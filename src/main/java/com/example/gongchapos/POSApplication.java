@@ -11,15 +11,17 @@ import java.io.IOException;
 public class POSApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(POSApplication.class.getResource("gong-cha.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+         FXMLLoader fxmlLoader = new FXMLLoader(POSApplication.class.getResource("gong-cha.fxml"));
+         Scene initialWindow = new Scene(fxmlLoader.load(), 320, 240);
 
-        stage.setTitle("Gong Cha");
-        stage.setScene(scene);
-        stage.show();
+         POSController.getInitialStage(stage);
+
+         stage.setTitle("Gong Cha");
+         stage.setScene(initialWindow);
+         stage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+         launch();
     }
 }
