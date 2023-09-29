@@ -1,5 +1,8 @@
 --Rollback, transaction, updates, cascade delete:
 
+-- enum types
+CREATE TYPE ice_type AS ENUM ('light', 'regular', 'none');
+CREATE TYPE sugar_type AS ENUM ('100%', '70%', '50%', '30%', '0%');
 
 --Clear out all old tables 
 DROP TABLE IF EXISTS public.Order_;
@@ -24,24 +27,6 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public.Order_
     OWNER to postgres;
 	
---Table: Order_Item
-CREATE TABLE IF NOT EXISTS public.Order_Item(
-	--insert items
-	Order_Item_Id serial NOT NULL,
-	Recipe_ID serial NOT NULL REFERENCES Recipe(Recipe_ID), -- this is a link to the recipes Table
-	Order_Id serial NOT NULL REFERENCES Order_(Order_ID),
-	Notes varchar(128), -- this will store the toppings and other notes
-	Is_Medium BOOLEAN NOT NULL,
-	Ice ENUM('light', 'regular', 'none') DEFAULT 'regular',
-	Sugar ENUM('100%', '70%', '50%', '30%', '0%') DEFAULT '100%',
-	Item_Price Decimal(5,2) NOT NULL,
-	PRIMARY KEY(Order_Item_Id)
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.Order_Item
-    OWNER to postgres;
 	
 --Table: Recipe
 CREATE TABLE IF NOT EXISTS public.Recipe(
@@ -59,17 +44,7 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public.Recipe
     OWNER to postgres;
 	
---Table: Recipe_Ingredient
-CREATE TABLE IF NOT EXISTS public.Recipe_Ingredient(
-	Recipe_ID serial NOT NULL REFERENCES Recipe(Recipe_ID),
-	Ingredient_ID serial NOT NULL REFERENCES Ingredient(Ingredient_ID),
-	Quantity_Used numeric NOT NULL,
-)
-TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.Recipe_Ingredient
-    OWNER to postgres;
-	
 --Table: Ingredient
 CREATE TABLE IF NOT EXISTS public.Ingredient(
 	Ingredient_ID serial NOT NULL,
@@ -98,4 +73,34 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public.Toppings
     OWNER to postgres;
 
---Populate with example data
+--Table: Recipe_Ingredient
+CREATE TABLE IF NOT EXISTS public.Recipe_Ingredient(
+	Recipe_ID serial NOT NULL REFERENCES Recipe(Recipe_ID),
+	Ingredient_ID serial NOT NULL REFERENCES Ingredient(Ingredient_ID),
+	Quantity_Used numeric NOT NULL
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.Recipe_Ingredient
+    OWNER to postgres;
+
+
+--Table: Order_Item
+CREATE TABLE IF NOT EXISTS public.Order_Item(
+	--insert items
+	Order_Item_Id serial NOT NULL,
+	Recipe_ID serial NOT NULL REFERENCES Recipe(Recipe_ID), -- this is a link to the recipes Table
+	Order_Id serial NOT NULL REFERENCES Order_(Order_ID),
+	Notes varchar(128), -- this will store the toppings and other notes
+	Is_Medium BOOLEAN NOT NULL,
+	Ice ice_type DEFAULT 'regular',
+	Sugar sugar_type DEFAULT '100%',
+	Item_Price Decimal(5,2) NOT NULL,
+	PRIMARY KEY(Order_Item_Id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.Order_Item
+    OWNER to postgres;
