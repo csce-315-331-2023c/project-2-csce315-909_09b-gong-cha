@@ -8,6 +8,8 @@ Welcome to Gong Cha's Teahouse POS system. TO run the application, you will need
 
 
 ## Setting up Postgres
+Note: I'm unsure if we have to have the person using this application set up postgres, as I think we are hosting it? I'm not sure. I'll leave this here for now.
+
 The main idea is to do the following:
 - Create a database "teahouse"
 - Create schema <insert schemas>  in "teahouse"

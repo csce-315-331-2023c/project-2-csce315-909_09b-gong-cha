@@ -13,9 +13,10 @@ DROP TABLE IF EXISTS public.Toppings;
 CREATE TABLE IF NOT EXISTS public.Order_(
 	Order_Id serial NOT NULL,
 	Date_ date NOT NULL,
-	Subtotal numeric NOT NULL,
-	Tip numeric,
-	Coupon_Code varchar(128)
+	Subtotal Decimal(5,2) NOT NULL,
+	Tip Decimal(5,2), -- can be null
+	Coupon_Code varchar(128),
+	PRIMARY KEY(Order_Id)
 )
 
 TABLESPACE pg_default;
@@ -26,6 +27,15 @@ ALTER TABLE IF EXISTS public.Order_
 --Table: Order_Item
 CREATE TABLE IF NOT EXISTS public.Order_Item(
 	--insert items
+	Order_Item_Id serial NOT NULL,
+	Recipe_ID serial NOT NULL REFERENCES Recipe(Recipe_ID), -- this is a link to the recipes Table
+	Order_Id serial NOT NULL REFERENCES Order_(Order_ID),
+	Notes varchar(128), -- this will store the toppings and other notes
+	Is_Medium BOOLEAN NOT NULL,
+	Ice ENUM('light', 'regular', 'none') DEFAULT 'regular',
+	Sugar ENUM('100%', '70%', '50%', '30%', '0%') DEFAULT '100%',
+	Item_Price Decimal(5,2) NOT NULL,
+	PRIMARY KEY(Order_Item_Id)
 )
 
 TABLESPACE pg_default;
@@ -35,7 +45,13 @@ ALTER TABLE IF EXISTS public.Order_Item
 	
 --Table: Recipe
 CREATE TABLE IF NOT EXISTS public.Recipe(
-	--insert items
+	Recipe_ID serial NOT NULL,
+	Recipe_Name varchar(128) NOT NULL,
+	Is_Slush BOOLEAN NOT NULL,
+	Med_Price Decimal(5,2) NOT NULL,
+	Large_Price Decimal(5,2) NOT NULL, -- this is the price for the large drink
+	Recipe_Price Decimal(5,2) NOT NULL, -- this is how much it costs for us to make the drink
+	PRIMARY KEY(Recipe_ID)
 )
 
 TABLESPACE pg_default;
@@ -45,7 +61,9 @@ ALTER TABLE IF EXISTS public.Recipe
 	
 --Table: Recipe_Ingredient
 CREATE TABLE IF NOT EXISTS public.Recipe_Ingredient(
-	--insert items
+	Recipe_ID serial NOT NULL REFERENCES Recipe(Recipe_ID),
+	Ingredient_ID serial NOT NULL REFERENCES Ingredient(Ingredient_ID),
+	Quantity_Used numeric NOT NULL,
 )
 TABLESPACE pg_default;
 
@@ -54,7 +72,11 @@ ALTER TABLE IF EXISTS public.Recipe_Ingredient
 	
 --Table: Ingredient
 CREATE TABLE IF NOT EXISTS public.Ingredient(
-	--insert items
+	Ingredient_ID serial NOT NULL,
+	Ingredient_Name varchar(128) NOT NULL,
+	Unit_Price Decimal(5,2) NOT NULL,
+	Stock numeric NOT NULL,
+	PRIMARY KEY(Ingredient_ID)
 )
 
 TABLESPACE pg_default;
@@ -64,7 +86,11 @@ ALTER TABLE IF EXISTS public.Ingredient
 	
 --Table: Toppings
 CREATE TABLE IF NOT EXISTS public.Toppings(
-	--insert items
+	Topping_ID serial NOT NULL,
+	Topping_Name varchar(128) NOT NULL,
+	Unit_Price Decimal(5,2) NOT NULL,
+	Stock numeric NOT NULL,
+	PRIMARY KEY(Topping_ID)
 )
 
 TABLESPACE pg_default;
