@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class POSController {
-    @FXML private Label headerText, cashierText, managerText;
+    @FXML private Label headerText;
     private static Stage initialStage;
 
     // This will be executed on startup of the application
@@ -25,11 +25,13 @@ public class POSController {
     @FXML protected void onCashierButtonClick() throws IOException {
         initialStage.hide();
 
-        // The code below is used to create the manager view
+        // The code below is used to create the cashier view
         Stage cashierWindow = new Stage();
         cashierWindow.setTitle("Cashier View");
         FXMLLoader cashierLoader = new FXMLLoader(getClass().getResource("cashierWindow.fxml"));
-        cashierWindow.setScene(new Scene(cashierLoader.load(), 320, 240));
+        Scene cashierScene = new Scene(cashierLoader.load(), 640, 640);
+        cashierScene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        cashierWindow.setScene(cashierScene);
         cashierWindow.show();
     }
 
@@ -40,7 +42,9 @@ public class POSController {
         Stage managerWindow = new Stage();
         managerWindow.setTitle("Manager View");
         FXMLLoader managerLoader = new FXMLLoader(getClass().getResource("managerWindow.fxml"));
-        managerWindow.setScene(new Scene(managerLoader.load(), 320, 240));
+        Scene managerScene = new Scene(managerLoader.load(), 640, 640);
+        managerScene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        managerWindow.setScene(managerScene);
         managerWindow.show();
     }
 }
