@@ -17,7 +17,7 @@ file = open("Orders.csv", "w")
 
 # each order has (1, 5) items
 
-
+# each order item has 
 
 
 
