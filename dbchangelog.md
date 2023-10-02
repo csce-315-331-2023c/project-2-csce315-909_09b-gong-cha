@@ -1,7 +1,5 @@
 ## CHANGELOG for Database Design and Justifications:
 If you had to make changes to your database design, you will need to describe and justify these changes during your demo.
-
-
 ## CHANGES MADE TO THE DATABASE DESIGN:
 
 #### Updates to Order_Item:
@@ -17,3 +15,7 @@ If you had to make changes to your database design, you will need to describe an
 #### Updates to Ingredient:
 - Got rid of Order_Item_ID FK, as it was an artifact from an earlier iterations of the database design. 
 - Got rid of Unit_Weight Field, as one assumption we make about the restaurant is that they don't need to keep track of actual measurements as kg or tsp (as recipes can be trade secrets). We can proceed fine with simply using units (with hidden associated measurements).
+
+#### Updates: Created Junction Table Between Order_Item and Toppings
+- Created a junction table between Order_Item and Toppings to keep track of topping modifications to drinks. This allows us to keep track of topping modifications to drinks, and also allows us to keep track of the price of the topping modifications.
+- This was done after suggestion from TA, as he raised concern regarding the fact that we were not keeping track of topping modifications to drinks in the DB. Previously we were going to keep track of this via backend functions.

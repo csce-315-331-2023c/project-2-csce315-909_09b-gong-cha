@@ -1,5 +1,7 @@
 --Feel free to practice SQL queries here and then copy them into the main file!
 
+
+-- Somewhat more complex queries
 -- Manager View Query, Select all ORDERS return a table showing the net profit for each day
 Select Order_Date, SUM(Net_Profit) AS Total_Profit FROM Order_ GROUP BY Order_Date;
 -- Manager View Query, SELECT ORDERS between set period of time and return something that we can create a pie chart of to see which orders are most popular
@@ -8,6 +10,7 @@ Select Order_Date, SUM(Net_Profit) AS Total_Profit FROM Order_ GROUP BY Order_Da
 
 
 -- Return current state of Ingredients and Toppings (stock)
+
 
 -- Return Recipes that are slushies
 SELECT * FROM Recipe WHERE Is_Slush = TRUE;
@@ -31,8 +34,21 @@ SELECT Ingredient_Name, Quantity FROM Recipe NATURAL JOIN Recipe_Ingredient NATU
 Select * FROM Order_Item WHERE Order_ID = 1;
 --return the number of order items on a particular day (requries join between Order_ and Order_Item)
 
---
+-- VIEWS and SIMPLE QUERIES for verifying Db is working
+-- return all the orders
+SELECT * FROM Order_;
 
---
+-- return all the order_items
+SELECT * FROM Order_Item;
 
---
+-- return all the ingredients
+SELECT * FROM Ingredient;
+
+-- return all the toppings
+SELECT * FROM Toppings;
+
+-- return all the recipes
+SELECT * FROM Recipe;
+
+-- return all recipe_ingredients
+SELECT * FROM Recipe_Ingredient;

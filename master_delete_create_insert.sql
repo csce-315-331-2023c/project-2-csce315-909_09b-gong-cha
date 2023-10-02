@@ -104,3 +104,16 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.Order_Item
     OWNER to postgres;
+
+--create junction table between order item and toppings.
+CREATE TABLE IF NOT EXISTS public.Order_Item_Toppings(
+	Order_Item_Id serial NOT NULL REFERENCES Order_Item(Order_Item_Id),
+	Topping_ID serial NOT NULL REFERENCES Toppings(Topping_ID),
+	Quantity_Used numeric NOT NULL
+	-- PRIMARY KEY(Order_Item_Id, Topping_ID)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.Order_Item_Toppings
+    OWNER to postgres;
