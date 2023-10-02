@@ -1,31 +1,31 @@
 Ingredient_ID,Ingredient_Name,Unit_Price,Stock
-1,Cup,,
-2,Straw,,
-3,Napkin,,
-4,To-Go Bag,,
-5,Milk,,
-6,Brown Sugar Syrup,,
-7,Wintermelon,,
-8,Cräme Brulee Mix,,
-9,Diced Strawberry,,
-10,Chocolate Syrup,,
-11,Diced Grapefruit,,
-12,Cream,,
-13,Sugar Syrup,,
-14,Lychee Syrup,,
-15,Honey,,
-16,Green Tea,,
-17,Caramel Syrup,,
-18,Black Tea,,
-19,Coconut Syrup,,
-20,Lemon Juice,,
-21,Taro Slush Powder,,
-22,Diced Peach,,
-23,Passionfruit Pulp,,
-24,Matcha,,
-25,Diced Mango,,
-26,Star Jelly,,
-27,Diced Lychee,,
-28,Yakult,,
-29,Oolong Tea,,
-30,Earl Grey Tea,,
+1,Cup,0.02,80
+2,Straw,0.01,103
+3,Napkin,0.02,156
+4,To-Go Bag,0.01,465
+5,Milk,0.5,265
+6,Brown Sugar Syrup,0.25,152
+7,Wintermelon,0.1,254
+8,Creme Brulee Mix,0.15,354
+9,Diced Strawberry,0.1,165
+10,Chocolate Syrup,0.15,435
+11,Diced Grapefruit,0.05,156
+12,Cream,0.75,168
+13,Sugar Syrup,0.15,215
+14,Lychee Syrup,0.45,168
+15,Honey,0.8,156
+16,Green Tea,0.15,247
+17,Caramel Syrup,0.35,158
+18,Black Tea,0.2,189
+19,Coconut Syrup,0.35,154
+20,Lemon Juice,0.1,354
+21,Taro Slush Powder,0.25,186
+22,Diced Peach,0.13,456
+23,Passionfruit Pulp,0.5,248
+24,Matcha,0.72,315
+25,Diced Mango,0.45,186
+26,Star Jelly,0.65,156
+27,Diced Lychee,0.56,246
+28,Yakult,0.6,354
+29,Oolong Tea,0.25,135
+30,Earl Grey Tea,0.15,315
