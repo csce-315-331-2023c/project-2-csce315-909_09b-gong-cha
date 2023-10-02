@@ -5,10 +5,11 @@ CREATE TYPE ice_type AS ENUM ('light', 'regular', 'none');
 CREATE TYPE sugar_type AS ENUM ('100%', '70%', '50%', '30%', '0%');
 
 --Clear out all old tables 
-DROP TABLE IF EXISTS public.Order_;
+DROP TABLE IF EXISTS public.Order_Item_Toppings;
 DROP TABLE IF EXISTS public.Order_Item;
-DROP TABLE IF EXISTS public.Recipe;
 DROP TABLE IF EXISTS public.Recipe_Ingredient;
+DROP TABLE IF EXISTS public.Order_;
+DROP TABLE IF EXISTS public.Recipe;
 DROP TABLE IF EXISTS public.Ingredient;
 DROP TABLE IF EXISTS public.Toppings; 
 
