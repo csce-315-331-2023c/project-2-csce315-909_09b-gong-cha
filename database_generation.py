@@ -2,8 +2,8 @@
 import pandas as pd
 import numpy as np
 import random
-recipes = pd.read_csv('recipes.csv')
-toppings = pd.read_csv('csv_files\Toppings.csv')
+recipes = pd.read_csv('Recipes.csv')
+toppings = pd.read_csv('csv_files/Toppings.csv')
 range_of_days = pd.date_range(end='10/2/2023', periods=365, freq = 'D')
 
 
@@ -14,7 +14,7 @@ range_of_days = pd.date_range(end='10/2/2023', periods=365, freq = 'D')
 # each order has [1, 5] items
 
 # each order item has [0, 2] toppings
-file = open("Order_Item.csv", "w")
+file = open("csv_files/Order_Item.csv", "w")
 file_toppings = open("csv_files/Order_Item_Toppings.csv", "w")
 # Order_Item.csv features: Order_Item_ID, Order_ID, Recipe_ID, Notes, Is_Medium, Ice, Sugar, Item_Price
 
