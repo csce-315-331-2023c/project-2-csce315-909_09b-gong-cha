@@ -32,5 +32,13 @@ In our case, it is the following: psql -h csce-315-db.engr.tamu.edu -U csce315_9
 Then, run the script using the following command:
 \i path/to/file/master_delete_create_insert.sql
 
+### Populate the tables by running the following commands in the Database connected to following running the sql script:
+**NOTE: MAKE SURE THAT YOU HAVE NAVIGATED TO THE project-2-csce315-909_09b-gong-cha FOLDER**
+Format: *\copy table_name from 'path/to/file/table_name.csv' delimiter ',' csv header;*
+
+\copy toppings from 'csv_files/Toppings.csv' CSV HEADER
+\copy recipe from 'csv_files/Recipes.csv' CSV HEADER
+\copy Ingredient from 'csv_files/Ingredients.csv' CSV HEADER
+\copy Recipe_Ingredient from 'csv_files/Recipe_Ingredients.csv' CSV HEADER
 
 
