@@ -3,6 +3,13 @@
 -- enum types
 CREATE TYPE ice_type AS ENUM ('light', 'regular', 'none');
 CREATE TYPE sugar_type AS ENUM ('100%', '70%', '50%', '30%', '0%');
+-- Alter the table to change the data type of the "Ice" column to text
+ALTER TABLE public.Order_Item
+ALTER COLUMN Ice TYPE TEXT;
+
+-- Alter the table to change the data type of the "Sugar" column to text
+ALTER TABLE public.Order_Item
+ALTER COLUMN Sugar TYPE TEXT;
 
 --Clear out all old tables 
 DROP TABLE IF EXISTS public.Order_Item_Toppings;
@@ -20,6 +27,7 @@ CREATE TABLE IF NOT EXISTS public.Order_(
 	Subtotal Decimal(5,2) NOT NULL,
 	Tip Decimal(5,2), -- can be null
 	Coupon_Code varchar(128),
+	Time_ TIME NOT NULL, --added time so we can do hourly queries
 	PRIMARY KEY(Order_Id)
 )
 
@@ -118,3 +126,67 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.Order_Item_Toppings
     OWNER to postgres;
+
+--GRANT PERMISSIONS
+GRANT ALL PRIVILEGES ON Order_Item_Toppings 
+TO csce315_909_brenndancroteau;
+
+GRANT ALL PRIVILEGES ON Order_Item_Toppings 
+TO csce315_909_antonhugo1;
+
+GRANT ALL PRIVILEGES ON Order_Item_Toppings 
+TO csce315_909_reid_jenkins;
+
+GRANT ALL PRIVILEGES ON Order_Item
+TO csce315_909_brenndancroteau;
+
+GRANT ALL PRIVILEGES ON Order_Item
+TO csce315_909_antonhugo1;
+
+GRANT ALL PRIVILEGES ON Order_Item
+TO csce315_909_reid_jenkins;
+
+GRANT ALL PRIVILEGES ON Recipe_Ingredient
+TO csce315_909_brenndancroteau;
+
+GRANT ALL PRIVILEGES ON Recipe_Ingredient 
+TO csce315_909_antonhugo1;
+
+GRANT ALL PRIVILEGES ON Recipe_Ingredient 
+TO csce315_909_reid_jenkins;
+
+GRANT ALL PRIVILEGES ON Order_ 
+TO csce315_909_brenndancroteau;
+
+GRANT ALL PRIVILEGES ON Order_ 
+TO csce315_909_antonhugo1;
+
+GRANT ALL PRIVILEGES ON Order_ 
+TO csce315_909_reid_jenkins;
+
+GRANT ALL PRIVILEGES ON Recipe 
+TO csce315_909_brenndancroteau;
+
+GRANT ALL PRIVILEGES ON Recipe 
+TO csce315_909_antonhugo1;
+
+GRANT ALL PRIVILEGES ON Recipe 
+TO csce315_909_reid_jenkins;
+
+GRANT ALL PRIVILEGES ON Ingredient 
+TO csce315_909_brenndancroteau;
+
+GRANT ALL PRIVILEGES ON Ingredient 
+TO csce315_909_antonhugo1;
+
+GRANT ALL PRIVILEGES ON Ingredient 
+TO csce315_909_reid_jenkins;
+
+GRANT ALL PRIVILEGES ON Toppings 
+TO csce315_909_brenndancroteau;
+
+GRANT ALL PRIVILEGES ON Toppings 
+TO csce315_909_antonhugo1;
+
+GRANT ALL PRIVILEGES ON Toppings 
+TO csce315_909_reid_jenkins;

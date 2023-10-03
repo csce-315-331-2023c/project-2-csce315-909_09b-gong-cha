@@ -39,6 +39,9 @@ Format: *\copy table_name from 'path/to/file/table_name.csv' delimiter ',' csv h
 \copy toppings from 'csv_files/Toppings.csv' CSV HEADER
 \copy recipe from 'csv_files/Recipes.csv' CSV HEADER
 \copy Ingredient from 'csv_files/Ingredients.csv' CSV HEADER
-\copy Recipe_Ingredient from 'csv_files/Recipe_Ingredients.csv' CSV HEADER
+\copy Recipe_Ingredient from 'csv_files/Recipe_Ingredients_short.csv' CSV HEADER
 
+\copy Order_ from 'csv_files/Order.csv' CSV HEADER
+\copy Order_Item from 'csv_files/Order_Item.csv' CSV HEADER
+\copy Order_Item_Toppings from 'csv_files/Order_Item_Toppings.csv' CSV HEADER
 
