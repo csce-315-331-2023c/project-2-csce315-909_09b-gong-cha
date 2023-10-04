@@ -13,14 +13,14 @@ SELECT COUNT(Order_ID), EXTRACT(WEEK FROM Date_) AS Weeks FROM Order_ GROUP BY E
 
 Query 2______________________
 "Realistic Sales History: select count of orders, sum of order total grouped by hour."
-(example_queries.sql)
+(realistic_sales_history.sql)
 SELECT EXTRACT(HOUR FROM Time_) AS Hour_of_Day,COUNT(Order_ID), SUM(Subtotal + Tip) FROM Order_ GROUP BY EXTRACT(HOUR FROM Time_) ORDER BY EXTRACT(HOUR FROM Time_) ASC;
 
 Query 3______________________
 "2 Peak Days: select top 10 sums of order total grouped by day in descending order."
 NOTE: we were unsure about the exact nature of this question, and what Order total constituted as (i.e. either order total of a day or the order total of as in what a customer pays up front after making a purchase, so QUERY 4 contains our alternate interpretation.)
 This interpretation of the required query assumed that we needed to find the peak 2 days where sales were highest, and then find the top 10 orders on those dates.
-(example_queries.sql)
+(two_peak_days_top_10.sql)
 SELECT Date_, SUM(Subtotal + Tip) FROM Order_ GROUP BY Date_ ORDER BY SUM(Subtotal + Tip) DESC LIMIT 2;
 WITH ALLORDERS AS (
     SELECT o.Order_Id, o.Date_, o.Subtotal + o.Tip AS Total
@@ -46,6 +46,7 @@ Query 4______________________
 "Select the Top 10 sales days and return the date, the number of orders, and the Total Sales"
 NOTE: this is our second interpretation of "2 Peak Days: select top 10 sums of order total grouped by day in descending order." 
 This assumes we just need to return the 10 ten peak days of sales, and that sums of order means the top 10 sale days.
+(top_10_sales_days.sql)
 
 SELECT date_, COUNT(*) as order_count, SUM(subtotal + tip) as sales
 FROM order_ 
