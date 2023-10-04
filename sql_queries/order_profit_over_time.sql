@@ -1,0 +1,2 @@
+--Manager View Query, Select all ORDERS return a table showing the net profit between a set period of time
+Select Date_, SUM(Subtotal + Tip) AS Total_Profit FROM Order_ WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-30' GROUP BY Date_ ORDER BY Date_ ASC;
