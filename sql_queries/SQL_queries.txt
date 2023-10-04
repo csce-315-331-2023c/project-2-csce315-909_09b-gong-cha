@@ -70,9 +70,9 @@ Query 7______________________
 SELECT Recipe_Name, Med_Price, Large_Price FROM Recipe WHERE Is_Slush = FALSE AND Med_Price < 18;
 
 Query 8______________________
-"return Recipes that have the word "lemon" in the name"
+"return Recipes that have the word "Tea" in the name"
 (example_queries.sql)
-SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Lemon%';
+SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Tea%';
 
 Query 9______________________
 "return the ingredients and quantity of ingredients in a particular recipe (Black Milk Tea)"
