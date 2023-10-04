@@ -7,7 +7,7 @@ toppings = pd.read_csv('csv_files/Toppings.csv')
 range_of_days = pd.date_range(end='10/2/2023', periods=365, freq = 'D')
 
 
-# distribution of orders: 100 a day, 200 on peak days
+# distribution of orders: around 100 a day, around 200 on peak days
 
 # peak days are saturday, sundays
 
@@ -27,15 +27,15 @@ Order_Item_ID= 0
 
 order_item.write("Order_Item_ID, Recipe_ID, Order_ID, Notes, Is_Medium, Ice, Sugar, Item_Price\n")
 order_item_toppings.write("Order_Item_Id, Topping_ID, Quantity_Used\n")
-order_receipt.write("Order_ID, Date_, Subtotal, Tip, Coupon_Code\n")
+order_receipt.write("Order_ID, Date_, Subtotal, Tip, Coupon_Code, Time_\n")
 
 for date in range_of_days:
     print(date.month, date.day, date.year)
-    num_orders = 100
+    num_orders = random.randint(100, 150)
     
     day_of_week = date.day%7
     if(day_of_week == 6 or day_of_week == 7):
-        num_orders = 200
+        num_orders = random.randint(200, 250)
     
     
     
@@ -91,12 +91,17 @@ for date in range_of_days:
             
         tip = random.randint(0, 500)/100 # the order is in range [0, 5] dollars
         #we want to format date as YYYY-MM-DD
+        #for the sake of time, we will use the Houston, TX location hours
+        hour = random.randint(11, 22) #open from 11am to 11pm, but we assume it closes at 22:59
+        minute = random.randint(0, 59) # for the sake of time, we will randomize all of these times, so the data won't be sorted by time.
+        
         order_receipt.write(
             str(Order_ID) + "," +
             str(date.year) + "-" + str(date.month) + "-" + str(date.day) + "," +
             str(total_price) + "," +
             str(tip) + "," +
-            str("") +
+            str("") + "," +
+            str(hour) + ":" + str(minute) +
             "\n"
         )
         Order_ID+=1

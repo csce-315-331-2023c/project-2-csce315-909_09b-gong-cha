@@ -19,3 +19,6 @@ If you had to make changes to your database design, you will need to describe an
 #### Updates: Created Junction Table Between Order_Item and Toppings
 - Created a junction table between Order_Item and Toppings to keep track of topping modifications to drinks. This allows us to keep track of topping modifications to drinks, and also allows us to keep track of the price of the topping modifications.
 - This was done after suggestion from TA, as he raised concern regarding the fact that we were not keeping track of topping modifications to drinks in the DB. Previously we were going to keep track of this via backend functions.
+
+#### Updates to Order:
+- Added Hour_ field as the required queries asks for us to "select count of orders, sum of order total grouped by hour."

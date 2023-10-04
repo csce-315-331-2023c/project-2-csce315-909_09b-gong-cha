@@ -1,0 +1,138 @@
+Db Changelog Reasons why we departed from some changes in the original document:
+NOTE: WE WILL EXPLAIN THESE REASONS IN LAB, so this is just a sucinct listing of some of the changes:
+- Updates to Order_Item fields
+- Updates to Recipe fields
+- Updates to Toppings fields
+- Updates to Ingredient
+- Created Junction Table between Order_Item and Toppings
+
+Query 1______________________
+"52 Weeks of Sales History: select count of orders grouped by week."
+(example_queries.sql)
+SELECT COUNT(Order_ID), EXTRACT(WEEK FROM Date_) AS Weeks FROM Order_ GROUP BY EXTRACT(WEEK FROM Date_) ORDER BY Weeks ASC;
+
+Query 2______________________
+"Realistic Sales History: select count of orders, sum of order total grouped by hour."
+(example_queries.sql)
+SELECT EXTRACT(HOUR FROM Time_) AS Hour_of_Day,COUNT(Order_ID), SUM(Subtotal + Tip) FROM Order_ GROUP BY EXTRACT(HOUR FROM Time_) ORDER BY EXTRACT(HOUR FROM Time_) ASC;
+
+Query 3______________________
+"2 Peak Days: select top 10 sums of order total grouped by day in descending order."
+NOTE: we were unsure about the exact nature of this question, and what Order total constituted as (i.e. either order total of a day or the order total of as in what a customer pays up front after making a purchase, so QUERY 4 contains our alternate interpretation.)
+This interpretation of the required query assumed that we needed to find the peak 2 days where sales were highest, and then find the top 10 orders on those dates.
+(example_queries.sql)
+SELECT Date_, SUM(Subtotal + Tip) FROM Order_ GROUP BY Date_ ORDER BY SUM(Subtotal + Tip) DESC LIMIT 2;
+WITH ALLORDERS AS (
+    SELECT o.Order_Id, o.Date_, o.Subtotal + o.Tip AS Total
+    FROM Order_ o
+    JOIN (
+        SELECT Date_, SUM(Subtotal + COALESCE(Tip, 0.00)) AS Total
+        FROM Order_
+        GROUP BY Date_
+        ORDER BY Total DESC
+        LIMIT 2
+    ) TopDates ON o.Date_ = TopDates.Date_
+)
+
+SELECT a.Order_Id, a.Date_, a.Total
+FROM (
+    SELECT *, ROW_NUMBER() OVER (PARTITION BY Date_ ORDER BY Total DESC) AS rn
+    FROM ALLORDERS
+) a
+WHERE a.rn <= 10
+ORDER BY a.Date_, a.Total;
+
+Query 4______________________
+"Select the Top 10 sales days and return the date, the number of orders, and the Total Sales"
+NOTE: this is our second interpretation of "2 Peak Days: select top 10 sums of order total grouped by day in descending order." 
+This assumes we just need to return the 10 ten peak days of sales, and that sums of order means the top 10 sale days.
+
+SELECT date_, COUNT(*) as order_count, SUM(subtotal + tip) as sales
+FROM order_ 
+GROUP BY date_
+ORDER BY sales DESC
+LIMIT 10;
+
+Query 5______________________
+"20 Items in Inventory: select row count from inventory."
+(example_queries.sql)
+SELECT COUNT(Ingredient_ID) FROM Ingredient;
+
+Query 5______________________
+"Return the top 5 most popular drinks (by number of orders)"
+(example_queries.sql)
+SELECT Recipe_Name, COUNT(Recipe_Name) from Recipe NATURAL JOIN Order_Item GROUP BY Recipe_Name ORDER BY COUNT(Recipe_Name) DESC LIMIT 5;
+
+Query 6______________________
+"Return Names of Recipes and Prices that are not slushies and have a medium price of less than $18"
+(example_queries.sql)
+SELECT Recipe_Name, Med_Price, Large_Price FROM Recipe WHERE Is_Slush = FALSE AND Med_Price < 18;
+
+Query 7______________________
+"return Recipes that have the word "lemon" in the name"
+(example_queries.sql)
+SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Lemon%';
+
+Query 8______________________
+"return the ingredients and quantity of ingredients in a particular recipe (Black Milk Tea)"
+(example_queries.sql)
+SELECT Recipe_Name, Ingredient_Name, Recipe_Ingredient.Quantity_Used FROM Recipe NATURAL JOIN Recipe_Ingredient NATURAL JOIN Ingredient WHERE Recipe_Name = 'Black Milk Tea';
+
+Query 9______________________
+"return toppings that have stock lower than 20"
+(example_queries.sql)
+SELECT * FROM Toppings WHERE Stock < 20;
+
+Query 10_____________________
+"return Recipes that have the word "lemon" in the name"
+(example_queries.sql)
+SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Lemon%';
+
+Query 11_____________________
+"return all the order items for a given Order_ with Order_ID = 5 (we use the Order_ID to identify the order)"
+(example_queries.sql)
+Select * FROM Order_Item WHERE Order_ID = 5;
+
+Query 12_____________________
+"return profit of an order by first calculating the total cost of the order and then subtracting the total cost from the total price taken from the recipe_price from recipe table"
+(example_queries.sql)
+SELECT SUM(-Recipe_Price + Item_Price) FROM Order_Item, Recipe WHERE Order_ID = 1 AND Order_Item.Recipe_ID = Recipe.Recipe_ID;
+
+Query 13_____________________
+"Manager View Query, Select all ORDERS return a table showing the net profit between a set period of time"
+(example_queries.sql)
+Select Date_, SUM(Subtotal + Tip) AS Total_Profit FROM Order_ WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-30' GROUP BY Date_ ORDER BY Date_ ASC;
+
+Query 14_____________________
+
+Query 15_____________________
+
+
+SIMPLE QUERIES for verifying Db is working
+"return all the orders"
+(example_queries.sql)
+SELECT * FROM Order_;
+
+"return all the order_items"
+(example_queries.sql)
+SELECT * FROM Order_Item;
+
+"return all the ingredients"
+(example_queries.sql)
+SELECT * FROM Ingredient;
+
+"return all the toppings"
+(example_queries.sql)
+SELECT * FROM Toppings;
+
+"return all the recipes"
+(example_queries.sql)
+SELECT * FROM Recipe;
+
+"return all recipe_ingredients"
+(example_queries.sql)
+SELECT * FROM Recipe_Ingredient;
+
+"return all from Order_Item_Toppings"
+(example_queries.sql)
+SELECT * FROM Order_Item_Toppings;
