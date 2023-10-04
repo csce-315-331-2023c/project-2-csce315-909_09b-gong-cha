@@ -26,28 +26,25 @@ LIMIT 10;
 --first select the two peak days, then subquery those two days to find the top ten
 
 SELECT Date_, SUM(Subtotal + Tip) FROM Order_ GROUP BY Date_ ORDER BY SUM(Subtotal + Tip) DESC LIMIT 2;
---why dont I just do a natural join here? I'm not sure if this is the right way to do it, but I'm going to try it.
---First, lets calculate the order totals for each day, then we can join that with the Peak_Days subqueries to get the top OrderIDs for each day
-SELECT Date_, SUM(Subtotal + Tip) FROM Order_ GROUP BY Date_ ORDER BY SUM(Subtotal + Tip) DESC LIMIT 2 JOIN Order_;
+WITH ALLORDERS AS (
+    SELECT o.Order_Id, o.Date_, o.Subtotal + o.Tip AS Total
+    FROM Order_ o
+    JOIN (
+        SELECT Date_, SUM(Subtotal + COALESCE(Tip, 0.00)) AS Total
+        FROM Order_
+        GROUP BY Date_
+        ORDER BY Total DESC
+        LIMIT 2
+    ) TopDates ON o.Date_ = TopDates.Date_
+)
 
-SELECT Order_Id, SUM(Subtotal + Tip)  
-FROM Order_, (SELECT Date_, SUM(Subtotal + Tip) FROM Order_ GROUP BY Date_ ORDER BY SUM(Subtotal + Tip) DESC LIMIT 2) Peak_Days
-WHERE Order_.Date_ = Peak_Days.Date_
-GROUP BY EXTRACT(DAY FROM Peak_Days.Date_) 
-ORDER BY SUM(Subtotal + Tip) 
-DESC LIMIT 10; 
-
-SELECT o.Order_Id, o.Date_, o.Subtotal, COALESCE(o.Tip, 0.00) AS Tip
-FROM Order_ o
-JOIN (
-  SELECT Date_, SUM(Subtotal + COALESCE(Tip, 0.00)) AS Total
-  FROM Order_
-  GROUP BY Date_
-  ORDER BY Total DESC
-  LIMIT 2
-) TopDates ON o.Date_ = TopDates.Date_
-ORDER BY o.Date_, COALESCE(o.Tip, 0.00) DESC, o.Order_Id
-LIMIT 10;
+SELECT a.Order_Id, a.Date_, a.Total
+FROM (
+    SELECT *, ROW_NUMBER() OVER (PARTITION BY Date_ ORDER BY Total DESC) AS rn
+    FROM ALLORDERS
+) a
+WHERE a.rn <= 10
+ORDER BY a.Date_, a.Total;
 
 
 -- 20 Items in Inventory: select row count from inventory.
@@ -125,3 +122,4 @@ SELECT * FROM Recipe_Ingredient;
 SELECT * FROM Order_Item_Toppings;
 
 
+Select SUM(Subtotal + Tip) FROM Order_;
