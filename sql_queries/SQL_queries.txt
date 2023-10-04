@@ -104,7 +104,14 @@ Query 14_____________________
 Select Date_, SUM(Subtotal + Tip) AS Total_Profit FROM Order_ WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-30' GROUP BY Date_ ORDER BY Date_ ASC;
 
 Query 15_____________________
-
+"return the name of the top 5 most common toppings that are present in orders"
+(example_queries.sql)
+SELECT T.Topping_Name, COUNT(OIT.Topping_ID) AS Topping_Count
+FROM Order_Item_Toppings OIT
+JOIN Toppings T ON OIT.Topping_ID = T.Topping_ID
+GROUP BY OIT.Topping_ID, T.Topping_Name
+ORDER BY Topping_Count DESC
+LIMIT 5;
 
 SIMPLE QUERIES for verifying Db is working
 "return all the orders"
