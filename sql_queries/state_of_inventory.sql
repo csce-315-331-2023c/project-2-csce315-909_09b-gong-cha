@@ -1,0 +1,1 @@
+Select Ingredient_Name, Ingredient.stock, Topping_Name, Toppings.stock FROM Ingredient, Toppings;    
