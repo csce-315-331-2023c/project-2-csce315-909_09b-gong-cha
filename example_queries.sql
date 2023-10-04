@@ -50,7 +50,13 @@ ORDER BY a.Date_, a.Total;
 -- 20 Items in Inventory: select row count from inventory.
 SELECT COUNT(Ingredient_ID) FROM Ingredient;
 
+--count most used number of toppings
+SELECT Topping_ID, COUNT(Topping_ID) FROM Order_Item_Toppings GROUP BY Topping_ID ORDER BY COUNT(Topping_ID) DESC LIMIT 5;
+
 -- Somewhat more complex queries
+
+--select most used ingredient
+SELECT Ingredient_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Ingredient NATURAL JOIN Ingredient GROUP BY Ingredient_Name ORDER BY Total_Used DESC LIMIT 1;
 
 -- Manager View Query, Select all ORDERS return a table showing the net profit for each day
 Select Date_, SUM(Subtotal + Tip) AS Total_Profit FROM Order_ GROUP BY Date_;
