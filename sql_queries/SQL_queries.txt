@@ -8,19 +8,19 @@ NOTE: WE WILL EXPLAIN THESE REASONS IN LAB, so this is just a sucinct listing of
 
 Query 1______________________
 "52 Weeks of Sales History: select count of orders grouped by week."
-(example_queries.sql)
+(52_weeks_sale_history.sql)
 SELECT COUNT(Order_ID), EXTRACT(WEEK FROM Date_) AS Weeks FROM Order_ GROUP BY EXTRACT(WEEK FROM Date_) ORDER BY Weeks ASC;
 
 Query 2______________________
 "Realistic Sales History: select count of orders, sum of order total grouped by hour."
-(example_queries.sql)
+(realistic_sales_history.sql)
 SELECT EXTRACT(HOUR FROM Time_) AS Hour_of_Day,COUNT(Order_ID), SUM(Subtotal + Tip) FROM Order_ GROUP BY EXTRACT(HOUR FROM Time_) ORDER BY EXTRACT(HOUR FROM Time_) ASC;
 
 Query 3______________________
 "2 Peak Days: select top 10 sums of order total grouped by day in descending order."
 NOTE: we were unsure about the exact nature of this question, and what Order total constituted as (i.e. either order total of a day or the order total of as in what a customer pays up front after making a purchase, so QUERY 4 contains our alternate interpretation.)
 This interpretation of the required query assumed that we needed to find the peak 2 days where sales were highest, and then find the top 10 orders on those dates.
-(example_queries.sql)
+(two_peak_days_top_10.sql)
 SELECT Date_, SUM(Subtotal + Tip) FROM Order_ GROUP BY Date_ ORDER BY SUM(Subtotal + Tip) DESC LIMIT 2;
 WITH ALLORDERS AS (
     SELECT o.Order_Id, o.Date_, o.Subtotal + o.Tip AS Total
@@ -46,6 +46,7 @@ Query 4______________________
 "Select the Top 10 sales days and return the date, the number of orders, and the Total Sales"
 NOTE: this is our second interpretation of "2 Peak Days: select top 10 sums of order total grouped by day in descending order." 
 This assumes we just need to return the 10 ten peak days of sales, and that sums of order means the top 10 sale days.
+(top_10_sales_days.sql)
 
 SELECT date_, COUNT(*) as order_count, SUM(subtotal + tip) as sales
 FROM order_ 
@@ -54,24 +55,25 @@ ORDER BY sales DESC
 LIMIT 10;
 
 Query 5______________________
-"20 Items in Inventory: select row count from inventory."
-(example_queries.sql)
+"30 Items in Inventory: select row count from inventory."
+(num_ingredients.sql)
 SELECT COUNT(Ingredient_ID) FROM Ingredient;
 
 Query 6______________________
 "Return the top 5 most popular drinks (by number of orders)"
-(example_queries.sql)
+(most_purchased_drinks.sql)
 SELECT Recipe_Name, COUNT(Recipe_Name) from Recipe NATURAL JOIN Order_Item GROUP BY Recipe_Name ORDER BY COUNT(Recipe_Name) DESC LIMIT 5;
 
 Query 7______________________
 "Return Names of Recipes and Prices that are not slushies and have a medium price of less than $18"
-(example_queries.sql)
+(drink_prices.sql)
 SELECT Recipe_Name, Med_Price, Large_Price FROM Recipe WHERE Is_Slush = FALSE AND Med_Price < 18;
 
 Query 8______________________
-"return Recipes that have the word "Tea" in the name"
-(example_queries.sql)
-SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Tea%';
+"return Recipes that have the word "Earl Grey" in the name"
+(earl_grey_drinks.sql)
+SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Earl Grey%';
+
 
 Query 9______________________
 "return the ingredients and quantity of ingredients in a particular recipe (Black Milk Tea)"

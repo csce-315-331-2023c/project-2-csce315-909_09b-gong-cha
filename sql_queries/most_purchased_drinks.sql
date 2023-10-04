@@ -1,0 +1,1 @@
+SELECT Recipe_Name, COUNT(Recipe_Name) from Recipe NATURAL JOIN Order_Item GROUP BY Recipe_Name ORDER BY COUNT(Recipe_Name) DESC LIMIT 5;
