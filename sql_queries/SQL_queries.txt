@@ -58,52 +58,50 @@ Query 5______________________
 (example_queries.sql)
 SELECT COUNT(Ingredient_ID) FROM Ingredient;
 
-Query 5______________________
+Query 6______________________
 "Return the top 5 most popular drinks (by number of orders)"
 (example_queries.sql)
 SELECT Recipe_Name, COUNT(Recipe_Name) from Recipe NATURAL JOIN Order_Item GROUP BY Recipe_Name ORDER BY COUNT(Recipe_Name) DESC LIMIT 5;
 
-Query 6______________________
+Query 7______________________
 "Return Names of Recipes and Prices that are not slushies and have a medium price of less than $18"
 (example_queries.sql)
 SELECT Recipe_Name, Med_Price, Large_Price FROM Recipe WHERE Is_Slush = FALSE AND Med_Price < 18;
 
-Query 7______________________
+Query 8______________________
 "return Recipes that have the word "lemon" in the name"
 (example_queries.sql)
 SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Lemon%';
 
-Query 8______________________
+Query 9______________________
 "return the ingredients and quantity of ingredients in a particular recipe (Black Milk Tea)"
 (example_queries.sql)
 SELECT Recipe_Name, Ingredient_Name, Recipe_Ingredient.Quantity_Used FROM Recipe NATURAL JOIN Recipe_Ingredient NATURAL JOIN Ingredient WHERE Recipe_Name = 'Black Milk Tea';
 
-Query 9______________________
+Query 10______________________
 "return toppings that have stock lower than 20"
 (example_queries.sql)
 SELECT * FROM Toppings WHERE Stock < 20;
 
-Query 10_____________________
+Query 11_____________________
 "return Recipes that have the word "lemon" in the name"
 (example_queries.sql)
 SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Lemon%';
 
-Query 11_____________________
+Query 12_____________________
 "return all the order items for a given Order_ with Order_ID = 5 (we use the Order_ID to identify the order)"
 (example_queries.sql)
 Select * FROM Order_Item WHERE Order_ID = 5;
 
-Query 12_____________________
+Query 13_____________________
 "return profit of an order by first calculating the total cost of the order and then subtracting the total cost from the total price taken from the recipe_price from recipe table"
 (example_queries.sql)
 SELECT SUM(-Recipe_Price + Item_Price) FROM Order_Item, Recipe WHERE Order_ID = 1 AND Order_Item.Recipe_ID = Recipe.Recipe_ID;
 
-Query 13_____________________
+Query 14_____________________
 "Manager View Query, Select all ORDERS return a table showing the net profit between a set period of time"
 (example_queries.sql)
 Select Date_, SUM(Subtotal + Tip) AS Total_Profit FROM Order_ WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-30' GROUP BY Date_ ORDER BY Date_ ASC;
-
-Query 14_____________________
 
 Query 15_____________________
 
