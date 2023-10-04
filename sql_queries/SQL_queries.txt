@@ -74,40 +74,39 @@ Query 8______________________
 (earl_grey_drinks.sql)
 SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Earl Grey%';
 
-
 Query 9______________________
 "return the ingredients and quantity of ingredients in a particular recipe (Black Milk Tea)"
-(example_queries.sql)
+(Ingredients_of_Recipe.sql)
 SELECT Recipe_Name, Ingredient_Name, Recipe_Ingredient.Quantity_Used FROM Recipe NATURAL JOIN Recipe_Ingredient NATURAL JOIN Ingredient WHERE Recipe_Name = 'Black Milk Tea';
 
 Query 10______________________
 "return toppings that have stock lower than 20"
-(example_queries.sql)
+(Toppings_Quantity_Under_20.sql)
 SELECT * FROM Toppings WHERE Stock < 20;
 
 Query 11_____________________
-"return Recipes that have the word "lemon" in the name"
-(example_queries.sql)
-SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Lemon%';
+"Current state of inventory"
+(state_of_inventory.sql)
+Select Ingredient_Name, Ingredient.stock, Topping_Name, Toppings.stock FROM Ingredient, Toppings;
 
 Query 12_____________________
 "return all the order items for a given Order_ with Order_ID = 5 (we use the Order_ID to identify the order)"
-(example_queries.sql)
+(Order_Items_of_Order.sql)
 Select * FROM Order_Item WHERE Order_ID = 5;
 
 Query 13_____________________
 "return profit of an order by first calculating the total cost of the order and then subtracting the total cost from the total price taken from the recipe_price from recipe table"
-(example_queries.sql)
+(order_profit.sql)
 SELECT SUM(-Recipe_Price + Item_Price) FROM Order_Item, Recipe WHERE Order_ID = 1 AND Order_Item.Recipe_ID = Recipe.Recipe_ID;
 
 Query 14_____________________
 "Manager View Query, Select all ORDERS return a table showing the net profit between a set period of time"
-(example_queries.sql)
+(order_profit_over_time.sql)
 Select Date_, SUM(Subtotal + Tip) AS Total_Profit FROM Order_ WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-30' GROUP BY Date_ ORDER BY Date_ ASC;
 
 Query 15_____________________
 "return the name of the top 5 most common toppings that are present in orders"
-(example_queries.sql)
+(most_common_toppings.sql)
 SELECT T.Topping_Name, COUNT(OIT.Topping_ID) AS Topping_Count
 FROM Order_Item_Toppings OIT
 JOIN Toppings T ON OIT.Topping_ID = T.Topping_ID
