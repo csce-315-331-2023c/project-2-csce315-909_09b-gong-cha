@@ -1,1 +1,2 @@
-SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Lemon%';
+SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Tea%';
+    
