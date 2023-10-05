@@ -24,8 +24,8 @@ public class GUI extends JFrame implements ActionListener {
       try {
         conn = DriverManager.getConnection(
           "jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315331_09b_db",
-          "csce315_909_brenndancroteau",
-          "password2");
+          "csce315_909_<NET ID>",
+          "<password>");
       } catch (Exception e) {
         e.printStackTrace();
         System.err.println(e.getClass().getName()+": "+e.getMessage());
