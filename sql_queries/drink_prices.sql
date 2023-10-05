@@ -1,0 +1,1 @@
+SELECT Recipe_Name, Med_Price, Large_Price FROM Recipe WHERE Is_Slush = FALSE AND Med_Price < 18;

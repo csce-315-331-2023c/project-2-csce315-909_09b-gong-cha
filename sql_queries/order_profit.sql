@@ -1,0 +1,2 @@
+--return profit of an order by first calculating the total cost of the order and then subtracting the total cost from the total price taken from the recipe_price from recipe table
+SELECT SUM(-Recipe_Price + Item_Price) FROM Order_Item, Recipe WHERE Order_ID = 1 AND Order_Item.Recipe_ID = Recipe.Recipe_ID;
