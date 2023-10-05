@@ -9,7 +9,7 @@ SELECT EXTRACT(HOUR FROM Time_) AS Hour_of_Day,COUNT(Order_ID), SUM(Subtotal + T
 -- 2 Peak Days: select top 10 sums of order total grouped by day in descending order.
 -- I'm a bit confused as to what they are asking for here, but I assume first we determine the dates of the two peak days.
 -- Then we select the top 10 sums of order total grouped by day in descending order.
-SELECT Date_, Order_ID SUM(Subtotal + Tip) AS TotalSales
+SELECT Date_, Order_ID, SUM(Subtotal + Tip) AS TotalSales
 FROM Order_
 INNER JOIN (
     SELECT Date_, SUM(Subtotal + Tip) AS DailyTotal

@@ -2,10 +2,15 @@
 import pandas as pd
 import numpy as np
 import random
-recipes = pd.read_csv('Recipes.csv')
-toppings = pd.read_csv('csv_files/Toppings.csv')
-range_of_days = pd.date_range(end='10/2/2023', periods=365, freq = 'D')
+recipes = pd.read_csv('csv_files/Recipes_Full.csv')
 
+toppings = pd.read_csv('csv_files/Toppings.csv')
+recipe_items, num_features = recipes.shape
+topping_items, topping_features = toppings.shape
+range_of_days = pd.date_range(end='10/2/2023', periods=365, freq = 'D')
+#make july 4th and christmas peak days
+July_4th = pd.date_range(start='7/4/2023', end='7/4/2023', freq = 'D')
+Christmas = pd.date_range(start='12/25/2022', end='12/25/2022', freq = 'D')
 
 # distribution of orders: around 100 a day, around 200 on peak days
 
@@ -34,9 +39,10 @@ for date in range_of_days:
     num_orders = random.randint(100, 150)
     
     day_of_week = date.day%7
-    if(day_of_week == 6 or day_of_week == 7):
-        num_orders = random.randint(200, 250)
     
+    if(date in July_4th or date in Christmas):
+        num_orders = random.randint(400, 550)
+        print("Peak Day")
     
     
     for order in range(num_orders):
@@ -45,7 +51,7 @@ for date in range_of_days:
         
         total_price = 0
         for item in range(num_items):
-            drink_index = random.randint(0,9)
+            drink_index = random.randint(0, recipe_items-1)
             size = random.randint(0,1)
             recipe_id = recipes.iloc[drink_index, 0]
             size = (size==1) # medium
@@ -60,7 +66,7 @@ for date in range_of_days:
             total_price += item_price    
     
             for topping in range(num_toppings):
-                _topping = random.randint(1, 8)
+                _topping = random.randint(1, topping_items)
                 # _topping = toppings.iloc[_topping, 1]
                 quantity = random.randint(1, 3)  
                 order_item_toppings.write(

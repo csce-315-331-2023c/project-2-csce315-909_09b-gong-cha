@@ -46,7 +46,7 @@ Query 4______________________
 "Select the Top 10 sales days and return the date, the number of orders, and the Total Sales"
 NOTE: this is our second interpretation of "2 Peak Days: select top 10 sums of order total grouped by day in descending order." 
 This assumes we just need to return the 10 ten peak days of sales, and that sums of order means the top 10 sale days.
-(top_10_sales_days.sql)
+(top_10_sales_day.sql)
 
 SELECT date_, COUNT(*) as order_count, SUM(subtotal + tip) as sales
 FROM order_ 
