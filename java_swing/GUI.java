@@ -1,5 +1,5 @@
 import java.sql.*;
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -15,6 +15,22 @@ public class GUI extends JFrame implements ActionListener {
     static JFrame loginFrame;
     static JFrame cashierFrame;
     static JFrame managerFrame;
+
+    /*
+     * This function handles the button creation for drinks so they all 
+     * follow the same style. It takes in a String of the text it will 
+     * contain, and formats it using html methods and Java swing commands.
+     */
+    public static JButton createDrinkButton(String text) {
+      JButton button = new JButton("<html><div style='text-align: center; vertical-align: middle;'>"+text+"</div></html>");
+
+      button.setBackground(Color.GREEN);
+      button.setPreferredSize(new Dimension(100, 100));
+      button.setHorizontalAlignment(SwingConstants.CENTER);
+      button.setVerticalAlignment(SwingConstants.CENTER);
+
+      return button;
+    }
 
     public static void main(String[] args)
     {
@@ -59,7 +75,9 @@ public class GUI extends JFrame implements ActionListener {
       // create a panel
       JPanel loginPanel = new JPanel();
       JPanel cashierPanel = new JPanel();
+      JPanel cashierDrinkPanel = new JPanel();
       JPanel managerPanel = new JPanel();
+      JPanel managerDrinkPanel = new JPanel();
 
       JButton exitButton = new JButton("Exit");
       JButton cashierButton = new JButton("Cashier");
@@ -67,7 +85,16 @@ public class GUI extends JFrame implements ActionListener {
       JButton managerButton = new JButton("Manager");
       JButton managerBackButton = new JButton("Back");
 
-
+      JButton blackMilkTea= createDrinkButton("<html>Black<br>Milk Tea</html>");
+      JButton brownSugarMilkTea = createDrinkButton("<html>Brown Sugar<br>Milk Tea</html>");
+      JButton caramelMilkTea = createDrinkButton("<html>Caramel<br>Milk Tea</html>");
+      JButton earlGreyMilkTea = createDrinkButton("<html>Earl Grey<br>Milk Tea</html>");
+      JButton earlGreyMilkTea3Js = createDrinkButton("<html>Earl Grey<br>Milk Tea<br>3Js</html>");
+      JButton greenMilkTea = createDrinkButton("<html>Green<br>Milk Tea</html>");
+      JButton oolongMilkTea = createDrinkButton("<html>Oolong<br>Milk Tea</html>");
+      JButton pearlMilkTea = createDrinkButton("<html>Pearl<br>Milk Tea</html>");
+      JButton strawberryMilkTea = createDrinkButton("<html>Strawberry<br>Milk Tea</html>");
+      JButton wintermelonMilkTea = createDrinkButton("<html>Wintermelon<br>Milk Tea</html>");
 
       // add actionlistener to button
       exitButton.addActionListener(s);
@@ -76,10 +103,21 @@ public class GUI extends JFrame implements ActionListener {
       managerButton.addActionListener(s);
       managerBackButton.addActionListener(s);
 
-
+      blackMilkTea.addActionListener(s);
+      brownSugarMilkTea.addActionListener(s);
+      caramelMilkTea.addActionListener(s);
+      earlGreyMilkTea.addActionListener(s);
+      earlGreyMilkTea3Js.addActionListener(s);
+      greenMilkTea.addActionListener(s);
+      oolongMilkTea.addActionListener(s);
+      pearlMilkTea.addActionListener(s);
+      strawberryMilkTea.addActionListener(s);
+      wintermelonMilkTea.addActionListener(s);
+      
       //TODO Step 3 
       JTextArea newTextArea = new JTextArea(9, 5);
       newTextArea.setText(name);
+      newTextArea.setEditable(false);
       //TODO Step 4
       loginPanel.add(newTextArea);
 
@@ -91,18 +129,35 @@ public class GUI extends JFrame implements ActionListener {
 
       cashierPanel.add(cashierBackButton);
 
+      cashierDrinkPanel.add(blackMilkTea);
+      cashierDrinkPanel.add(brownSugarMilkTea);
+      cashierDrinkPanel.add(caramelMilkTea);
+      cashierDrinkPanel.add(earlGreyMilkTea);
+      cashierDrinkPanel.add(earlGreyMilkTea3Js);
+      cashierDrinkPanel.add(greenMilkTea);
+      cashierDrinkPanel.add(oolongMilkTea);
+      cashierDrinkPanel.add(pearlMilkTea);
+      cashierDrinkPanel.add(strawberryMilkTea);
+      cashierDrinkPanel.add(wintermelonMilkTea);
+
       managerPanel.add(managerBackButton);
       
       // add panel to frame
       loginFrame.add(loginPanel);
       cashierFrame.add(cashierPanel);
+      cashierFrame.add(cashierDrinkPanel, BorderLayout.CENTER);
       managerFrame.add(managerPanel);
+      managerFrame.add(managerDrinkPanel, BorderLayout.CENTER);
 
       // set the size of frame
       loginFrame.setSize(640, 480);
       cashierFrame.setSize(640, 480);
       managerFrame.setSize(640, 480);
 
+      // prevent resizability of the frames
+      loginFrame.setResizable(false);
+      cashierFrame.setResizable(false);
+      managerFrame.setResizable(false);
 
       loginFrame.setVisible(true);
 
