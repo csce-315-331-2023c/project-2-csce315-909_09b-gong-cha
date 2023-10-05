@@ -3,13 +3,6 @@
 -- enum types
 CREATE TYPE ice_type AS ENUM ('light', 'regular', 'none');
 CREATE TYPE sugar_type AS ENUM ('100%', '70%', '50%', '30%', '0%');
--- Alter the table to change the data type of the "Ice" column to text
-ALTER TABLE public.Order_Item
-ALTER COLUMN Ice TYPE TEXT;
-
--- Alter the table to change the data type of the "Sugar" column to text
-ALTER TABLE public.Order_Item
-ALTER COLUMN Sugar TYPE TEXT;
 
 --Clear out all old tables 
 DROP TABLE IF EXISTS public.Order_Item_Toppings;
@@ -113,6 +106,15 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.Order_Item
     OWNER to postgres;
+	
+-- Alter the table to change the data type of the "Ice" column to text
+ALTER TABLE public.Order_Item
+ALTER COLUMN Ice TYPE TEXT;
+
+-- Alter the table to change the data type of the "Sugar" column to text
+ALTER TABLE public.Order_Item
+ALTER COLUMN Sugar TYPE TEXT;
+
 
 --create junction table between order item and toppings.
 CREATE TABLE IF NOT EXISTS public.Order_Item_Toppings(
