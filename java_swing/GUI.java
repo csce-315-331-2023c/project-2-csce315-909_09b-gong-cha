@@ -112,17 +112,15 @@ public class GUI extends JFrame implements ActionListener {
       JButton cashierBackButton = new JButton("Back");
       JButton managerButton = new JButton("Manager");
       JButton managerBackButton = new JButton("Back");
+
       //I want to read from a sql query and create buttons for each drink
       //jtabbed pane for drinks, fields will be Slushie, Coffee, Milk Tea
       //each tab will open a new window with the drinks for that category
       //each drink will have a button that will add it to the order
       //each drink will have a button that will remove it from the order
-      JTabbedPane tabbedPane = new JTabbedPane();
-      tabbedPane.addTab("Slushie", null);
-      tabbedPane.addTab("Coffee", null);
-      tabbedPane.addTab("Milk Tea", null);
-      //add this to the CashierPanel
-      cashierPanel.add(tabbedPane);
+
+      //create a tabbed pane
+
 
       JButton blackMilkTea= createDrinkButton("<html>Black<br>Milk Tea</html>");
       JButton brownSugarMilkTea = createDrinkButton("<html>Brown Sugar<br>Milk Tea</html>");
@@ -135,9 +133,18 @@ public class GUI extends JFrame implements ActionListener {
       JButton strawberryMilkTea = createDrinkButton("<html>Strawberry<br>Milk Tea</html>");
       JButton wintermelonMilkTea = createDrinkButton("<html>Wintermelon<br>Milk Tea</html>");
 
-      // add actionlistener to button
-      //make it override ActionListener and close connection if it is hit.
-      // exitButton.addActionListener(s);
+      JTabbedPane tabbedPane = new JTabbedPane();
+      tabbedPane.addTab("Slushie", null);
+      tabbedPane.addTab("Coffee", null);
+      tabbedPane.addTab("Milk Tea", null);
+      //make sure the info below the tabbed pane takes up the space not populated by the receipt panel
+      //put the coffees in the coffee tab
+      //put the slushies in the slushie tab
+      //make sure the tabs are scrollable
+      tabbedPane.setPreferredSize(new Dimension(824, 768));
+      //put the teas in the milk tea tab
+      
+
       // When initializing the exit button, pass the connection
       exitButton.addActionListener(new ExitButtonListener(conn));
 
@@ -182,7 +189,41 @@ public class GUI extends JFrame implements ActionListener {
       // add panel to frame
       loginFrame.add(loginPanel);
       
-      cashierFrame.add(tabbedPane, BorderLayout.NORTH);
+      //make "receipt" jpanel that will always be on the side of the screen
+      //make it so that it is always on the right side of the screen
+      //make it so that it is always on top of the other panels
+      //make it so that it is always the same size
+      //make it so that it is scrollable
+      //the receipt panel will be edited based on current orders, which will be handled by backend
+      JPanel receiptPanel = new JPanel();
+      receiptPanel.setPreferredSize(new Dimension(200, 768));
+      receiptPanel.setBackground(Color.WHITE);
+      receiptPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+      receiptPanel.setLayout(new BoxLayout(receiptPanel, BoxLayout.Y_AXIS));
+      //add name of server and an exit button that clears the receipt panel(i.e. the current order)
+      receiptPanel.add(new JLabel("Server:"));
+      // receiptPanel.add(new JLabel("Receipt"));
+      receiptPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+      //function to edit receipt panel and add more orders/items to it
+      //at the bottom of the receipt panel, we will have a part that says Subtotal, Tip, Total, and a checkout button which ends a transaction
+      //the checkout button will also clear the receipt panel
+      //the Jlabels for subtotal, tip, and total will be updated based on the current order, but should be always on the bottom of the receipt panel
+      JPanel receiptPanel2_bottom = new JPanel();
+      receiptPanel2_bottom.setLayout(new BoxLayout(receiptPanel2_bottom, BoxLayout.Y_AXIS));
+      receiptPanel2_bottom.add(new JLabel("Subtotal:"));
+      receiptPanel2_bottom.add(new JLabel("Tip:"));
+      receiptPanel2_bottom.add(new JLabel("Total:"));
+      JButton checkoutButton = new JButton("Checkout");
+      receiptPanel2_bottom.add(checkoutButton);
+
+      //i want to make sure the information on the order is always at the bottom of the receipt panel
+      receiptPanel.add(Box.createVerticalGlue());
+      //put receiptPanel2_bottom at the bottom of the receipt panel
+      receiptPanel.add(receiptPanel2_bottom);
+
+      
+      cashierFrame.add(receiptPanel, BorderLayout.EAST);    
+      cashierFrame.add(tabbedPane, BorderLayout.WEST);
       cashierFrame.add(cashierBackButton, BorderLayout.SOUTH);
       cashierFrame.add(cashierPanel);
       cashierFrame.add(cashierDrinkPanel, BorderLayout.CENTER);
