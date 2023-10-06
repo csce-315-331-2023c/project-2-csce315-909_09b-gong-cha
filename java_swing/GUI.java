@@ -3,6 +3,26 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+class ExitButtonListener implements ActionListener {
+    private Connection conn;
+
+    public ExitButtonListener(Connection conn) {
+        this.conn = conn;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        try {
+            conn.close(); // Close the database connection
+            JOptionPane.showMessageDialog(null, "Connection Closed.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Connection NOT Closed.");
+        }
+        System.exit(0); // Exit the application
+    }
+}
+
+
 /*
   TODO:
   1) Change credentials for your own team's database
@@ -105,7 +125,13 @@ public class GUI extends JFrame implements ActionListener {
       JButton wintermelonMilkTea = createDrinkButton("<html>Wintermelon<br>Milk Tea</html>");
 
       // add actionlistener to button
-      exitButton.addActionListener(s);
+      //make it override ActionListener and close connection if it is hit.
+      // exitButton.addActionListener(s);
+      // // ...
+
+      // When initializing the exit button, pass the connection
+      exitButton.addActionListener(new ExitButtonListener(conn));
+
       cashierButton.addActionListener(s);
       cashierBackButton.addActionListener(s);
       managerButton.addActionListener(s);
@@ -122,11 +148,9 @@ public class GUI extends JFrame implements ActionListener {
       strawberryMilkTea.addActionListener(s);
       wintermelonMilkTea.addActionListener(s);
       
-      //TODO Step 3 
       JTextArea newTextArea = new JTextArea(9, 5);
       newTextArea.setText(name);
       newTextArea.setEditable(false);
-      //TODO Step 4
       loginPanel.add(newTextArea);
 
 
@@ -169,13 +193,12 @@ public class GUI extends JFrame implements ActionListener {
 
       loginFrame.setVisible(true);
 
-      //closing the connection
-      try {
-        conn.close();
-        JOptionPane.showMessageDialog(null,"Connection Closed.");
-      } catch(Exception e) {
-        JOptionPane.showMessageDialog(null,"Connection NOT Closed.");
-      }
+      // try {
+      //   conn.close();
+      //   JOptionPane.showMessageDialog(null,"Connection Closed.");
+      // } catch(Exception e) {
+      //   JOptionPane.showMessageDialog(null,"Connection NOT Closed.");
+      // }
     }
 
     // if button is pressed
@@ -199,4 +222,6 @@ public class GUI extends JFrame implements ActionListener {
             loginFrame.setVisible(false);
         }
     }
+
+    
 }
