@@ -1,20 +1,20 @@
-import java.sql.*;
+package com.example.gongchapos;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-/*
-  TODO:
-  1) Change credentials for your own team's database
-  2) Change SQL command to a relevant query that retrieves a small amount of data
-  3) Create a JTextArea object using the queried data
-  4) Add the new object to the JPanel p
-*/
 
 public class GUI extends JFrame implements ActionListener {
     static JFrame loginFrame;
     static JFrame cashierFrame;
     static JFrame managerFrame;
+
+    private Application app = null;
+
+    public void setApp(Application _app)
+    {
+      app = _app;
+    }
 
     /*
      * This function handles the button creation for drinks so they all 
@@ -30,55 +30,22 @@ public class GUI extends JFrame implements ActionListener {
       button.setVerticalAlignment(SwingConstants.CENTER);
 
       return button;
-    }
+    }    
 
-    public static void main(String[] args)
+
+    public void launchGUI()
     {
-      //Pass in NetID and Password as command line arguments
-      if(args.length != 2) {
-        System.out.println("Error: Must supply NetID and Password as command line arguments");
-        System.exit(0);
-      }
-      String netID = args[0];
-      String password = args[1];
-      System.out.println("NetID: " + netID + "\nPassword: " + password);
-      //Building the connection
-      Connection conn = null;
-
-      //TODO STEP 1
-      try {
-        conn = DriverManager.getConnection(
-          "jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315331_09b_db",
-          "csce315_909_"+netID,
-          password);
-      } catch (Exception e) {
-        e.printStackTrace();
-        System.err.println(e.getClass().getName()+": "+e.getMessage());
-        System.exit(0);
-      }
       JOptionPane.showMessageDialog(null,"Opened database successfully");
 
-      String name = "";
-      try{
-        //create a statement object
-        Statement stmt = conn.createStatement();
-        //create a SQL statement
-        String sqlStatement = "SELECT * FROM order_ LIMIT 10;";
-        //send statement to DBMS
-        ResultSet result = stmt.executeQuery(sqlStatement);
-        while (result.next()) {
-          name += result.getString("order_id")+"\n";
-        }
-      } catch (Exception e){
-        JOptionPane.showMessageDialog(null,"Error accessing Database.");
-      }
+      String name = app.BasicQuery("SELECT * FROM order_ LIMIT 5");  
+
       // create frames for the 3 possible windows
       loginFrame = new JFrame("Welcome to Gong Cha!");
       cashierFrame = new JFrame("Cashier");
       managerFrame = new JFrame("Manager");
 
       // create a object
-      GUI s = new GUI();
+      // GUI s = new GUI();
 
       // create a panel
       JPanel loginPanel = new JPanel();
@@ -105,28 +72,26 @@ public class GUI extends JFrame implements ActionListener {
       JButton wintermelonMilkTea = createDrinkButton("<html>Wintermelon<br>Milk Tea</html>");
 
       // add actionlistener to button
-      exitButton.addActionListener(s);
-      cashierButton.addActionListener(s);
-      cashierBackButton.addActionListener(s);
-      managerButton.addActionListener(s);
-      managerBackButton.addActionListener(s);
+      exitButton.addActionListener(this);
+      cashierButton.addActionListener(this);
+      cashierBackButton.addActionListener(this);
+      managerButton.addActionListener(this);
+      managerBackButton.addActionListener(this);
 
-      blackMilkTea.addActionListener(s);
-      brownSugarMilkTea.addActionListener(s);
-      caramelMilkTea.addActionListener(s);
-      earlGreyMilkTea.addActionListener(s);
-      earlGreyMilkTea3Js.addActionListener(s);
-      greenMilkTea.addActionListener(s);
-      oolongMilkTea.addActionListener(s);
-      pearlMilkTea.addActionListener(s);
-      strawberryMilkTea.addActionListener(s);
-      wintermelonMilkTea.addActionListener(s);
+      blackMilkTea.addActionListener(this);
+      brownSugarMilkTea.addActionListener(this);
+      caramelMilkTea.addActionListener(this);
+      earlGreyMilkTea.addActionListener(this);
+      earlGreyMilkTea3Js.addActionListener(this);
+      greenMilkTea.addActionListener(this);
+      oolongMilkTea.addActionListener(this);
+      pearlMilkTea.addActionListener(this);
+      strawberryMilkTea.addActionListener(this);
+      wintermelonMilkTea.addActionListener(this);
       
-      //TODO Step 3 
       JTextArea newTextArea = new JTextArea(9, 5);
       newTextArea.setText(name);
       newTextArea.setEditable(false);
-      //TODO Step 4
       loginPanel.add(newTextArea);
 
 
@@ -169,13 +134,6 @@ public class GUI extends JFrame implements ActionListener {
 
       loginFrame.setVisible(true);
 
-      //closing the connection
-      try {
-        conn.close();
-        JOptionPane.showMessageDialog(null,"Connection Closed.");
-      } catch(Exception e) {
-        JOptionPane.showMessageDialog(null,"Connection NOT Closed.");
-      }
     }
 
     // if button is pressed
@@ -183,7 +141,8 @@ public class GUI extends JFrame implements ActionListener {
     {
         String s = e.getActionCommand();
         if (s.equals("Exit")) {
-            loginFrame.dispose();
+          app.closeDatabase();
+          loginFrame.dispose();
         }
         if (s.equals("Back")) {
           loginFrame.setVisible(true);
