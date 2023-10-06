@@ -34,14 +34,23 @@ public class GUI extends JFrame implements ActionListener {
 
     public static void main(String[] args)
     {
+      //Pass in NetID and Password as command line arguments
+      if(args.length != 2) {
+        System.out.println("Error: Must supply NetID and Password as command line arguments");
+        System.exit(0);
+      }
+      String netID = args[0];
+      String password = args[1];
+      System.out.println("NetID: " + netID + "\nPassword: " + password);
       //Building the connection
       Connection conn = null;
+
       //TODO STEP 1
       try {
         conn = DriverManager.getConnection(
           "jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315331_09b_db",
-          "csce315_909_<NET ID>",
-          "<password>");
+          "csce315_909_"+netID,
+          password);
       } catch (Exception e) {
         e.printStackTrace();
         System.err.println(e.getClass().getName()+": "+e.getMessage());
@@ -54,7 +63,6 @@ public class GUI extends JFrame implements ActionListener {
         //create a statement object
         Statement stmt = conn.createStatement();
         //create a SQL statement
-        //TODO Step 2
         String sqlStatement = "SELECT * FROM order_ LIMIT 10;";
         //send statement to DBMS
         ResultSet result = stmt.executeQuery(sqlStatement);
