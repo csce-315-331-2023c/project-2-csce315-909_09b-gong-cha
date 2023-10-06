@@ -112,6 +112,17 @@ public class GUI extends JFrame implements ActionListener {
       JButton cashierBackButton = new JButton("Back");
       JButton managerButton = new JButton("Manager");
       JButton managerBackButton = new JButton("Back");
+      //I want to read from a sql query and create buttons for each drink
+      //jtabbed pane for drinks, fields will be Slushie, Coffee, Milk Tea
+      //each tab will open a new window with the drinks for that category
+      //each drink will have a button that will add it to the order
+      //each drink will have a button that will remove it from the order
+      JTabbedPane tabbedPane = new JTabbedPane();
+      tabbedPane.addTab("Slushie", null);
+      tabbedPane.addTab("Coffee", null);
+      tabbedPane.addTab("Milk Tea", null);
+      //add this to the CashierPanel
+      cashierPanel.add(tabbedPane);
 
       JButton blackMilkTea= createDrinkButton("<html>Black<br>Milk Tea</html>");
       JButton brownSugarMilkTea = createDrinkButton("<html>Brown Sugar<br>Milk Tea</html>");
@@ -127,8 +138,6 @@ public class GUI extends JFrame implements ActionListener {
       // add actionlistener to button
       //make it override ActionListener and close connection if it is hit.
       // exitButton.addActionListener(s);
-      // // ...
-
       // When initializing the exit button, pass the connection
       exitButton.addActionListener(new ExitButtonListener(conn));
 
@@ -159,8 +168,6 @@ public class GUI extends JFrame implements ActionListener {
       loginPanel.add(cashierButton);
       loginPanel.add(managerButton);
 
-      cashierPanel.add(cashierBackButton);
-
       cashierDrinkPanel.add(blackMilkTea);
       cashierDrinkPanel.add(brownSugarMilkTea);
       cashierDrinkPanel.add(caramelMilkTea);
@@ -171,20 +178,25 @@ public class GUI extends JFrame implements ActionListener {
       cashierDrinkPanel.add(pearlMilkTea);
       cashierDrinkPanel.add(strawberryMilkTea);
       cashierDrinkPanel.add(wintermelonMilkTea);
-
-      managerPanel.add(managerBackButton);
       
       // add panel to frame
       loginFrame.add(loginPanel);
+      
+      cashierFrame.add(tabbedPane, BorderLayout.NORTH);
+      cashierFrame.add(cashierBackButton, BorderLayout.SOUTH);
       cashierFrame.add(cashierPanel);
       cashierFrame.add(cashierDrinkPanel, BorderLayout.CENTER);
+
+      
+      managerFrame.add(managerBackButton, BorderLayout.SOUTH);
+
       managerFrame.add(managerPanel);
       managerFrame.add(managerDrinkPanel, BorderLayout.CENTER);
 
-      // set the size of frame
+      // set the size of frame to be desktop
       loginFrame.setSize(640, 480);
-      cashierFrame.setSize(640, 480);
-      managerFrame.setSize(640, 480);
+      cashierFrame.setSize(1024, 768);
+      managerFrame.setSize(1024, 768);
 
       // prevent resizability of the frames
       loginFrame.setResizable(false);
