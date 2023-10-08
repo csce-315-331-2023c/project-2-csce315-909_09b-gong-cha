@@ -22,15 +22,6 @@ class ExitButtonListener implements ActionListener {
     }
 }
 
-
-/*
-  TODO:
-  1) Change credentials for your own team's database
-  2) Change SQL command to a relevant query that retrieves a small amount of data
-  3) Create a JTextArea object using the queried data
-  4) Add the new object to the JPanel p
-*/
-
 public class GUI extends JFrame implements ActionListener {
     static JFrame loginFrame;
     static JFrame cashierFrame;
@@ -118,10 +109,6 @@ public class GUI extends JFrame implements ActionListener {
       //each tab will open a new window with the drinks for that category
       //each drink will have a button that will add it to the order
       //each drink will have a button that will remove it from the order
-
-      //create a tabbed pane
-
-
       JButton blackMilkTea= createDrinkButton("<html>Black<br>Milk Tea</html>");
       JButton brownSugarMilkTea = createDrinkButton("<html>Brown Sugar<br>Milk Tea</html>");
       JButton caramelMilkTea = createDrinkButton("<html>Caramel<br>Milk Tea</html>");
