@@ -11,9 +11,10 @@ public class GUI extends JFrame implements ActionListener {
 
     private Application app = null;
 
-    public void setApp(Application _app)
+    public GUI(Application _app)
     {
       app = _app;
+      launchGUI();
     }
 
     /*
