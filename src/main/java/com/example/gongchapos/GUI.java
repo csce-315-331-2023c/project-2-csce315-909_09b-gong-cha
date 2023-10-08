@@ -1,20 +1,20 @@
-import java.sql.*;
+package com.example.gongchapos;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-/*
-  TODO:
-  1) Change credentials for your own team's database
-  2) Change SQL command to a relevant query that retrieves a small amount of data
-  3) Create a JTextArea object using the queried data
-  4) Add the new object to the JPanel p
-*/
 
 public class GUI extends JFrame implements ActionListener {
     static JFrame loginFrame;
     static JFrame cashierFrame;
     static JFrame managerFrame;
+
+    private Application app = null;
+
+    public void setApp(Application _app)
+    {
+      app = _app;
+    }
 
     /*
      * This function handles the button creation for drinks so they all 
@@ -30,60 +30,27 @@ public class GUI extends JFrame implements ActionListener {
       button.setVerticalAlignment(SwingConstants.CENTER);
 
       return button;
-    }
+    }    
 
-    public static void main(String[] args)
+
+    public void launchGUI()
     {
-      //Pass in NetID and Password as command line arguments
-      if(args.length != 2) {
-        System.out.println("Error: Must supply NetID and Password as command line arguments");
-        System.exit(0);
-      }
-      String netID = args[0];
-      String password = args[1];
-      System.out.println("NetID: " + netID + "\nPassword: " + password);
-      //Building the connection
-      Connection conn = null;
-
-      //TODO STEP 1
-      try {
-        conn = DriverManager.getConnection(
-          "jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315331_09b_db",
-          "csce315_909_"+netID,
-          password);
-      } catch (Exception e) {
-        e.printStackTrace();
-        System.err.println(e.getClass().getName()+": "+e.getMessage());
-        System.exit(0);
-      }
       JOptionPane.showMessageDialog(null,"Opened database successfully");
 
-      String name = "";
-      try{
-        //create a statement object
-        Statement stmt = conn.createStatement();
-        //create a SQL statement
-        String sqlStatement = "SELECT * FROM order_ LIMIT 10;";
-        //send statement to DBMS
-        ResultSet result = stmt.executeQuery(sqlStatement);
-        while (result.next()) {
-          name += result.getString("order_id")+"\n";
-        }
-      } catch (Exception e){
-        JOptionPane.showMessageDialog(null,"Error accessing Database.");
-      }
+      String name = app.BasicQuery("SELECT * FROM order_ LIMIT 5");  
+
       // create frames for the 3 possible windows
       loginFrame = new JFrame("Welcome to Gong Cha!");
       cashierFrame = new JFrame("Cashier");
       managerFrame = new JFrame("Manager");
 
       // create a object
-      GUI s = new GUI();
+      // GUI s = new GUI();
 
       // create a panel
       JPanel loginPanel = new JPanel();
       JPanel cashierPanel = new JPanel();
-      JPanel cashierDrinkPanel = new JPanel();
+      // JPanel cashierDrinkPanel = new JPanel();
       JPanel managerPanel = new JPanel();
       JPanel managerDrinkPanel = new JPanel();
 
@@ -104,29 +71,39 @@ public class GUI extends JFrame implements ActionListener {
       JButton strawberryMilkTea = createDrinkButton("<html>Strawberry<br>Milk Tea</html>");
       JButton wintermelonMilkTea = createDrinkButton("<html>Wintermelon<br>Milk Tea</html>");
 
-      // add actionlistener to button
-      exitButton.addActionListener(s);
-      cashierButton.addActionListener(s);
-      cashierBackButton.addActionListener(s);
-      managerButton.addActionListener(s);
-      managerBackButton.addActionListener(s);
-
-      blackMilkTea.addActionListener(s);
-      brownSugarMilkTea.addActionListener(s);
-      caramelMilkTea.addActionListener(s);
-      earlGreyMilkTea.addActionListener(s);
-      earlGreyMilkTea3Js.addActionListener(s);
-      greenMilkTea.addActionListener(s);
-      oolongMilkTea.addActionListener(s);
-      pearlMilkTea.addActionListener(s);
-      strawberryMilkTea.addActionListener(s);
-      wintermelonMilkTea.addActionListener(s);
+      JButton milkcoffee = createDrinkButton("<html>Milk<br>Coffee</html>");
+      JButton CoffeeMilkTea = createDrinkButton("<html>Coffee<br>Milk Tea</html>");
+      JButton MilkFoamBlackCoffee = createDrinkButton("<html>Milk Foam<br>Black Coffee</html>");
+      JButton TaroMilkSlush = createDrinkButton("<html>Taro<br>Milk Slush</html>");
+      JButton StrawberryMilkSlush = createDrinkButton("<html>Strawberry<br>Milk Slush</html>");
       
-      //TODO Step 3 
+      // add actionlistener to button
+      exitButton.addActionListener(this);
+      cashierButton.addActionListener(this);
+      cashierBackButton.addActionListener(this);
+      managerButton.addActionListener(this);
+      managerBackButton.addActionListener(this);
+
+      blackMilkTea.addActionListener(this);
+      brownSugarMilkTea.addActionListener(this);
+      caramelMilkTea.addActionListener(this);
+      earlGreyMilkTea.addActionListener(this);
+      earlGreyMilkTea3Js.addActionListener(this);
+      greenMilkTea.addActionListener(this);
+      oolongMilkTea.addActionListener(this);
+      pearlMilkTea.addActionListener(this);
+      strawberryMilkTea.addActionListener(this);
+      wintermelonMilkTea.addActionListener(this);
+      
+      milkcoffee.addActionListener(this);
+      CoffeeMilkTea.addActionListener(this);
+      MilkFoamBlackCoffee.addActionListener(this);
+      TaroMilkSlush.addActionListener(this);
+      StrawberryMilkSlush.addActionListener(this);
+        
       JTextArea newTextArea = new JTextArea(9, 5);
       newTextArea.setText(name);
       newTextArea.setEditable(false);
-      //TODO Step 4
       loginPanel.add(newTextArea);
 
 
@@ -137,30 +114,104 @@ public class GUI extends JFrame implements ActionListener {
 
       cashierPanel.add(cashierBackButton);
 
-      cashierDrinkPanel.add(blackMilkTea);
-      cashierDrinkPanel.add(brownSugarMilkTea);
-      cashierDrinkPanel.add(caramelMilkTea);
-      cashierDrinkPanel.add(earlGreyMilkTea);
-      cashierDrinkPanel.add(earlGreyMilkTea3Js);
-      cashierDrinkPanel.add(greenMilkTea);
-      cashierDrinkPanel.add(oolongMilkTea);
-      cashierDrinkPanel.add(pearlMilkTea);
-      cashierDrinkPanel.add(strawberryMilkTea);
-      cashierDrinkPanel.add(wintermelonMilkTea);
+      // cashierDrinkPanel.add(blackMilkTea);
+      // cashierDrinkPanel.add(brownSugarMilkTea);
+      // cashierDrinkPanel.add(caramelMilkTea);
+      // cashierDrinkPanel.add(earlGreyMilkTea);
+      // cashierDrinkPanel.add(earlGreyMilkTea3Js);
+      // cashierDrinkPanel.add(greenMilkTea);
+      // cashierDrinkPanel.add(oolongMilkTea);
+      // cashierDrinkPanel.add(pearlMilkTea);
+      // cashierDrinkPanel.add(strawberryMilkTea);
+      // cashierDrinkPanel.add(wintermelonMilkTea);
 
-      managerPanel.add(managerBackButton);
+      JTabbedPane tabbedPane = new JTabbedPane();
+      
+      JPanel milkteaholder = new JPanel();
+      milkteaholder.add(blackMilkTea);
+      milkteaholder.add(brownSugarMilkTea);
+      milkteaholder.add(caramelMilkTea);
+      milkteaholder.add(earlGreyMilkTea);
+      milkteaholder.add(earlGreyMilkTea3Js);
+      milkteaholder.add(greenMilkTea);
+      milkteaholder.add(oolongMilkTea);
+      milkteaholder.add(pearlMilkTea);
+      milkteaholder.add(strawberryMilkTea);
+      milkteaholder.add(wintermelonMilkTea);
+
+      //make cashierslushiepanel
+      JPanel CashierSlushiePanel = new JPanel();
+      CashierSlushiePanel.add(TaroMilkSlush);
+      CashierSlushiePanel.add(StrawberryMilkSlush);
+
+      //make cashiercoffeepanel
+      JPanel CashierCoffeePanel = new JPanel();
+      CashierCoffeePanel.add(milkcoffee);
+      CashierCoffeePanel.add(CoffeeMilkTea);
+      CashierCoffeePanel.add(MilkFoamBlackCoffee);
+
+      tabbedPane.addTab("Milk Tea", null, milkteaholder, "Does nothing");
+      tabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
+      tabbedPane.addTab("Coffee", null, CashierCoffeePanel, "Does nothing");
+      //put pearlmilkTea in the milk tea tab
+      tabbedPane.setPreferredSize(new Dimension(824, 768));
+      //put the teas in the milk tea tab
       
       // add panel to frame
       loginFrame.add(loginPanel);
+      
+      //make "receipt" jpanel that will always be on the side of the screen
+      //make it so that it is always on the right side of the screen
+      //make it so that it is always on top of the other panels
+      //make it so that it is always the same size
+      //make it so that it is scrollable
+      //the receipt panel will be edited based on current orders, which will be handled by backend
+      JPanel receiptPanel = new JPanel();
+      receiptPanel.setPreferredSize(new Dimension(200, 768));
+      receiptPanel.setBackground(Color.WHITE);
+      receiptPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+      receiptPanel.setLayout(new BoxLayout(receiptPanel, BoxLayout.Y_AXIS));
+      //add name of server and an exit button that clears the receipt panel(i.e. the current order)
+      receiptPanel.add(new JLabel("Server:"));
+      // receiptPanel.add(new JLabel("Receipt"));
+      receiptPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+      //function to edit receipt panel and add more orders/items to it
+      //at the bottom of the receipt panel, we will have a part that says Subtotal, Tip, Total, and a checkout button which ends a transaction
+      //the checkout button will also clear the receipt panel
+      //the Jlabels for subtotal, tip, and total will be updated based on the current order, but should be always on the bottom of the receipt panel
+      JPanel receiptPanel2_bottom = new JPanel();
+      //receiptpanel2_bottom should be same width as receipt panel
+      // receiptPanel2_bottom.setSize(new Dimension(200, 100)); //currently not working
+      
+      receiptPanel2_bottom.setLayout(new BoxLayout(receiptPanel2_bottom, BoxLayout.Y_AXIS));
+      receiptPanel2_bottom.add(new JLabel("Subtotal:"));
+      receiptPanel2_bottom.add(new JLabel("Tip:"));
+      receiptPanel2_bottom.add(new JLabel("Total:"));
+      JButton checkoutButton = new JButton("Checkout");
+      receiptPanel2_bottom.add(checkoutButton);
+
+      //i want to make sure the information on the order is always at the bottom of the receipt panel
+      receiptPanel.add(Box.createVerticalGlue());
+    
+      //put receiptPanel2_bottom at the bottom of the receipt panel
+      receiptPanel.add(receiptPanel2_bottom);
+
+      cashierFrame.add(receiptPanel, BorderLayout.EAST);    
+      cashierFrame.add(tabbedPane, BorderLayout.WEST);
+      cashierFrame.add(cashierBackButton, BorderLayout.SOUTH);
       cashierFrame.add(cashierPanel);
-      cashierFrame.add(cashierDrinkPanel, BorderLayout.CENTER);
+      // cashierFrame.add(cashierDrinkPanel, BorderLayout.CENTER);
+
+      
+      managerFrame.add(managerBackButton, BorderLayout.SOUTH);
+
       managerFrame.add(managerPanel);
       managerFrame.add(managerDrinkPanel, BorderLayout.CENTER);
 
-      // set the size of frame
+      // set the size of frame to be desktop
       loginFrame.setSize(640, 480);
-      cashierFrame.setSize(640, 480);
-      managerFrame.setSize(640, 480);
+      cashierFrame.setSize(1024, 768);
+      managerFrame.setSize(1024, 768);
 
       // prevent resizability of the frames
       loginFrame.setResizable(false);
@@ -168,14 +219,6 @@ public class GUI extends JFrame implements ActionListener {
       managerFrame.setResizable(false);
 
       loginFrame.setVisible(true);
-
-      //closing the connection
-      try {
-        conn.close();
-        JOptionPane.showMessageDialog(null,"Connection Closed.");
-      } catch(Exception e) {
-        JOptionPane.showMessageDialog(null,"Connection NOT Closed.");
-      }
     }
 
     // if button is pressed
@@ -183,7 +226,8 @@ public class GUI extends JFrame implements ActionListener {
     {
         String s = e.getActionCommand();
         if (s.equals("Exit")) {
-            loginFrame.dispose();
+          app.closeDatabase();
+          loginFrame.dispose();
         }
         if (s.equals("Back")) {
           loginFrame.setVisible(true);
