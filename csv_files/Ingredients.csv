@@ -19,7 +19,7 @@ Ingredient_ID,Ingredient_Name,Unit_Price,Stock
 18,Black Tea,0.2,189
 19,Coconut Syrup,0.35,154
 20,Lemon Juice,0.1,354
-21,Taro Slush Powder,0.25,186
+21,Taro Powder,0.25,186
 22,Diced Peach,0.13,456
 23,Passionfruit Pulp,0.5,248
 24,Matcha,0.72,315
@@ -33,3 +33,5 @@ Ingredient_ID,Ingredient_Name,Unit_Price,Stock
 32,Coffee,0.3,274
 33,Chai Tea,0.13,118
 34,Thai Tea,0.15,175
+35,Slush Base,0.1,234
+36,Lemonade,0.22,178
