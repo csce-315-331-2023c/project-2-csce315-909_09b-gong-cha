@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS public.Order_;
 DROP TABLE IF EXISTS public.Recipe;
 DROP TABLE IF EXISTS public.Ingredient;
 DROP TABLE IF EXISTS public.Toppings; 
+Drop TABLE IF EXISTS public.Recipe_Toppings;
 
 --Table: Order REQUIRES UNDERSCORE because of naming conventions in SQL
 CREATE TABLE IF NOT EXISTS public.Order_(
@@ -129,6 +130,19 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public.Order_Item_Toppings
     OWNER to postgres;
 
+--create junction table between recipe and toppings
+CREATE TABLE IF NOT EXISTS public.Recipe_Toppings(
+	Recipe_ID serial NOT NULL REFERENCES Recipe(Recipe_ID),
+	Topping_ID serial NOT NULL REFERENCES Toppings(Topping_ID),
+	Quantity_Used numeric NOT NULL
+	-- PRIMARY KEY(Recipe_ID, Topping_ID)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.Recipe_Toppings
+	OWNER to postgres;
+
 --GRANT PERMISSIONS
 GRANT ALL PRIVILEGES ON Order_Item_Toppings 
 TO csce315_909_brenndancroteau;
@@ -191,4 +205,13 @@ GRANT ALL PRIVILEGES ON Toppings
 TO csce315_909_antonhugo1;
 
 GRANT ALL PRIVILEGES ON Toppings 
+TO csce315_909_reid_jenkins;
+
+GRANT ALL PRIVILEGES ON Recipe_Toppings 
+TO csce315_909_brenndancroteau;
+
+GRANT ALL PRIVILEGES ON Recipe_Toppings 
+TO csce315_909_antonhugo1;
+
+GRANT ALL PRIVILEGES ON Recipe_Toppings 
 TO csce315_909_reid_jenkins;

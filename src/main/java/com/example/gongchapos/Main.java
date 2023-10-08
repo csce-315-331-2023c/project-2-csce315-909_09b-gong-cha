@@ -16,10 +16,6 @@ public class Main {
         System.out.println("NetID: " + netID + "\nPassword: " + password);
 
         Application app = new Application();
-        app.ConnectToDatabase(netID, password);
-
-        GUI gui = new GUI();
-        gui.setApp(app);
-        gui.launchGUI();
+        app.run(netID, password);
     }
 }
