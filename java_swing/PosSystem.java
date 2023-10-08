@@ -95,8 +95,8 @@ public class PosSystem {
         frame.setVisible(true);
 
         // Create buttons with associated prices and names
-        ItemButton addItemButton1 = new ItemButton("Item 1", 10.99);
-        ItemButton addItemButton2 = new ItemButton("Item 2", 7.49);
+        ItemButton addItemButton1 = new ItemButton("Item 1", 10.99, 12.99);
+        ItemButton addItemButton2 = new ItemButton("Item 2", 7.49, 9.49);
 
         // Add action listeners to the buttons
         addItemButton1.addActionListener(new ActionListener() {
@@ -129,8 +129,19 @@ public class PosSystem {
 
     private void addItemToReceipt(ItemButton itemButton) {
         // Get item details from the button
+        //ask user if they want the medium price or large price
         String itemName = itemButton.getItemName();
-        double itemPrice = itemButton.getItemPrice();
+        double itemPrice;
+
+        int result = JOptionPane.showConfirmDialog(null, "Would you like the medium or large size? Click YES for medium and NO for large", "Size", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) { 
+            //medium
+            itemPrice = itemButton.getMediumPrice() + 1.00;
+        }
+        else {
+            //large
+            itemPrice = itemButton.getLargePrice() + 2.00;
+        }
 
         // Create components for the new item
         JLabel itemLabel = new JLabel(itemName);
@@ -166,19 +177,30 @@ public class PosSystem {
 
 class ItemButton extends JButton {
     private String itemName;
-    private double itemPrice;
+    private double mediumPrice;
+    private double largePrice;
 
-    public ItemButton(String itemName, double itemPrice) {
+    public ItemButton(String itemName, double mediumPrice, double largePrice) {
         super(itemName);
         this.itemName = itemName;
-        this.itemPrice = itemPrice;
+        this.mediumPrice = mediumPrice;
+        this.largePrice = largePrice;
+
+        setPreferredSize(new Dimension(100, 100));
+        setBackground(Color.GREEN);
+        setHorizontalAlignment(SwingConstants.CENTER);
+        setVerticalAlignment(SwingConstants.CENTER);
     }
 
     public String getItemName() {
         return itemName;
     }
 
-    public double getItemPrice() {
-        return itemPrice;
+    public double getMediumPrice() {
+        return mediumPrice;
+    }
+
+    public double getLargePrice() {
+        return largePrice;
     }
 }
