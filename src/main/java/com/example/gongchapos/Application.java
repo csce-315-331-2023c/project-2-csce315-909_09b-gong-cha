@@ -6,6 +6,14 @@ import javax.swing.JOptionPane;
 
 public class Application {
 
+  GUI gui;
+
+  public void run(String netID, String password)
+  {
+    ConnectToDatabase(netID, password);
+    gui = new GUI(this);
+  }
+
   Connection conn = null;
 
   protected void ConnectToDatabase(String netID, String password)
