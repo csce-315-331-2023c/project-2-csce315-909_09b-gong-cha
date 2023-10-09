@@ -241,6 +241,9 @@ public class GUI extends JFrame {
       // add panel to frame
       loginFrame.add(loginPanel);
     
+      //TODO: add cancel order button, same as checkout button just clears the receipt panel
+      //TODO: add a button to remove an item from the receipt panel
+      //TODO: add a button to edit an item in the receipt panel and add toppings
       JPanel receiptPanel = new JPanel();
 
       receiptPanel.setPreferredSize(new Dimension(200, 768));
@@ -306,6 +309,7 @@ public class GUI extends JFrame {
     private void addItemToReceipt(ItemButton itemButton) {
       // Get item details from the button
       //ask user if they want the medium price or large price
+      
       String itemName = itemButton.getItemName();
       double itemPrice;
 
@@ -337,6 +341,30 @@ public class GUI extends JFrame {
       JLabel priceLabel = new JLabel("    $" + itemPrice);
 
       // Add the item to the item list panel
+      //TODO: add a button to remove an item from the receipt panel
+      //style button to make it small and in same row as item and price labels
+      JButton removeItemButton = new JButton("Remove");
+      removeItemButton.setPreferredSize(new Dimension(100, 20));
+        removeItemButton.setHorizontalAlignment(SwingConstants.CENTER);
+        removeItemButton.setVerticalAlignment(SwingConstants.CENTER);
+        removeItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                itemListPanel.remove(itemLabel);
+                itemListPanel.remove(priceLabel);
+                itemListPanel.remove(removeItemButton);
+                itemListPanel.revalidate();
+                itemListPanel.repaint();
+            }
+        });
+    itemListPanel.add(removeItemButton);
+    //create button to add toppings
+    //should be a dropdown menu with checkboxes
+    JButton editItemButton = new JButton("Edit");
+    editItemButton.setPreferredSize(new Dimension(100, 20));
+    //TODO: add action listener for editItemButton
+
+      itemListPanel.add(editItemButton);
       itemListPanel.add(itemLabel);
       itemListPanel.add(priceLabel);
 
