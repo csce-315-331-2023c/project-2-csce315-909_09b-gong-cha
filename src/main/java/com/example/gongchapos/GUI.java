@@ -69,7 +69,7 @@ public class GUI extends JFrame implements ActionListener {
       JPanel cashierPanel = new JPanel();
       // JPanel cashierDrinkPanel = new JPanel();
       JPanel managerPanel = new JPanel();
-      JPanel managerDrinkPanel = new JPanel();
+      //   JPanel managerDrinkPanel = new JPanel();
 
       JButton exitButton = new JButton("Exit");
       JButton cashierButton = new JButton("Cashier");
@@ -77,22 +77,22 @@ public class GUI extends JFrame implements ActionListener {
       JButton managerButton = new JButton("Manager");
       JButton managerBackButton = new JButton("Back");
 
-      JButton blackMilkTea= createDrinkButton("<html>Black<br>Milk Tea</html>");
-      JButton brownSugarMilkTea = createDrinkButton("<html>Brown Sugar<br>Milk Tea</html>");
-      JButton caramelMilkTea = createDrinkButton("<html>Caramel<br>Milk Tea</html>");
-      JButton earlGreyMilkTea = createDrinkButton("<html>Earl Grey<br>Milk Tea</html>");
-      JButton earlGreyMilkTea3Js = createDrinkButton("<html>Earl Grey<br>Milk Tea<br>3Js</html>");
-      JButton greenMilkTea = createDrinkButton("<html>Green<br>Milk Tea</html>");
-      JButton oolongMilkTea = createDrinkButton("<html>Oolong<br>Milk Tea</html>");
-      JButton pearlMilkTea = createDrinkButton("<html>Pearl<br>Milk Tea</html>");
-      JButton strawberryMilkTea = createDrinkButton("<html>Strawberry<br>Milk Tea</html>");
-      JButton wintermelonMilkTea = createDrinkButton("<html>Wintermelon<br>Milk Tea</html>");
+      ItemButton blackMilkTea= new ItemButton("<html>Black<br>Milk Tea</html>", 8, 12.50);
+      ItemButton brownSugarMilkTea = new ItemButton("<html>Brown Sugar<br>Milk Tea</html>", 8, 12.5);
+      ItemButton caramelMilkTea = new ItemButton("<html>Caramel<br>Milk Tea</html>", 8, 12.5);
+      ItemButton earlGreyMilkTea = new ItemButton("<html>Earl Grey<br>Milk Tea</html>", 8, 12.5);
+      ItemButton earlGreyMilkTea3Js = new ItemButton("<html>Earl Grey<br>Milk Tea<br>3Js</html>", 8, 12.5);
+      ItemButton greenMilkTea = new ItemButton("<html>Green<br>Milk Tea</html>", 8, 12.5);
+      ItemButton oolongMilkTea = new ItemButton("<html>Oolong<br>Milk Tea</html>", 8, 12.5);
+      ItemButton pearlMilkTea = new ItemButton("<html>Pearl<br>Milk Tea</html>", 8, 12.5);
+      ItemButton strawberryMilkTea = new ItemButton("<html>Strawberry<br>Milk Tea</html>", 8, 12.5);
+      ItemButton wintermelonMilkTea = new ItemButton("<html>Wintermelon<br>Milk Tea</html>", 8, 12.5);
 
-      JButton milkcoffee = createDrinkButton("<html>Milk<br>Coffee</html>");
-      JButton CoffeeMilkTea = createDrinkButton("<html>Coffee<br>Milk Tea</html>");
-      JButton MilkFoamBlackCoffee = createDrinkButton("<html>Milk Foam<br>Black Coffee</html>");
-      JButton TaroMilkSlush = createDrinkButton("<html>Taro<br>Milk Slush</html>");
-      JButton StrawberryMilkSlush = createDrinkButton("<html>Strawberry<br>Milk Slush</html>");
+      ItemButton milkcoffee = new ItemButton("<html>Milk<br>Coffee</html>", 10, 16);
+      ItemButton CoffeeMilkTea = new ItemButton("<html>Coffee<br>Milk Tea</html>", 9, 19);
+      ItemButton MilkFoamBlackCoffee = new ItemButton("<html>Milk Foam<br>Black Coffee</html>", 9, 13);
+      ItemButton TaroMilkSlush = new ItemButton("<html>Taro<br>Milk Slush</html>", 10, 20);
+      ItemButton StrawberryMilkSlush = new ItemButton("<html>Strawberry<br>Milk Slush</html>", 10, 20);
       
       // add actionlistener to button
       exitButton.addActionListener(this);
@@ -243,7 +243,7 @@ public class GUI extends JFrame implements ActionListener {
       managerFrame.add(managerBackButton, BorderLayout.SOUTH);
 
       managerFrame.add(managerPanel);
-      managerFrame.add(managerDrinkPanel, BorderLayout.CENTER);
+    //   managerFrame.add(managerDrinkPanel, BorderLayout.CENTER);
 
       // set the size of frame to be desktop
       loginFrame.setSize(640, 480);
@@ -261,6 +261,8 @@ public class GUI extends JFrame implements ActionListener {
     // if button is pressed
     public void actionPerformed(ActionEvent e)
     {
+        JButton clickedButton = (JButton) e.getSource();
+        String buttonName = clickedButton.getText();
         String s = e.getActionCommand();
         if (s.equals("Exit")) {
           app.closeDatabase();
@@ -280,7 +282,7 @@ public class GUI extends JFrame implements ActionListener {
             loginFrame.setVisible(false);
         }
         //if a drink button is pressed, add it to the receipt panel
-
+        if (buttonName == "<html>Black<br>Milk Tea</html>") { addItemToReceipt(blackMilkTea) }
     }
 
     private void addItemToReceipt(ItemButton itemButton) {
@@ -292,11 +294,11 @@ public class GUI extends JFrame implements ActionListener {
       int result = JOptionPane.showConfirmDialog(null, "Would you like the medium or large size? Click YES for medium and NO for large", "Size", JOptionPane.YES_NO_OPTION);
       if (result == JOptionPane.YES_OPTION) { 
           //medium
-          itemPrice = itemButton.getMediumPrice() + 1.00;
+          itemPrice = itemButton.getMediumPrice();
       }
       else {
           //large
-          itemPrice = itemButton.getLargePrice() + 2.00;
+          itemPrice = itemButton.getLargePrice();
       }
 
       // Create components for the new item
