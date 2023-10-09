@@ -190,11 +190,6 @@ public class GUI extends JFrame {
       milkFoamBlackCoffee.addActionListener(actionListener);
       taroMilkSlush.addActionListener(actionListener);
       strawberryMilkSlush.addActionListener(actionListener);
-      
-      JTextArea newTextArea = new JTextArea(9, 5);
-      newTextArea.setText(name);
-      newTextArea.setEditable(false);
-      loginPanel.add(newTextArea);
 
       // add buttons to panels
       loginPanel.add(exitButton);
