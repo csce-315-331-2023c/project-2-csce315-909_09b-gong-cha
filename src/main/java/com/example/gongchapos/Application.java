@@ -1,20 +1,23 @@
 package com.example.gongchapos;
 
 import java.sql.*;
-
+import java.util.*;
 import javax.swing.JOptionPane;
 
 public class Application {
 
   GUI gui;
+  List<Recipe> recipes = new ArrayList<Recipe>();
+  Connection conn = null;
+
+
 
   public void run(String netID, String password)
   {
     ConnectToDatabase(netID, password);
+    populateRecipes();
     gui = new GUI(this);
   }
-
-  Connection conn = null;
 
   protected void ConnectToDatabase(String netID, String password)
   {
@@ -53,10 +56,78 @@ public class Application {
         output += result.getString("order_id")+"\n";
       }
     } catch (Exception e){
-        JOptionPane.showMessageDialog(null,"Error accessing Database.");
+        JOptionPane.showMessageDialog(null,"Error accessing Database");
     }
 
     return output;
+  }
+
+  private void populateRecipes()
+  {
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM Recipe;");
+      while(result.next())
+      {
+        Recipe currentRecipe = new Recipe(result.getInt("Recipe_ID"), 
+                                          result.getString("Recipe_Name"),
+                                          result.getBoolean("Is_Slush"),
+                                          result.getDouble("Med_Price"),
+                                          result.getDouble("Large_Price"),
+                                          result.getDouble("Recipe_Price"));
+
+        recipes.add(currentRecipe);
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }
+
+  // creates a new recipe and inserts it into the database
+  public void createRecipe(int recipe_id, String recipe_name, boolean is_slush, double med_price, double large_price, double recipe_price)
+  {
+    Recipe newRecipe = new Recipe(recipe_id, recipe_name, is_slush, med_price, large_price, recipe_price);
+    recipes.add(newRecipe);
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.executeQuery("INSERT INTO Recipe VALUES(" + recipe_id + recipe_name + is_slush + med_price + large_price + recipe_price + ");");
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }
+
+  // Retuns a recipe given a name, returns null if recipe not found
+  public Recipe getRecipe(String name)
+  {
+    Recipe outRecipe = null;
+    for(Recipe currentRecipe : recipes)
+    {
+      if(currentRecipe.getRecipeName() == name)
+      {
+        outRecipe = currentRecipe;
+        break;
+      }
+    }
+
+    return outRecipe;
+  }
+
+  // Retuns a recipe given a recipe_id, returns null if recipe not found
+  public Recipe getRecipe(int recipe_id)
+  {
+    Recipe outRecipe = null;
+    for(Recipe currentRecipe : recipes)
+    {
+      if(currentRecipe.getRecipeID() == recipe_id)
+      {
+        outRecipe = currentRecipe;
+        break;
+      }
+    }
+
+    return outRecipe;
   }
     
 }
