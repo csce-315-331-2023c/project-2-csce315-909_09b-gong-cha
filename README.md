@@ -42,12 +42,13 @@ Format: *\copy table_name from 'path/to/file/table_name.csv' delimiter ',' csv h
 
 \copy Ingredient from 'csv_files/Ingredients.csv' CSV HEADER
 
-\copy Recipe_Ingredient from 'csv_files/Recipe_Ingredients_short.csv' CSV HEADER
+\copy Recipe_Ingredient from 'csv_files/Recipe_Ingredients.csv' CSV HEADER
 
-\copy Order_ from 'csv_files/Order.csv' CSV HEADER
-
-\copy Order_Item from 'csv_files/Order_Item.csv' CSV HEADER
-
-\copy Order_Item_Toppings from 'csv_files/Order_Item_Toppings.csv' CSV HEADER
+\copy Recipe_Toppings from 'csv_files/Recipe_Toppings.csv' CSV HEADER
 
 \copy Order_ from 'csv_order_items/Order.csv' CSV HEADER
+
+\copy Order_Item from 'csv_order_items/Order_Item.csv' CSV HEADER
+
+\copy Order_Item_Toppings from 'csv_order_items/Order_Item_Toppings.csv' CSV HEADER
+
