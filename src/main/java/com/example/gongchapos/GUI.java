@@ -7,7 +7,7 @@ import javax.swing.*;
 //create class for the POS system cashier end
 
 
-public class GUI extends JFrame implements ActionListener {
+public class GUI extends JFrame {
     static JFrame loginFrame;
     static JFrame cashierFrame;
     static JFrame managerFrame;
@@ -88,35 +88,108 @@ public class GUI extends JFrame implements ActionListener {
       ItemButton strawberryMilkTea = new ItemButton("<html>Strawberry<br>Milk Tea</html>", 8, 12.5);
       ItemButton wintermelonMilkTea = new ItemButton("<html>Wintermelon<br>Milk Tea</html>", 8, 12.5);
 
-      ItemButton milkcoffee = new ItemButton("<html>Milk<br>Coffee</html>", 10, 16);
-      ItemButton CoffeeMilkTea = new ItemButton("<html>Coffee<br>Milk Tea</html>", 9, 19);
-      ItemButton MilkFoamBlackCoffee = new ItemButton("<html>Milk Foam<br>Black Coffee</html>", 9, 13);
-      ItemButton TaroMilkSlush = new ItemButton("<html>Taro<br>Milk Slush</html>", 10, 20);
-      ItemButton StrawberryMilkSlush = new ItemButton("<html>Strawberry<br>Milk Slush</html>", 10, 20);
+      ItemButton milkCoffee = new ItemButton("<html>Milk<br>Coffee</html>", 10, 16);
+      ItemButton coffeeMilkTea = new ItemButton("<html>Coffee<br>Milk Tea</html>", 9, 19);
+      ItemButton milkFoamBlackCoffee = new ItemButton("<html>Milk Foam<br>Black Coffee</html>", 9, 13);
+      ItemButton taroMilkSlush = new ItemButton("<html>Taro<br>Milk Slush</html>", 10, 20);
+      ItemButton strawberryMilkSlush = new ItemButton("<html>Strawberry<br>Milk Slush</html>", 10, 20);
       
-      // add actionlistener to button
-      exitButton.addActionListener(this);
-      cashierButton.addActionListener(this);
-      cashierBackButton.addActionListener(this);
-      managerButton.addActionListener(this);
-      managerBackButton.addActionListener(this);
+      ActionListener actionListener = new ActionListener() {
+        // if button is pressed
+        public void actionPerformed(ActionEvent e)
+        {
+            JButton clickedButton = (JButton) e.getSource();
+            String buttonName = clickedButton.getText();
+            String s = e.getActionCommand();
+            if (s.equals("Exit")) {
+            app.closeDatabase();
+            loginFrame.dispose();
+            }
+            if (s.equals("Back")) {
+            loginFrame.setVisible(true);
+            cashierFrame.setVisible(false);
+            managerFrame.setVisible(false);
+            }
+            if (s.equals("Cashier")) {
+                cashierFrame.setVisible(true);
+                loginFrame.setVisible(false);;
+            }
+            if (s.equals("Manager")) {
+                managerFrame.setVisible(true);
+                loginFrame.setVisible(false);
+            }
+            //if a drink button is pressed, add it to the receipt panel
+            if (buttonName.equals("<html>Black<br>Milk Tea</html>")) { addItemToReceipt(blackMilkTea); }
+            if (buttonName.equals("<html>Brown Sugar<br>Milk Tea</html>")) { addItemToReceipt(brownSugarMilkTea); }
+            if (buttonName.equals("<html>Caramel<br>Milk Tea</html>")) { addItemToReceipt(caramelMilkTea); }
+            if (buttonName.equals("<html>Earl Grey<br>Milk Tea</html>")) { addItemToReceipt(earlGreyMilkTea); }
+            if (buttonName.equals("<html>Earl Grey<br>Milk Tea<br>3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js); }
+            if (buttonName.equals("<html>Green<br>Milk Tea</html>")) { addItemToReceipt(greenMilkTea); }
+            if (buttonName.equals("<html>Oolong<br>Milk Tea</html>")) { addItemToReceipt(oolongMilkTea); }
+            if (buttonName.equals("<html>Pearl<br>Milk Tea</html>")) { addItemToReceipt(pearlMilkTea); }
+            if (buttonName.equals("<html>Strawberry<br>Milk Tea</html>")) { addItemToReceipt(strawberryMilkTea); }
+            if (buttonName.equals("<html>Wintermelon<br>Milk Tea</html>")) { addItemToReceipt(wintermelonMilkTea); }
+            if (buttonName.equals("<html>Milk<br>Coffee</html>")) { addItemToReceipt(milkCoffee); }
+            if (buttonName.equals("<html>Coffee<br>Milk Tea</html>")) { addItemToReceipt(coffeeMilkTea); }
+            if (buttonName.equals("<html>Milk Foam<br>Black Coffee</html>")) { addItemToReceipt(milkFoamBlackCoffee); }
+            if (buttonName.equals("<html>Taro<br>Milk Slush</html>")) { addItemToReceipt(taroMilkSlush); }
+            if (buttonName.equals("<html>Strawberry<br>Milk Slush</html>")) { addItemToReceipt(strawberryMilkSlush); }
 
-      blackMilkTea.addActionListener(this);
-      brownSugarMilkTea.addActionListener(this);
-      caramelMilkTea.addActionListener(this);
-      earlGreyMilkTea.addActionListener(this);
-      earlGreyMilkTea3Js.addActionListener(this);
-      greenMilkTea.addActionListener(this);
-      oolongMilkTea.addActionListener(this);
-      pearlMilkTea.addActionListener(this);
-      strawberryMilkTea.addActionListener(this);
-      wintermelonMilkTea.addActionListener(this);
+            if (s.equals("Checkout")) {
+                //ask for tip
+                String tipString = JOptionPane.showInputDialog("Enter tip amount: ");
+                tip = Double.parseDouble(tipString);
+                //update tip and total
+                total = subtotal + tip;
+                //update tip and total labels
+                tipLabel.setText("Tip: $" + tip);
+                totalLabel.setText("Total: $" + total);
+                //display total in jdialog box and clear if yes is clicked
+                int result = JOptionPane.showConfirmDialog(null, "Total: $" + total + "\n" + "Clear receipt?", "Checkout", JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) { 
+                    //clear receipt
+                    itemListPanel.removeAll();
+                    //reset subtotal, tip, and total
+                    subtotal = 0;
+                    tip = 0;
+                    total = 0;
+                    //update subtotal, tip, and total labels
+                    subtotalLabel.setText("Subtotal: $" + subtotal);
+                    tipLabel.setText("Tip: $" + tip);
+                    totalLabel.setText("Total: $" + total);
+                    
+                    //repaint receipt panel
+                    itemListPanel.revalidate();
+                    itemListPanel.repaint();
+                }
+            }
+        }        
+      };
+
+
+      // add actionlistener to button
+      exitButton.addActionListener(actionListener);
+      cashierButton.addActionListener(actionListener);
+      cashierBackButton.addActionListener(actionListener);
+      managerButton.addActionListener(actionListener);
+      managerBackButton.addActionListener(actionListener);
+
+      blackMilkTea.addActionListener(actionListener);
+      brownSugarMilkTea.addActionListener(actionListener);
+      caramelMilkTea.addActionListener(actionListener);
+      earlGreyMilkTea.addActionListener(actionListener);
+      earlGreyMilkTea3Js.addActionListener(actionListener);
+      greenMilkTea.addActionListener(actionListener);
+      oolongMilkTea.addActionListener(actionListener);
+      pearlMilkTea.addActionListener(actionListener);
+      strawberryMilkTea.addActionListener(actionListener);
+      wintermelonMilkTea.addActionListener(actionListener);
       
-      milkcoffee.addActionListener(this);
-      CoffeeMilkTea.addActionListener(this);
-      MilkFoamBlackCoffee.addActionListener(this);
-      TaroMilkSlush.addActionListener(this);
-      StrawberryMilkSlush.addActionListener(this);
+      milkCoffee.addActionListener(actionListener);
+      coffeeMilkTea.addActionListener(actionListener);
+      milkFoamBlackCoffee.addActionListener(actionListener);
+      taroMilkSlush.addActionListener(actionListener);
+      strawberryMilkSlush.addActionListener(actionListener);
       
       JTextArea newTextArea = new JTextArea(9, 5);
       newTextArea.setText(name);
@@ -147,14 +220,14 @@ public class GUI extends JFrame implements ActionListener {
 
       //make cashierslushiepanel
       JPanel CashierSlushiePanel = new JPanel();
-      CashierSlushiePanel.add(TaroMilkSlush);
-      CashierSlushiePanel.add(StrawberryMilkSlush);
+      CashierSlushiePanel.add(taroMilkSlush);
+      CashierSlushiePanel.add(strawberryMilkSlush);
 
       //make cashiercoffeepanel
       JPanel CashierCoffeePanel = new JPanel();
-      CashierCoffeePanel.add(milkcoffee);
-      CashierCoffeePanel.add(CoffeeMilkTea);
-      CashierCoffeePanel.add(MilkFoamBlackCoffee);
+      CashierCoffeePanel.add(milkCoffee);
+      CashierCoffeePanel.add(coffeeMilkTea);
+      CashierCoffeePanel.add(milkFoamBlackCoffee);
 
       tabbedPane.addTab("Milk Tea", null, milkteaholder, "Does nothing");
       tabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
@@ -193,37 +266,7 @@ public class GUI extends JFrame implements ActionListener {
 
       // Create the Checkout button
       JButton checkoutButton = new JButton("Checkout");
-      checkoutButton.addActionListener(new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-              //ask for tip
-              String tipString = JOptionPane.showInputDialog("Enter tip amount: ");
-              tip = Double.parseDouble(tipString);
-              //update tip and total
-              total = subtotal + tip;
-              //update tip and total labels
-              tipLabel.setText("Tip: $" + tip);
-              totalLabel.setText("Total: $" + total);
-              //display total in jdialog box and clear if yes is clicked
-              int result = JOptionPane.showConfirmDialog(null, "Total: $" + total + "\n" + "Clear receipt?", "Checkout", JOptionPane.YES_NO_OPTION);
-              if (result == JOptionPane.YES_OPTION) { 
-                  //clear receipt
-                  itemListPanel.removeAll();
-                  //reset subtotal, tip, and total
-                  subtotal = 0;
-                  tip = 0;
-                  total = 0;
-                  //update subtotal, tip, and total labels
-                  subtotalLabel.setText("Subtotal: $" + subtotal);
-                  tipLabel.setText("Tip: $" + tip);
-                  totalLabel.setText("Total: $" + total);
-                  
-                  //repaint receipt panel
-                  itemListPanel.revalidate();
-                  itemListPanel.repaint();
-              }
-          }
-      });
+      checkoutButton.addActionListener(actionListener);
 
       receiptPanel2_bottom.add(checkoutButton);
 
@@ -258,52 +301,38 @@ public class GUI extends JFrame implements ActionListener {
       loginFrame.setVisible(true);
     }
 
-    // if button is pressed
-    public void actionPerformed(ActionEvent e)
-    {
-        JButton clickedButton = (JButton) e.getSource();
-        String buttonName = clickedButton.getText();
-        String s = e.getActionCommand();
-        if (s.equals("Exit")) {
-          app.closeDatabase();
-          loginFrame.dispose();
-        }
-        if (s.equals("Back")) {
-          loginFrame.setVisible(true);
-          cashierFrame.setVisible(false);
-          managerFrame.setVisible(false);
-        }
-        if (s.equals("Cashier")) {
-            cashierFrame.setVisible(true);
-            loginFrame.setVisible(false);;
-        }
-        if (s.equals("Manager")) {
-            managerFrame.setVisible(true);
-            loginFrame.setVisible(false);
-        }
-        //if a drink button is pressed, add it to the receipt panel
-        if (buttonName == "<html>Black<br>Milk Tea</html>") { addItemToReceipt(blackMilkTea) }
-    }
-
     private void addItemToReceipt(ItemButton itemButton) {
       // Get item details from the button
       //ask user if they want the medium price or large price
       String itemName = itemButton.getItemName();
       double itemPrice;
 
-      int result = JOptionPane.showConfirmDialog(null, "Would you like the medium or large size? Click YES for medium and NO for large", "Size", JOptionPane.YES_NO_OPTION);
-      if (result == JOptionPane.YES_OPTION) { 
-          //medium
+      itemName = itemName.replace("<html>", "");
+      itemName = itemName.replace("<br>", " ");
+      itemName = itemName.replace("</html>", "");
+
+      Object[] options = {"Medium", "Large"};
+      int result = JOptionPane.showOptionDialog(
+              null,
+              "Would you like the medium or large size?",
+              "Size",
+              JOptionPane.DEFAULT_OPTION,
+              JOptionPane.QUESTION_MESSAGE,
+              null,
+              options,
+              options[0]
+      );
+  
+      if (result == 0) {
           itemPrice = itemButton.getMediumPrice();
-      }
+      } 
       else {
-          //large
           itemPrice = itemButton.getLargePrice();
       }
 
       // Create components for the new item
       JLabel itemLabel = new JLabel(itemName);
-      JLabel priceLabel = new JLabel("$" + itemPrice);
+      JLabel priceLabel = new JLabel("    $" + itemPrice);
 
       // Add the item to the item list panel
       itemListPanel.add(itemLabel);
