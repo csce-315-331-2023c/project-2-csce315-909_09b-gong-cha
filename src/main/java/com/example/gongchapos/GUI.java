@@ -69,8 +69,28 @@ public class GUI extends JFrame {
       JPanel cashierPanel = new JPanel();
       // JPanel cashierDrinkPanel = new JPanel();
       JPanel managerPanel = new JPanel();
-      //   JPanel managerDrinkPanel = new JPanel();
+      /*
+      The manager portal must be able to "create a product usage chart over a given time window".
+      This chart is intended to display the amount of each inventory item / ingredient used  */
 
+        //Tasks:
+    //1. **managers to view, add, and update the items and prices**
+    //2. **allow managers to view and update their inventory**.
+    //3. "create a product usage chart over a given time window".
+        //This chart is intended to display the amount of each inventory item / ingredient used 
+
+    JPanel managerChartPanel = new JPanel(); //TODO: add chart to this panel
+    //TODO: await response from backend to get back an Object[][] data and a String[] columnNames to populate the table
+    //CRUD operations for the inventory, Create, Read, Update, Delete
+    //Create CreateInventoryItem function that sends info to backend to add a new item to the inventory
+    //Read ReadInventoryItem function that sends info to backend to get info about an item in the inventory
+    //Update UpdateInventoryItem function that sends info to backend to update info about an item in the inventory
+    //Delete DeleteInventoryItem function that sends info to backend to delete an item from the inventory
+
+
+    JPanel managerInventoryPanel = new JPanel();
+    //requires a function to populate the panel with the inventory items, I want this to be in table form
+    //TODO: add inventory items to this panel
       JButton exitButton = new JButton("Exit");
       exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
       JButton cashierButton = new JButton("Cashier");
@@ -274,26 +294,18 @@ public class GUI extends JFrame {
       checkoutButton.addActionListener(actionListener);
 
       receiptPanel2_bottom.add(checkoutButton);
-
-      // //i want to make sure the information on the order is always at the bottom of the receipt panel
-      // receiptPanel.add(Box.createVerticalGlue());
     
-      //put receiptPanel2_bottom at the bottom of the receipt panel
       receiptPanel.add(receiptPanel2_bottom,BorderLayout.SOUTH);
 
       cashierFrame.add(receiptPanel, BorderLayout.EAST);    
       cashierFrame.add(tabbedPane, BorderLayout.WEST);
       cashierFrame.add(cashierBackButton, BorderLayout.SOUTH);
       cashierFrame.add(cashierPanel);
-      // cashierFrame.add(cashierDrinkPanel, BorderLayout.CENTER);
-
       
       managerFrame.add(managerBackButton, BorderLayout.SOUTH);
 
       managerFrame.add(managerPanel);
-    //   managerFrame.add(managerDrinkPanel, BorderLayout.CENTER);
 
-      // set the size of frame to be desktop
       loginFrame.setSize(320, 240);
       cashierFrame.setSize(1024, 768);
       managerFrame.setSize(1024, 768);
@@ -380,6 +392,11 @@ public class GUI extends JFrame {
       // Repaint the item list panel
       itemListPanel.revalidate();
       itemListPanel.repaint();
+  }
+  void ReloadButtons(){
+    //if name has coffee in it, add to coffee tab
+    //else if name has slushie in it, add to slushie tab
+    
   }
 }
 
