@@ -21,7 +21,7 @@ public class GUI extends JFrame {
     private JLabel tipLabel;
     private JLabel totalLabel;
 
-    private Application app = null;
+    protected Application app = null;
 
     public GUI(Application _app)
     {
@@ -50,7 +50,6 @@ public class GUI extends JFrame {
     {
       JOptionPane.showMessageDialog(null,"Opened database successfully");
 
-      String name = app.BasicQuery("SELECT * FROM order_ LIMIT 5");  
       //initalize subtotal, tip, and total
       subtotal = 0;
       tip = 0;
@@ -100,22 +99,22 @@ public class GUI extends JFrame {
       managerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
       JButton managerBackButton = new JButton("Back");
 
-      ItemButton blackMilkTea= new ItemButton("<html>Black<br>Milk Tea</html>", 8, 12.50);
-      ItemButton brownSugarMilkTea = new ItemButton("<html>Brown Sugar<br>Milk Tea</html>", 8, 12.5);
-      ItemButton caramelMilkTea = new ItemButton("<html>Caramel<br>Milk Tea</html>", 8, 12.5);
-      ItemButton earlGreyMilkTea = new ItemButton("<html>Earl Grey<br>Milk Tea</html>", 8, 12.5);
-      ItemButton earlGreyMilkTea3Js = new ItemButton("<html>Earl Grey<br>Milk Tea<br>3Js</html>", 8, 12.5);
-      ItemButton greenMilkTea = new ItemButton("<html>Green<br>Milk Tea</html>", 8, 12.5);
-      ItemButton oolongMilkTea = new ItemButton("<html>Oolong<br>Milk Tea</html>", 8, 12.5);
-      ItemButton pearlMilkTea = new ItemButton("<html>Pearl<br>Milk Tea</html>", 8, 12.5);
-      ItemButton strawberryMilkTea = new ItemButton("<html>Strawberry<br>Milk Tea</html>", 8, 12.5);
-      ItemButton wintermelonMilkTea = new ItemButton("<html>Wintermelon<br>Milk Tea</html>", 8, 12.5);
+      ItemButton blackMilkTea= new ItemButton(1, this);
+      ItemButton brownSugarMilkTea = new ItemButton(2, this);
+      ItemButton caramelMilkTea = new ItemButton(3, this);
+      ItemButton earlGreyMilkTea = new ItemButton(4, this);
+      ItemButton earlGreyMilkTea3Js = new ItemButton(5, this);
+      ItemButton greenMilkTea = new ItemButton(6, this);
+      ItemButton oolongMilkTea = new ItemButton(7, this);
+      ItemButton pearlMilkTea = new ItemButton(8, this);
+      ItemButton strawberryMilkTea = new ItemButton(9, this);
+      ItemButton wintermelonMilkTea = new ItemButton(10, this);
 
-      ItemButton milkCoffee = new ItemButton("<html>Milk<br>Coffee</html>", 10, 16);
-      ItemButton coffeeMilkTea = new ItemButton("<html>Coffee<br>Milk Tea</html>", 9, 19);
-      ItemButton milkFoamBlackCoffee = new ItemButton("<html>Milk Foam<br>Black Coffee</html>", 9, 13);
-      ItemButton taroMilkSlush = new ItemButton("<html>Taro<br>Milk Slush</html>", 10, 20);
-      ItemButton strawberryMilkSlush = new ItemButton("<html>Strawberry<br>Milk Slush</html>", 10, 20);
+      ItemButton milkCoffee = new ItemButton(24, this);
+      ItemButton coffeeMilkTea = new ItemButton(25, this);
+      ItemButton milkFoamBlackCoffee = new ItemButton(26, this);
+      ItemButton taroMilkSlush = new ItemButton(49, this);
+      ItemButton strawberryMilkSlush = new ItemButton(48, this);
       
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
@@ -125,13 +124,14 @@ public class GUI extends JFrame {
             String buttonName = clickedButton.getText();
             String s = e.getActionCommand();
             if (s.equals("Exit")) {
-            app.closeDatabase();
-            loginFrame.dispose();
+                app.closeDatabase();
+                loginFrame.dispose();
+                System.exit(0);
             }
             if (s.equals("Back")) {
-            loginFrame.setVisible(true);
-            cashierFrame.setVisible(false);
-            managerFrame.setVisible(false);
+                loginFrame.setVisible(true);
+                cashierFrame.setVisible(false);
+                managerFrame.setVisible(false);
             }
             if (s.equals("Cashier")) {
                 cashierFrame.setVisible(true);
@@ -142,21 +142,21 @@ public class GUI extends JFrame {
                 loginFrame.setVisible(false);
             }
             //if a drink button is pressed, add it to the receipt panel
-            if (buttonName.equals("<html>Black<br>Milk Tea</html>")) { addItemToReceipt(blackMilkTea); }
-            if (buttonName.equals("<html>Brown Sugar<br>Milk Tea</html>")) { addItemToReceipt(brownSugarMilkTea); }
-            if (buttonName.equals("<html>Caramel<br>Milk Tea</html>")) { addItemToReceipt(caramelMilkTea); }
-            if (buttonName.equals("<html>Earl Grey<br>Milk Tea</html>")) { addItemToReceipt(earlGreyMilkTea); }
-            if (buttonName.equals("<html>Earl Grey<br>Milk Tea<br>3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js); }
-            if (buttonName.equals("<html>Green<br>Milk Tea</html>")) { addItemToReceipt(greenMilkTea); }
-            if (buttonName.equals("<html>Oolong<br>Milk Tea</html>")) { addItemToReceipt(oolongMilkTea); }
-            if (buttonName.equals("<html>Pearl<br>Milk Tea</html>")) { addItemToReceipt(pearlMilkTea); }
-            if (buttonName.equals("<html>Strawberry<br>Milk Tea</html>")) { addItemToReceipt(strawberryMilkTea); }
-            if (buttonName.equals("<html>Wintermelon<br>Milk Tea</html>")) { addItemToReceipt(wintermelonMilkTea); }
-            if (buttonName.equals("<html>Milk<br>Coffee</html>")) { addItemToReceipt(milkCoffee); }
-            if (buttonName.equals("<html>Coffee<br>Milk Tea</html>")) { addItemToReceipt(coffeeMilkTea); }
-            if (buttonName.equals("<html>Milk Foam<br>Black Coffee</html>")) { addItemToReceipt(milkFoamBlackCoffee); }
-            if (buttonName.equals("<html>Taro<br>Milk Slush</html>")) { addItemToReceipt(taroMilkSlush); }
-            if (buttonName.equals("<html>Strawberry<br>Milk Slush</html>")) { addItemToReceipt(strawberryMilkSlush); }
+            if (buttonName.equals("<html>Black Milk Tea</html>")) { addItemToReceipt(blackMilkTea); }
+            if (buttonName.equals("<html>Brown Sugar Milk Tea</html>")) { addItemToReceipt(brownSugarMilkTea); }
+            if (buttonName.equals("<html>Caramel Milk Tea</html>")) { addItemToReceipt(caramelMilkTea); }
+            if (buttonName.equals("<html>Earl Grey Milk Tea</html>")) { addItemToReceipt(earlGreyMilkTea); }
+            if (buttonName.equals("<html>Earl Grey Milk Tea<br>3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js); }
+            if (buttonName.equals("<html>Green Milk Tea</html>")) { addItemToReceipt(greenMilkTea); }
+            if (buttonName.equals("<html>Oolong Milk Tea</html>")) { addItemToReceipt(oolongMilkTea); }
+            if (buttonName.equals("<html>Pearl Milk Tea</html>")) { addItemToReceipt(pearlMilkTea); }
+            if (buttonName.equals("<html>Strawberry Milk Tea</html>")) { addItemToReceipt(strawberryMilkTea); }
+            if (buttonName.equals("<html>Wintermelon Milk Tea</html>")) { addItemToReceipt(wintermelonMilkTea); }
+            if (buttonName.equals("<html>Milk Coffee</html>")) { addItemToReceipt(milkCoffee); }
+            if (buttonName.equals("<html>Coffee Milk Tea</html>")) { addItemToReceipt(coffeeMilkTea); }
+            if (buttonName.equals("<html>Milk Foam Black Coffee</html>")) { addItemToReceipt(milkFoamBlackCoffee); }
+            if (buttonName.equals("<html>Taro Milk Slush</html>")) { addItemToReceipt(taroMilkSlush); }
+            if (buttonName.equals("<html>Strawberry Milk Slush</html>")) { addItemToReceipt(strawberryMilkSlush); }
 
             if (s.equals("Checkout")) {
                 //ask for tip
@@ -325,10 +325,6 @@ public class GUI extends JFrame {
       String itemName = itemButton.getItemName();
       double itemPrice;
 
-      itemName = itemName.replace("<html>", "");
-      itemName = itemName.replace("<br>", " ");
-      itemName = itemName.replace("</html>", "");
-
       Object[] options = {"Medium", "Large"};
       int result = JOptionPane.showOptionDialog(
               null,
@@ -401,16 +397,12 @@ public class GUI extends JFrame {
 }
 
 class ItemButton extends JButton {
-    private String itemName;
-    private double mediumPrice;
-    private double largePrice;
+    private Recipe recipe;
 
-    public ItemButton(String itemName, double mediumPrice, double largePrice) {
-        super(itemName);
-        this.itemName = itemName;
-        this.mediumPrice = mediumPrice;
-        this.largePrice = largePrice;
-
+    public ItemButton(int recipe_id, GUI gui) {
+        super("<html>" + gui.app.getRecipe(recipe_id).getRecipeName() + "</html>");
+        recipe = gui.app.getRecipe(recipe_id);
+ 
         setPreferredSize(new Dimension(100, 100));
         setBackground(Color.GREEN);
         setHorizontalAlignment(SwingConstants.CENTER);
@@ -418,15 +410,15 @@ class ItemButton extends JButton {
     }
 
     public String getItemName() {
-        return itemName;
+        return recipe.getRecipeName();
     }
 
     public double getMediumPrice() {
-        return mediumPrice;
+        return recipe.getMediumPrice();
     }
 
     public double getLargePrice() {
-        return largePrice;
+        return recipe.getLargePrice();
     }
 }
 
