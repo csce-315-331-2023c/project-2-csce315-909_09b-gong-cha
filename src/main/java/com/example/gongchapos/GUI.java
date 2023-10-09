@@ -72,9 +72,12 @@ public class GUI extends JFrame {
       //   JPanel managerDrinkPanel = new JPanel();
 
       JButton exitButton = new JButton("Exit");
+      exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
       JButton cashierButton = new JButton("Cashier");
+      cashierButton.setAlignmentX(Component.CENTER_ALIGNMENT);
       JButton cashierBackButton = new JButton("Back");
       JButton managerButton = new JButton("Manager");
+      managerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
       JButton managerBackButton = new JButton("Back");
 
       ItemButton blackMilkTea= new ItemButton("<html>Black<br>Milk Tea</html>", 8, 12.50);
@@ -192,8 +195,12 @@ public class GUI extends JFrame {
       strawberryMilkSlush.addActionListener(actionListener);
 
       // add buttons to panels
+      loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
+      loginPanel.add(Box.createVerticalStrut(10));
       loginPanel.add(exitButton);
+      loginPanel.add(Box.createVerticalStrut(10));
       loginPanel.add(cashierButton);
+      loginPanel.add(Box.createVerticalStrut(10));
       loginPanel.add(managerButton);
 
       cashierPanel.add(cashierBackButton);
@@ -284,7 +291,7 @@ public class GUI extends JFrame {
     //   managerFrame.add(managerDrinkPanel, BorderLayout.CENTER);
 
       // set the size of frame to be desktop
-      loginFrame.setSize(640, 480);
+      loginFrame.setSize(320, 240);
       cashierFrame.setSize(1024, 768);
       managerFrame.setSize(1024, 768);
 
