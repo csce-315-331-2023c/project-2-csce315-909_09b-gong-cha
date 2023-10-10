@@ -288,4 +288,94 @@ public class Application {
       }
     }
   }
+
+  public Object[][] getIngredients(){
+
+    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM ingredient;");
+      while(result.next())
+      {
+        ArrayList<String> cur_ingredient = new ArrayList<String>();
+        String ingredient_id = String.valueOf(result.getInt("ingredient_id"));
+        String ingredient_name = result.getString("ingredient_name");
+        String unit_price = String.valueOf(result.getDouble("unit_price"));
+        String stock = String.valueOf(result.getDouble("stock"));
+
+        cur_ingredient.add(ingredient_id);
+        cur_ingredient.add(ingredient_name);
+        cur_ingredient.add(unit_price);
+        cur_ingredient.add(stock);
+        tempContainer.add(cur_ingredient);
+
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  
+    Object[][] toReturn = new Object[tempContainer.size()][4];
+    for(int i = 0; i < tempContainer.size(); i++){
+      ArrayList<String> cur_arr = tempContainer.get(i);
+      Object[] cur = new Object[4];
+      cur = cur_arr.toArray();
+      toReturn[i] = cur; // error here
+    }
+    for(int i = 0; i < tempContainer.size(); i++){
+      for(int j = 0; j < 4; j++){
+        System.out.print(toReturn[i][j] + ", ");
+      }
+      System.out.println();
+    }
+    return toReturn;  
+  }
+
+  public Object[][] getToppings(){
+
+    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM toppings;");
+      while(result.next())
+      {
+        ArrayList<String> cur_ingredient = new ArrayList<String>();
+        String topping_id = String.valueOf(result.getInt("topping_id"));
+        String topping_name = result.getString("topping_name");
+        String unit_price = String.valueOf(result.getDouble("unit_price"));
+        String stock = String.valueOf(result.getDouble("stock"));
+
+        cur_ingredient.add(topping_id);
+        cur_ingredient.add(topping_name);
+        cur_ingredient.add(unit_price);
+        cur_ingredient.add(stock);
+        tempContainer.add(cur_ingredient);
+
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  
+    Object[][] toReturn = new Object[tempContainer.size()][4];
+    for(int i = 0; i < tempContainer.size(); i++){
+      ArrayList<String> cur_arr = tempContainer.get(i);
+      Object[] cur = new Object[4];
+      cur = cur_arr.toArray();
+      toReturn[i] = cur; // error here
+    }
+    for(int i = 0; i < tempContainer.size(); i++){
+      for(int j = 0; j < 4; j++){
+        System.out.print(toReturn[i][j] + ", ");
+      }
+      System.out.println();
+    }
+    return toReturn;  
+  }
+
+
+
+  
 }
