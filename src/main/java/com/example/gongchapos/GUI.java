@@ -1,6 +1,7 @@
 package com.example.gongchapos;
 
 import java.util.*;
+import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -22,6 +23,19 @@ public class GUI extends JFrame {
     private JLabel subtotalLabel;
     private JLabel tipLabel;
     private JLabel totalLabel;
+    private JLabel managerSubtotalLabel;
+    private JLabel managerTipLabel;
+    private JLabel managerTotalLabel;
+
+    //making private labels for tabbed pane
+    JPanel CashierMilkTeaPanel;
+    JPanel CashierSlushiePanel;
+    JPanel CashierCoffeePanel;
+    JPanel CashierOtherPanel;
+
+    //manager chart
+    JPanel managerChartPanel;
+    
 
     protected Application app = null;
 
@@ -81,8 +95,25 @@ public class GUI extends JFrame {
       JPanel cashierPanel = new JPanel();
       // JPanel cashierDrinkPanel = new JPanel();
       JPanel managerPanel = new JPanel();
-      //   JPanel managerDrinkPanel = new JPanel();
+      /*
+      The manager portal must be able to "create a product usage chart over a given time window".
+      This chart is intended to display the amount of each inventory item / ingredient used  */
 
+        //Tasks:
+    //1. **managers to view, add, and update the items and prices**
+    //2. **allow managers to view and update their inventory**.
+    //3. "create a product usage chart over a given time window".
+        //This chart is intended to display the amount of each inventory item / ingredient used 
+
+    //TODO: await response from backend to get back an Object[][] data and a String[] columnNames to populate the table
+    //CRUD operations for the inventory, Create, Read, Update, Delete
+    //Create CreateInventoryItem function that sends info to backend to add a new item to the inventory
+    //Read ReadInventoryItem function that sends info to backend to get info about an item in the inventory
+    //Update UpdateInventoryItem function that sends info to backend to update info about an item in the inventory
+    //Delete DeleteInventoryItem function that sends info to backend to delete an item from the inventory
+
+
+    //requires a function to populate the panel with the inventory items, I want this to be in table form
       JButton exitButton = new JButton("Exit");
       exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
       JButton cashierButton = new JButton("Cashier");
@@ -183,6 +214,8 @@ public class GUI extends JFrame {
                 tipLabel.setText("Tip: $" + tip);
                 totalLabel.setText("Total: $" + total);
                 //display total in jdialog box and clear if yes is clicked
+                //TODO: send data to backend to update inventory
+                
                 int result = JOptionPane.showConfirmDialog(null, "Total: $" + total + "\n" + "Clear receipt?", "Checkout", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) { 
                     //clear receipt
@@ -329,31 +362,31 @@ public class GUI extends JFrame {
       JTabbedPane cashierTabbedPane = new JTabbedPane();
       JTabbedPane managerTabbedPane = new JTabbedPane();
       
-      JPanel milkteaholder = new JPanel();
-      milkteaholder.add(blackMilkTea);
-      milkteaholder.add(brownSugarMilkTea);
-      milkteaholder.add(caramelMilkTea);
-      milkteaholder.add(earlGreyMilkTea);
-      milkteaholder.add(earlGreyMilkTea3Js);
-      milkteaholder.add(greenMilkTea);
-      milkteaholder.add(oolongMilkTea);
-      milkteaholder.add(pearlMilkTea);
-      milkteaholder.add(strawberryMilkTea);
-      milkteaholder.add(wintermelonMilkTea);
+      CashierMilkTeaPanel = new JPanel();
+      CashierMilkTeaPanel.add(blackMilkTea);
+      CashierMilkTeaPanel.add(brownSugarMilkTea);
+      CashierMilkTeaPanel.add(caramelMilkTea);
+      CashierMilkTeaPanel.add(earlGreyMilkTea);
+      CashierMilkTeaPanel.add(earlGreyMilkTea3Js);
+      CashierMilkTeaPanel.add(greenMilkTea);
+      CashierMilkTeaPanel.add(oolongMilkTea);
+      CashierMilkTeaPanel.add(pearlMilkTea);
+      CashierMilkTeaPanel.add(strawberryMilkTea);
+      CashierMilkTeaPanel.add(wintermelonMilkTea);
 
       //make cashierslushiepanel
-      JPanel CashierSlushiePanel = new JPanel();
+      CashierSlushiePanel = new JPanel();
       CashierSlushiePanel.add(taroMilkSlush);
       CashierSlushiePanel.add(strawberryMilkSlush);
 
       //make cashiercoffeepanel
-      JPanel CashierCoffeePanel = new JPanel();
+      CashierCoffeePanel = new JPanel();
       CashierCoffeePanel.add(milkCoffee);
       CashierCoffeePanel.add(coffeeMilkTea);
       CashierCoffeePanel.add(milkFoamBlackCoffee);
 
       //make cashierotherpanel
-      JPanel CashierOtherPanel = new JPanel();
+      CashierOtherPanel = new JPanel();
       JPanel managerInventoryPanel = new JPanel();
 
       //make manageractionspanel
@@ -453,7 +486,7 @@ public class GUI extends JFrame {
       managerTabbedPane.addTab("Manager", null, managerActionsPanel, "Does nothing");
       managerTabbedPane.addTab("Inventory", null, managerInventoryPanel, "Does nothing");
 
-      cashierTabbedPane.addTab("Milk Tea", null, milkteaholder, "Does nothing");
+      cashierTabbedPane.addTab("Milk Tea", null, CashierMilkTeaPanel, "Does nothing");
       cashierTabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
       cashierTabbedPane.addTab("Coffee", null, CashierCoffeePanel, "Does nothing");
       cashierTabbedPane.addTab("Other", null, CashierOtherPanel, "Does nothing");
@@ -496,11 +529,7 @@ public class GUI extends JFrame {
       managerCheckoutButton.addActionListener(actionListener);
 
       receiptPanel2_bottom.add(checkoutButton);
-
-      // //i want to make sure the information on the order is always at the bottom of the receipt panel
-      // receiptPanel.add(Box.createVerticalGlue());
     
-      //put receiptPanel2_bottom at the bottom of the receipt panel
       receiptPanel.add(receiptPanel2_bottom,BorderLayout.SOUTH);
 
       cashierFrame.add(receiptPanel, BorderLayout.EAST);    
@@ -513,9 +542,7 @@ public class GUI extends JFrame {
       managerFrame.add(managerTabbedPane, BorderLayout.WEST);
       managerFrame.add(managerBackButton, BorderLayout.SOUTH);
       managerFrame.add(managerPanel);
-    //   managerFrame.add(managerDrinkPanel, BorderLayout.CENTER);
 
-      // set the size of frame to be desktop
       loginFrame.setSize(320, 240);
       cashierFrame.setSize(1024, 768);
       managerFrame.setSize(1024, 768);
@@ -531,6 +558,7 @@ public class GUI extends JFrame {
     private void addItemToReceipt(ItemButton itemButton, JPanel panel) {
       // Get item details from the button
       //ask user if they want the medium price or large price
+      
       String itemName = itemButton.getItemName();
       double itemPrice;
 
@@ -552,27 +580,151 @@ public class GUI extends JFrame {
       else {
           itemPrice = itemButton.getLargePrice();
       }
+      Object[] sugar = {"0%", "25%", "50%", "75%", "100%"};
+        int sugarResult = JOptionPane.showOptionDialog(
+                null,
+                "How much sugar would you like?",
+                "Sugar",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                sugar,
+                sugar[0]
+        );
 
+    Object [] ice = {"light", "regular", "none"};
+    int iceResult = JOptionPane.showOptionDialog(
+            null,
+            "How much ice would you like?",
+            "Ice",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            ice,
+            ice[0]
+    );
+
+    
       // Create components for the new item
       JLabel itemLabel = new JLabel(itemName);
       JLabel priceLabel = new JLabel("    $" + itemPrice);
+      JLabel sugarLabel = new JLabel("    Sugar: " + sugar[sugarResult]);
+      JLabel iceLabel = new JLabel("    Ice: " + ice[iceResult]);
 
       // Add the item to the item list panel
-      panel.add(itemLabel);
-      panel.add(priceLabel);
+      //style button to make it small and in same row as item and price labels
+      JButton removeItemButton = new JButton("Remove");
+      removeItemButton.setPreferredSize(new Dimension(100, 20));
+        removeItemButton.setHorizontalAlignment(SwingConstants.CENTER);
+        removeItemButton.setVerticalAlignment(SwingConstants.CENTER);
+        JButton editItemButton = new JButton("Edit Toppings");
+        editItemButton.setPreferredSize(new Dimension(100, 20));
+        removeItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                itemListPanel.remove(itemLabel);
+                itemListPanel.remove(priceLabel);
+                itemListPanel.remove(sugarLabel);
+                itemListPanel.remove(iceLabel);
+                itemListPanel.remove(removeItemButton);
+                itemListPanel.remove(editItemButton);
+                itemListPanel.revalidate();
+                itemListPanel.repaint();
+            }
+        });
+    itemListPanel.add(removeItemButton);
+    //create button to add toppings
+    //should be a dropdown menu with checkboxes
 
-      // Update the running total
-      subtotal += itemPrice;
-      total = subtotal + tip;
+        editItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Create a dialog to select toppings and quantities
+                JDialog dialog = new JDialog();
+                dialog.setTitle("Edit Toppings");
+                dialog.setLayout(new BorderLayout());
 
-      // Update the labels in receiptPanel2
-      subtotalLabel.setText("Subtotal: $" + subtotal);
-      tipLabel.setText("Tip: $" + tip);
-      totalLabel.setText("Total: $" + total);
+                JPanel toppingsPanel = new JPanel();
+                toppingsPanel.setLayout(new BoxLayout(toppingsPanel, BoxLayout.Y_AXIS));
 
-      // Repaint the item list panel
-      panel.revalidate();
-      panel.repaint();
+                // Sample toppings (you can replace this with your actual toppings)
+                //TODO: query database for toppings and topping prices
+                String[] availableToppings = {"Sugar", "Milk", "Honey", "Caramel"};
+
+                // Create checkboxes for each topping
+                List<JCheckBox> checkboxes = new ArrayList<>();
+                for (String topping : availableToppings) {
+                    JCheckBox checkbox = new JCheckBox(topping);
+                    checkboxes.add(checkbox);
+                    toppingsPanel.add(checkbox);
+                }
+
+                // Create a spinner to control the quantity
+                SpinnerModel spinnerModel = new SpinnerNumberModel(0, 0, 10, 1); // Change the range and step as needed
+                JSpinner quantitySpinner = new JSpinner(spinnerModel);
+                JLabel quantityLabel = new JLabel("Quantity:");
+
+                // Create a button to confirm toppings selection
+                JButton confirmButton = new JButton("Confirm");
+
+                // Add action listener for the confirm button
+                confirmButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Process the selected toppings and quantity
+                        int quantity = (int) quantitySpinner.getValue();
+                        List<String> selectedToppings = new ArrayList<>();
+                        for (JCheckBox checkbox : checkboxes) {
+                            if (checkbox.isSelected()) {
+                                selectedToppings.add(checkbox.getText());
+                            }
+                        }
+
+                        // TODO: Add logic to update the receipt with selected toppings and quantity
+                        // You can use selectedToppings and quantity here
+
+                        // Close the dialog
+                        dialog.dispose();
+                    }
+                });
+
+                // Add components to the dialog
+                dialog.add(toppingsPanel, BorderLayout.CENTER);
+                JPanel controlPanel = new JPanel();
+                controlPanel.add(quantityLabel);
+                controlPanel.add(quantitySpinner);
+                controlPanel.add(confirmButton);
+                dialog.add(controlPanel, BorderLayout.SOUTH);
+
+                // Set dialog properties
+                dialog.pack();
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+            }
+        });
+    itemListPanel.add(editItemButton);
+    itemListPanel.add(itemLabel);
+    itemListPanel.add(priceLabel);
+    itemListPanel.add(sugarLabel);
+    itemListPanel.add(iceLabel);
+
+    // Update the running total
+    subtotal += itemPrice;
+    total = subtotal + tip;
+
+    // Update the labels in receiptPanel2
+    subtotalLabel.setText("Subtotal: $" + subtotal);
+    tipLabel.setText("Tip: $" + tip);
+    totalLabel.setText("Total: $" + total);
+
+    // Repaint the item list panel
+    itemListPanel.revalidate();
+    itemListPanel.repaint();
+  }
+  void ReloadButtons(){
+    //if name has coffee in it, add to coffee tab
+    //else if name has slushie in it, add to slushie tab
+    
   }
 }
 
