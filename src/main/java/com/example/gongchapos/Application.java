@@ -153,24 +153,6 @@ public class Application {
   // }
 
 
-
- // TODO: need to adjust
-  // adds ingredients into recipe_ingredients
-  public void addIngredients(ArrayList<recipeIngredient> ingredients){
-
-    for(recipeIngredient cur_ingredient: ingredients){
-      try
-      {
-        Statement stmt = conn.createStatement();
-        stmt.executeQuery("INSERT INTO recipe_ingredient VALUES (" + cur_ingredient.getRecipeID() + cur_ingredient.getIngredientID() + cur_ingredient.getQuantityUsed() + ")" );
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error accessing Database");
-      }
-    }
-  }
-
-
-
   // update recipe med_price
   public void updateMedPrice(int recipe_id, double new_quantity){
     try
