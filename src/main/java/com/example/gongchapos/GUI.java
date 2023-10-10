@@ -6,10 +6,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-//create class for the POS system cashier end
-
 
 public class GUI extends JFrame {
+    //make list of order items
+
     static JFrame loginFrame;
     static JFrame cashierFrame;
     static JFrame managerFrame;
@@ -22,9 +22,6 @@ public class GUI extends JFrame {
     private JLabel subtotalLabel;
     private JLabel tipLabel;
     private JLabel totalLabel;
-    private JLabel managerSubtotalLabel;
-    private JLabel managerTipLabel;
-    private JLabel managerTotalLabel;
 
     //making private labels for tabbed pane
     JPanel CashierMilkTeaPanel;
@@ -34,7 +31,9 @@ public class GUI extends JFrame {
 
     //manager chart
     JPanel managerChartPanel;
-    
+
+    //list of drinks
+    ArrayList<_drink> drinks = new ArrayList<>();
 
     protected Application app = null;
 
@@ -598,7 +597,7 @@ public class GUI extends JFrame {
     private void addItemToReceipt(ItemButton itemButton, JPanel panel) {
       // Get item details from the button
       //ask user if they want the medium price or large price
-      
+
       String itemName = itemButton.getItemName();
       double itemPrice;
 
@@ -647,9 +646,12 @@ public class GUI extends JFrame {
             ice[0]
     );
 
-    
-      // Create components for the new item
-      //make itemlabel wrap
+    //TODO: DRINK FUNCTIONALITY
+    //create new drink object
+      _drink newDrink = new _drink(itemButton.getRecipe(), size, iceResult, sugarResult);
+      //add drink to array
+      drinks.add(newDrink);
+
       JLabel itemLabel = new JLabel(itemName);
 
       JLabel priceLabel = new JLabel("    $" + itemPrice);
@@ -676,9 +678,13 @@ public class GUI extends JFrame {
                 itemListPanel.remove(iceLabel);
                 itemListPanel.remove(removeItemButton);
                 itemListPanel.remove(editItemButton);
+                //remove drink from drinks
                 //subtract from subtotal the price of the item
                 //TODO: query database for price of toppings too.
-                subtotal -= itemPrice;
+
+                subtotal -= newDrink.price;
+                drinks.remove(newDrink);
+
                 //update subtotal and total labels
                 subtotalLabel.setText("Subtotal: $" + subtotal);
                 total = subtotal + tip;
@@ -729,7 +735,7 @@ public class GUI extends JFrame {
                         // Process the selected toppings and quantity
                         int quantity;
 
-                        List<_topping> selectedToppings = new ArrayList<>();
+                        ArrayList<_topping> selectedToppings = new ArrayList<>();
                         //iterate over spinners and get quantity, if not 0, add to list of toppings
                         for (int i = 0; i < spinners.size(); i++) {
                             JSpinner spinner = spinners.get(i);
@@ -744,6 +750,7 @@ public class GUI extends JFrame {
                             }
                         }
                         // Close the dialog
+                        newDrink.toppings = selectedToppings;
                         dialog.dispose();
                         minitoppanel.revalidate();
                         minitoppanel.repaint();
@@ -792,10 +799,6 @@ public class GUI extends JFrame {
     CashierCoffeePanel.removeAll();
     CashierOtherPanel.removeAll();
 
-    //then, await query from Application.java to get the list of recipes
-    
-    //create arraylist of ItemButtons
-    //for each recipe in the list of recipes, create a new ItemButton
     ArrayList<ItemButton> buttons = new ArrayList<ItemButton>();
 
     for (Recipe recette : app.recipes) {
@@ -807,7 +810,6 @@ public class GUI extends JFrame {
         if (recette.isSlush()) {
             CashierSlushiePanel.add(button);
         }
-        //else if name contains coffee, add to coffee panel
         else if (recette.getRecipeName().contains("Coffee")) {
             CashierCoffeePanel.add(button);
         }
@@ -876,6 +878,10 @@ class ItemButton extends JButton {
     public double getLargePrice() {
         return recipe.getLargePrice();
     }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
 }
 
 //make a class for toppings
@@ -888,4 +894,40 @@ class _topping{
         this.quantity = quantity;
     }
 }
+
+class _drink{
+    Recipe recipe;
+    ArrayList<_topping> toppings;
+    boolean is_medium;
+    int ice;
+    int sugar;
+    double price; //price of drink is calculated using recipe price and topping prices
+
+    public _drink(Recipe recipe, boolean is_medium,int ice, int sugar){
+        this.recipe = recipe;
+        this.is_medium = is_medium;
+        this.ice = ice;
+        this.sugar = sugar;
+        if (is_medium) {
+            price = recipe.getMediumPrice();
+        }
+        else{
+            price = recipe.getLargePrice();
+        }
+    }
+
+    public void updateprice(){
+        if(is_medium){
+            price = recipe.getMediumPrice();
+        }
+        else{
+            price = recipe.getLargePrice();
+        }
+
+        for(_topping topping : toppings){
+            price += topping.quantity * 1; //TODO: query database for topping price
+        }
+    }
+}
+
 
