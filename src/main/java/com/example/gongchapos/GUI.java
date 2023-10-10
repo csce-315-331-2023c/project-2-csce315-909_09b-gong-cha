@@ -16,12 +16,16 @@ public class GUI extends JFrame {
 
     //stuff for the cashier frame
     private JPanel itemListPanel; // Panel to hold item labels
+    private JPanel managerItemListPanel;
     private double subtotal;
     private double tip;
     private double total;
     private JLabel subtotalLabel;
     private JLabel tipLabel;
     private JLabel totalLabel;
+    private JLabel managerSubtotalLabel;
+    private JLabel managerTipLabel;
+    private JLabel managerTotalLabel;
 
     protected Application app = null;
 
@@ -126,6 +130,9 @@ public class GUI extends JFrame {
       JRadioButton coffee = new JRadioButton("Coffee");
       JRadioButton other = new JRadioButton("Other");
 
+    JButton checkoutButton = new JButton("Checkout");
+    JButton managerCheckoutButton = new JButton("Checkout");
+
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
         public void actionPerformed(ActionEvent e)
@@ -152,23 +159,23 @@ public class GUI extends JFrame {
                 loginFrame.setVisible(false);
             }
             //if a drink button is pressed, add it to the receipt panel
-            if (buttonName.equals("<html>Black Milk Tea</html>")) { addItemToReceipt(blackMilkTea); }
-            if (buttonName.equals("<html>Brown Sugar Milk Tea</html>")) { addItemToReceipt(brownSugarMilkTea); }
-            if (buttonName.equals("<html>Caramel Milk Tea</html>")) { addItemToReceipt(caramelMilkTea); }
-            if (buttonName.equals("<html>Earl Grey Milk Tea</html>")) { addItemToReceipt(earlGreyMilkTea); }
-            if (buttonName.equals("<html>Earl Grey Milk Tea 3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js); }
-            if (buttonName.equals("<html>Green Milk Tea</html>")) { addItemToReceipt(greenMilkTea); }
-            if (buttonName.equals("<html>Oolong Milk Tea</html>")) { addItemToReceipt(oolongMilkTea); }
-            if (buttonName.equals("<html>Pearl Milk Tea</html>")) { addItemToReceipt(pearlMilkTea); }
-            if (buttonName.equals("<html>Strawberry Milk Tea</html>")) { addItemToReceipt(strawberryMilkTea); }
-            if (buttonName.equals("<html>Wintermelon Milk Tea</html>")) { addItemToReceipt(wintermelonMilkTea); }
-            if (buttonName.equals("<html>Milk Coffee</html>")) { addItemToReceipt(milkCoffee); }
-            if (buttonName.equals("<html>Coffee Milk Tea</html>")) { addItemToReceipt(coffeeMilkTea); }
-            if (buttonName.equals("<html>Milk Foam Black Coffee</html>")) { addItemToReceipt(milkFoamBlackCoffee); }
-            if (buttonName.equals("<html>Taro Milk Slush</html>")) { addItemToReceipt(taroMilkSlush); }
-            if (buttonName.equals("<html>Strawberry Milk Slush</html>")) { addItemToReceipt(strawberryMilkSlush); }
+            if (buttonName.equals("<html>Black Milk Tea</html>")) { addItemToReceipt(blackMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Brown Sugar Milk Tea</html>")) { addItemToReceipt(brownSugarMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Caramel Milk Tea</html>")) { addItemToReceipt(caramelMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Earl Grey Milk Tea</html>")) { addItemToReceipt(earlGreyMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Earl Grey Milk Tea 3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js, itemListPanel); }
+            if (buttonName.equals("<html>Green Milk Tea</html>")) { addItemToReceipt(greenMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Oolong Milk Tea</html>")) { addItemToReceipt(oolongMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Pearl Milk Tea</html>")) { addItemToReceipt(pearlMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Strawberry Milk Tea</html>")) { addItemToReceipt(strawberryMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Wintermelon Milk Tea</html>")) { addItemToReceipt(wintermelonMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Milk Coffee</html>")) { addItemToReceipt(milkCoffee, itemListPanel); }
+            if (buttonName.equals("<html>Coffee Milk Tea</html>")) { addItemToReceipt(coffeeMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Milk Foam Black Coffee</html>")) { addItemToReceipt(milkFoamBlackCoffee, itemListPanel); }
+            if (buttonName.equals("<html>Taro Milk Slush</html>")) { addItemToReceipt(taroMilkSlush, itemListPanel); }
+            if (buttonName.equals("<html>Strawberry Milk Slush</html>")) { addItemToReceipt(strawberryMilkSlush, itemListPanel); }
 
-            if (s.equals("Checkout")) {
+            if (clickedButton == checkoutButton) {
                 //ask for tip
                 String tipString = JOptionPane.showInputDialog("Enter tip amount: ");
                 tip = Double.parseDouble(tipString);
@@ -194,6 +201,34 @@ public class GUI extends JFrame {
                     //repaint receipt panel
                     itemListPanel.revalidate();
                     itemListPanel.repaint();
+                }
+            }
+            if (clickedButton == managerCheckoutButton) {
+                //ask for tip
+                String tipString = JOptionPane.showInputDialog("Enter tip amount: ");
+                tip = Double.parseDouble(tipString);
+                //update tip and total
+                total = subtotal + tip;
+                //update tip and total labels
+                managerTipLabel.setText("Tip: $" + tip);
+                managerTotalLabel.setText("Total: $" + total);
+                //display total in jdialog box and clear if yes is clicked
+                int result = JOptionPane.showConfirmDialog(null, "Total: $" + total + "\n" + "Clear receipt?", "Checkout", JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) { 
+                    //clear receipt
+                    managerItemListPanel.removeAll();
+                    //reset subtotal, tip, and total
+                    subtotal = 0;
+                    tip = 0;
+                    total = 0;
+                    //update subtotal, tip, and total labels
+                    managerSubtotalLabel.setText("Subtotal: $" + subtotal);
+                    managerTipLabel.setText("Tip: $" + tip);
+                    managerTotalLabel.setText("Total: $" + total);
+                    
+                    //repaint receipt panel
+                    managerItemListPanel.revalidate();
+                    managerItemListPanel.repaint();
                 }
             }
 
@@ -457,20 +492,35 @@ public class GUI extends JFrame {
       receiptPanel2_bottom.add(tipLabel);
       receiptPanel2_bottom.add(totalLabel);
 
-      // Create the Checkout button
-      JButton checkoutButton = new JButton("Checkout");
-      checkoutButton.addActionListener(actionListener);
+      // Repeat for manager side
+      managerItemListPanel = new JPanel();
+      managerItemListPanel.setLayout(new BoxLayout(managerItemListPanel, BoxLayout.Y_AXIS));
+      JScrollPane managerItemScrollPane = new JScrollPane(managerItemListPanel);
+      managerReceiptPanel.add(managerItemScrollPane);
+      JPanel managerReceiptPanel2_bottom = new JPanel();
 
-      JButton managerCheckoutButton = new JButton("Checkout");
+      managerReceiptPanel2_bottom.setLayout(new BoxLayout(managerReceiptPanel2_bottom, BoxLayout.Y_AXIS));
+      managerSubtotalLabel = new JLabel("Subtotal: $" + subtotal);
+      managerTipLabel = new JLabel("Tip: $" + tip);
+      managerTotalLabel = new JLabel("Total: $" + total);
+
+      managerReceiptPanel2_bottom.add(managerSubtotalLabel);
+      managerReceiptPanel2_bottom.add(managerTipLabel);
+      managerReceiptPanel2_bottom.add(managerTotalLabel);
+
+      // Add the checkout buttons
+      checkoutButton.addActionListener(actionListener);
       managerCheckoutButton.addActionListener(actionListener);
 
       receiptPanel2_bottom.add(checkoutButton);
+      managerReceiptPanel2_bottom.add(managerCheckoutButton);
 
       // //i want to make sure the information on the order is always at the bottom of the receipt panel
       // receiptPanel.add(Box.createVerticalGlue());
     
       //put receiptPanel2_bottom at the bottom of the receipt panel
       receiptPanel.add(receiptPanel2_bottom,BorderLayout.SOUTH);
+      managerReceiptPanel.add(managerReceiptPanel2_bottom,BorderLayout.SOUTH);
 
       cashierFrame.add(receiptPanel, BorderLayout.EAST);    
       cashierFrame.add(cashierTabbedPane, BorderLayout.WEST);
@@ -497,7 +547,7 @@ public class GUI extends JFrame {
       loginFrame.setVisible(true);
     }
 
-    private void addItemToReceipt(ItemButton itemButton) {
+    private void addItemToReceipt(ItemButton itemButton, JPanel panel) {
       // Get item details from the button
       //ask user if they want the medium price or large price
       String itemName = itemButton.getItemName();
@@ -527,8 +577,8 @@ public class GUI extends JFrame {
       JLabel priceLabel = new JLabel("    $" + itemPrice);
 
       // Add the item to the item list panel
-      itemListPanel.add(itemLabel);
-      itemListPanel.add(priceLabel);
+      panel.add(itemLabel);
+      panel.add(priceLabel);
 
       // Update the running total
       subtotal += itemPrice;
@@ -540,8 +590,8 @@ public class GUI extends JFrame {
       totalLabel.setText("Total: $" + total);
 
       // Repaint the item list panel
-      itemListPanel.revalidate();
-      itemListPanel.repaint();
+      panel.revalidate();
+      panel.repaint();
   }
 }
 
