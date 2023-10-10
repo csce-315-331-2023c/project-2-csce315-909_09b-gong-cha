@@ -148,16 +148,33 @@ public class GUI extends JFrame {
       JTextField recipePrice = new JTextField();
       JTextField ingredientsQuantity = new JTextField();
       JTextField toppingsQuantity = new JTextField();
-      JTextArea ingredients = new JTextArea();
-      JTextArea toppings = new JTextArea();
+      JTextField ingredients = new JTextField();
+      JTextField toppings = new JTextField();
       ButtonGroup slushieOptions = new ButtonGroup();
-      JRadioButton option1 = new JRadioButton("Slushy");
-      JRadioButton option2 = new JRadioButton("Not Slushy");
+      JRadioButton isSlushy = new JRadioButton("Slushy");
+      JRadioButton isNotSlushy = new JRadioButton("Not Slushy");
       ButtonGroup drinkType = new ButtonGroup();
       JRadioButton milkTea = new JRadioButton("Milk Tea");
       JRadioButton slushie = new JRadioButton("Slushie");
       JRadioButton coffee = new JRadioButton("Coffee");
       JRadioButton other = new JRadioButton("Other");
+      // Repeat to add to modify drink panel
+      JTextField drinkName2 = new JTextField();
+      JTextField mediumPrice2 = new JTextField();
+      JTextField largePrice2 = new JTextField();
+      JTextField recipePrice2 = new JTextField();
+      JTextField ingredientsQuantity2 = new JTextField();
+      JTextField toppingsQuantity2 = new JTextField();
+      JTextField ingredients2 = new JTextField();
+      JTextField toppings2 = new JTextField();
+      ButtonGroup slushieOptions2 = new ButtonGroup();
+      JRadioButton isSlushy2 = new JRadioButton("Slushy");
+      JRadioButton isNotSlushy2 = new JRadioButton("Not Slushy");
+      ButtonGroup drinkType2 = new ButtonGroup();
+      JRadioButton milkTea2 = new JRadioButton("Milk Tea");
+      JRadioButton slushie2 = new JRadioButton("Slushie");
+      JRadioButton coffee2 = new JRadioButton("Coffee");
+      JRadioButton other2 = new JRadioButton("Other");
 
     JButton checkoutButton = new JButton("Checkout");
     JButton managerCheckoutButton = new JButton("Checkout");
@@ -268,14 +285,8 @@ public class GUI extends JFrame {
                     toppingsQuantityArray.add(quantity);
                 }
 
+                boolean isSlush = isSlushy.isSelected();
 
-                boolean isSlush = option1.isSelected();
-
-                // Basic error handling cases
-                // if (newDrinkID.equals("")) { 
-                //     JOptionPane.showMessageDialog(null, "No ID provided", "Error", JOptionPane.ERROR_MESSAGE); 
-                //     return;
-                // }
                 if (newDrinkName.equals("")) {
                     JOptionPane.showMessageDialog(null, "No name provided", "Error", JOptionPane.ERROR_MESSAGE); 
                     return;
@@ -318,6 +329,89 @@ public class GUI extends JFrame {
                 // TODO:
                 // CREATE SQL QUERY TO ADD DRINK INFO TO DATABASE
                 JOptionPane.showMessageDialog(null, "Drink added successfully, restart application to use button", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            if (s.equals("Modify Drink")) {
+                String drinkToModify = drinkID.getText();
+                String modifiedDrinkName = drinkName2.getText();
+                String requestedIngredients = ingredients2.getText();
+                String requestedIngredientsQuantity = ingredientsQuantity2.getText();
+                String requestedToppings = toppings2.getText();
+                String requestedToppingsQuantity = toppingsQuantity2.getText();
+                String modifiedMediumPrice = mediumPrice2.getText();
+                String modifiedLargePrice = largePrice2.getText();
+                String modifiedRecipePrice = recipePrice2.getText();
+
+                String[] modifiedIngredients = requestedIngredients.split(",");
+                String[] modifiedIngredientsQuantity = requestedIngredientsQuantity.split(",");
+                String[] modifiedToppings = requestedToppings.split(",");
+                String[] modifiedToppingsQuantity = requestedToppingsQuantity.split(",");
+                ArrayList<String> ingredientsArray = new ArrayList<>();
+                ArrayList<String> ingredientsQuantityArray = new ArrayList<>();
+                ArrayList<String> toppingsArray = new ArrayList<>();
+                ArrayList<String> toppingsQuantityArray = new ArrayList<>();
+
+                for (String ingredient : modifiedIngredients) {
+                    ingredientsArray.add(ingredient);
+                }
+                for (String topping : modifiedToppings) {
+                    toppingsArray.add(topping);
+                }
+                for (String quantity: modifiedIngredientsQuantity) {
+                    ingredientsQuantityArray.add(quantity);
+                }
+                for (String quantity: modifiedToppingsQuantity) {
+                    toppingsQuantityArray.add(quantity);
+                }
+
+                boolean isSlush = isSlushy.isSelected();
+
+                if (drinkToModify.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No drink ID provided", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (modifiedDrinkName.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No name provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (requestedIngredients.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No ingredients provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (requestedIngredientsQuantity.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No ingredient quantities provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (slushieOptions2.getSelection() == null) {
+                    JOptionPane.showMessageDialog(null, "Slushie/Not Slushie not selected", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (modifiedMediumPrice.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No medium price provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (modifiedLargePrice.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No large price provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (modifiedRecipePrice.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No recipe price provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (drinkType2.getSelection() == null) {
+                    JOptionPane.showMessageDialog(null, "No drink type selected", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+
+                if (!requestedToppings.equals("")) {
+                    if (requestedToppingsQuantity.equals("")) {
+                        JOptionPane.showMessageDialog(null, "No topping quantities provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                        return;
+                    }
+                }
+                // TODO:
+                // CREATE SQL QUERY TO ADD DRINK INFO TO DATABASE
+                JOptionPane.showMessageDialog(null, "Drink modified successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         }        
       };
@@ -388,13 +482,16 @@ public class GUI extends JFrame {
       //make cashierotherpanel
       CashierOtherPanel = new JPanel();
       JPanel managerInventoryPanel = new JPanel();
-
+      JPanel changeDrinkPanel = new JPanel();
+      JPanel addDrinkPanel = new JPanel();
       //make manageractionspanel
       JPanel managerActionsPanel = new JPanel();
-      managerActionsPanel.setLayout(new BoxLayout(managerActionsPanel, BoxLayout.Y_AXIS));
-      managerActionsPanel.add(Box.createVerticalStrut(10));
+      addDrinkPanel.setLayout(new BoxLayout(addDrinkPanel, BoxLayout.Y_AXIS));
+      addDrinkPanel.add(Box.createVerticalStrut(10));
+      changeDrinkPanel.setLayout(new BoxLayout(changeDrinkPanel, BoxLayout.Y_AXIS));
+      changeDrinkPanel.add(Box.createVerticalStrut(47));
       // declare necessary sections to add a drink
-      JLabel drinkIDLabel = new JLabel("Drink ID: ");
+      JLabel addDrinkLabel = new JLabel("ADD DRINK: ");
       JLabel nameLabel = new JLabel("Drink name: ");
       JLabel ingredientsLabel = new JLabel("Ingredients (separated by ','): ");
       JLabel ingredientsQuantityLabel = new JLabel("Quantity of Ingredients (in same order, separated by ','): ");
@@ -404,8 +501,21 @@ public class GUI extends JFrame {
       JLabel largeLabel = new JLabel("Large Price: ");
       JLabel recipeLabel = new JLabel("Recipe Price: ");
 
-      // Set alignment
-      drinkIDLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      // declare necessary sections to modify a drink
+      JLabel modifyDrinkLabel = new JLabel("MODIFY DRINK: ");
+      JLabel drinkIDLabel = new JLabel("ID of drink to modify: ");
+      JLabel nameLabel2 = new JLabel("Drink name: ");
+      JLabel ingredientsLabel2 = new JLabel("Ingredients (separated by ','): ");
+      JLabel ingredientsQuantityLabel2 = new JLabel("Quantity of Ingredients (in same order, separated by ','): ");
+      JLabel toppingsLabel2 = new JLabel("Toppings (separated by ','): ");
+      JLabel toppingsQuantityLabel2 = new JLabel("Quantity of Toppings (in same order, separated by ','): ");
+      JLabel mediumLabel2 = new JLabel("Medium Price: ");
+      JLabel largeLabel2 = new JLabel("Large Price: ");
+      JLabel recipeLabel2 = new JLabel("Recipe Price: ");
+
+
+      // Add Drink alignment
+      addDrinkLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       drinkID.setAlignmentX(Component.LEFT_ALIGNMENT);
       nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       drinkName.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -417,14 +527,36 @@ public class GUI extends JFrame {
       toppings.setAlignmentX(Component.LEFT_ALIGNMENT);
       toppingsQuantityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       toppingsQuantity.setAlignmentX(Component.LEFT_ALIGNMENT);
-      option1.setAlignmentX(Component.LEFT_ALIGNMENT);
-      option2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      isSlushy.setAlignmentX(Component.LEFT_ALIGNMENT);
+      isNotSlushy.setAlignmentX(Component.LEFT_ALIGNMENT);
       mediumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       mediumPrice.setAlignmentX(Component.LEFT_ALIGNMENT);
       largeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       largePrice.setAlignmentX(Component.LEFT_ALIGNMENT);
       recipeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       recipePrice.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+      // Modify Drink alignment
+      modifyDrinkLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      drinkIDLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      nameLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      drinkName2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      ingredientsLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      ingredients2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      ingredientsQuantityLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      ingredientsQuantity2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      toppingsLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      toppings2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      toppingsQuantityLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      toppingsQuantity2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      isSlushy2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      isNotSlushy2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      mediumLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      mediumPrice2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      largeLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      largePrice2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      recipeLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      recipePrice2.setAlignmentX(Component.LEFT_ALIGNMENT);
 
       // Set dimensions
       drinkID.setMinimumSize(new Dimension(200, 20));
@@ -445,45 +577,103 @@ public class GUI extends JFrame {
       toppings.setMaximumSize(new Dimension(200, 100));
       toppingsQuantity.setMinimumSize(new Dimension(200, 20));
       toppingsQuantity.setMaximumSize(new Dimension(200, 20));
+      // Again for modify drink
+      drinkName2.setMinimumSize(new Dimension(200, 20));
+      drinkName2.setMaximumSize(new Dimension(200, 20));
+      ingredients2.setMinimumSize(new Dimension(200, 100));
+      ingredients2.setMaximumSize(new Dimension(200, 100));
+      ingredientsQuantity2.setMinimumSize(new Dimension(200, 20));
+      ingredientsQuantity2.setMaximumSize(new Dimension(200, 20));
+      mediumPrice2.setMinimumSize(new Dimension(200, 20));
+      mediumPrice2.setMaximumSize(new Dimension(200, 20));
+      largePrice2.setMinimumSize(new Dimension(200, 20));
+      largePrice2.setMaximumSize(new Dimension(200, 20));
+      recipePrice2.setMinimumSize(new Dimension(200, 20));
+      recipePrice2.setMaximumSize(new Dimension(200, 20));
+      toppings2.setMinimumSize(new Dimension(200, 100));
+      toppings2.setMaximumSize(new Dimension(200, 100));
+      toppingsQuantity2.setMinimumSize(new Dimension(200, 20));
+      toppingsQuantity2.setMaximumSize(new Dimension(200, 20));
       
       // Add the objects in the correct order
       //   managerActionsPanel.add(drinkIDLabel);
       //   managerActionsPanel.add(drinkID);
-      managerActionsPanel.add(nameLabel);
-      managerActionsPanel.add(drinkName);
-      managerActionsPanel.add(ingredientsLabel);
-      managerActionsPanel.add(ingredients);
-      managerActionsPanel.add(ingredientsQuantityLabel);
-      managerActionsPanel.add(ingredientsQuantity);
-      managerActionsPanel.add(toppingsLabel);
-      managerActionsPanel.add(toppings);
-      managerActionsPanel.add(toppingsQuantityLabel);
-      managerActionsPanel.add(toppingsQuantity);
-      slushieOptions.add(option1);
-      slushieOptions.add(option2);
-      managerActionsPanel.add(option1);
-      managerActionsPanel.add(option2);
-      managerActionsPanel.add(mediumLabel);
-      managerActionsPanel.add(mediumPrice);
-      managerActionsPanel.add(largeLabel);
-      managerActionsPanel.add(largePrice);
-      managerActionsPanel.add(recipeLabel);
-      managerActionsPanel.add(recipePrice);
+      addDrinkPanel.add(addDrinkLabel);
+      addDrinkPanel.add(nameLabel);
+      addDrinkPanel.add(drinkName);
+      addDrinkPanel.add(ingredientsLabel);
+      addDrinkPanel.add(ingredients);
+      addDrinkPanel.add(ingredientsQuantityLabel);
+      addDrinkPanel.add(ingredientsQuantity);
+      addDrinkPanel.add(toppingsLabel);
+      addDrinkPanel.add(toppings);
+      addDrinkPanel.add(toppingsQuantityLabel);
+      addDrinkPanel.add(toppingsQuantity);
+      slushieOptions.add(isSlushy);
+      slushieOptions.add(isNotSlushy);
+      addDrinkPanel.add(isSlushy);
+      addDrinkPanel.add(isNotSlushy);
+      addDrinkPanel.add(mediumLabel);
+      addDrinkPanel.add(mediumPrice);
+      addDrinkPanel.add(largeLabel);
+      addDrinkPanel.add(largePrice);
+      addDrinkPanel.add(recipeLabel);
+      addDrinkPanel.add(recipePrice);
       drinkType.add(milkTea);
       drinkType.add(slushie);
       drinkType.add(coffee);
       drinkType.add(other);
-      managerActionsPanel.add(milkTea);
-      managerActionsPanel.add(slushie);
-      managerActionsPanel.add(coffee);
-      managerActionsPanel.add(other);
+      addDrinkPanel.add(milkTea);
+      addDrinkPanel.add(slushie);
+      addDrinkPanel.add(coffee);
+      addDrinkPanel.add(other);
+
+      // For change Drink
+      changeDrinkPanel.add(modifyDrinkLabel);
+      changeDrinkPanel.add(drinkIDLabel);
+      changeDrinkPanel.add(drinkID);
+      changeDrinkPanel.add(nameLabel2);
+      changeDrinkPanel.add(drinkName2);
+      changeDrinkPanel.add(ingredientsLabel2);
+      changeDrinkPanel.add(ingredients2);
+      changeDrinkPanel.add(ingredientsQuantityLabel2);
+      changeDrinkPanel.add(ingredientsQuantity2);
+      changeDrinkPanel.add(toppingsLabel2);
+      changeDrinkPanel.add(toppings2);
+      changeDrinkPanel.add(toppingsQuantityLabel2);
+      changeDrinkPanel.add(toppingsQuantity2);
+      slushieOptions2.add(isSlushy2);
+      slushieOptions2.add(isNotSlushy2);
+      changeDrinkPanel.add(isSlushy2);
+      changeDrinkPanel.add(isNotSlushy2);
+      changeDrinkPanel.add(mediumLabel2);
+      changeDrinkPanel.add(mediumPrice2);
+      changeDrinkPanel.add(largeLabel2);
+      changeDrinkPanel.add(largePrice2);
+      changeDrinkPanel.add(recipeLabel2);
+      changeDrinkPanel.add(recipePrice2);
+      drinkType2.add(milkTea2);
+      drinkType2.add(slushie2);
+      drinkType2.add(coffee2);
+      drinkType2.add(other2);
+      changeDrinkPanel.add(milkTea2);
+      changeDrinkPanel.add(slushie2);
+      changeDrinkPanel.add(coffee2);
+      changeDrinkPanel.add(other2);
 
       // Create the new drink button
       JButton newDrinkButton = new JButton("Add New Drink");
       newDrinkButton.addActionListener(actionListener);
-      managerActionsPanel.add(newDrinkButton);
+      addDrinkPanel.add(newDrinkButton);
 
-      managerTabbedPane.addTab("Manager", null, managerActionsPanel, "Does nothing");
+      JButton changeDrinkButton = new JButton("Modify Drink");
+      changeDrinkButton.addActionListener(actionListener);
+      changeDrinkPanel.add(changeDrinkButton);
+
+      managerActionsPanel.add(addDrinkPanel, BorderLayout.WEST);
+      managerActionsPanel.add(changeDrinkPanel, BorderLayout.EAST);
+
+      managerTabbedPane.addTab("Add/Modify Drink", null, managerActionsPanel, "Does nothing");
       managerTabbedPane.addTab("Inventory", null, managerInventoryPanel, "Does nothing");
 
       cashierTabbedPane.addTab("Milk Tea", null, CashierMilkTeaPanel, "Does nothing");
