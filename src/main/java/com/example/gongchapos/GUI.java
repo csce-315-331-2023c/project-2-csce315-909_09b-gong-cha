@@ -411,8 +411,17 @@ public class GUI extends JFrame {
       //make cashierotherpanel
       CashierOtherPanel = new JPanel();
 
+      JPanel changeInventoryPanel = new JPanel();
+      JPanel viewDrinksPanel = new JPanel();
       JPanel managerInventoryPanel = new JPanel();
       
+      String[] columnNames = {"Ingredient_ID", "Ingredient_Name", "Unit_Price", "Stock"};
+      // Make a JTable out of the data returned from function in Application.java
+      Object[][] data = app.getIngredients();
+      JTable inventoryTable = new JTable(data, columnNames);
+      JScrollPane inventoryScrollPane = new JScrollPane(inventoryTable);
+      managerInventoryPanel.add(inventoryScrollPane);
+
       //make manageractionspanel
       JPanel managerActionsPanel = new JPanel();
       addDrinkPanel.setLayout(new BoxLayout(addDrinkPanel, BoxLayout.Y_AXIS));
@@ -529,8 +538,10 @@ public class GUI extends JFrame {
       managerActionsPanel.add(addDrinkPanel, BorderLayout.WEST);
       managerActionsPanel.add(changeDrinkPanel, BorderLayout.EAST);
 
-      managerTabbedPane.addTab("Add/Modify Drink", null, managerActionsPanel, "Does nothing");
       managerTabbedPane.addTab("Inventory", null, managerInventoryPanel, "Does nothing");
+      managerTabbedPane.addTab("Add/Update Inventory Items", null, changeInventoryPanel, "Does nothing");
+      managerTabbedPane.addTab("Drinks", null, viewDrinksPanel, "Does nothing");
+      managerTabbedPane.addTab("Add/Modify Drink", null, managerActionsPanel, "Does nothing");
 
       cashierTabbedPane.addTab("Milk Tea", null, CashierMilkTeaPanel, "Does nothing");
       cashierTabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
