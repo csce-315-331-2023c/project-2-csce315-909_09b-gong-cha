@@ -1,8 +1,10 @@
 package com.example.gongchapos;
 
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import com.example.gongchapos.Application;
 
 //create class for the POS system cashier end
 
@@ -206,6 +208,15 @@ public class GUI extends JFrame {
 
                 String[] newIngredients = requestedIngredients.split(",");
                 String[] newToppings = requestedToppings.split(",");
+                ArrayList<String> ingredientsArray = new ArrayList<>();
+                ArrayList<String> toppingsArray = new ArrayList<>();
+
+                for (String ingredient : newIngredients) {
+                    ingredientsArray.add(ingredient);
+                }
+                for (String topping : newToppings) {
+                    toppingsArray.add(topping);
+                }
 
                 boolean isSlush = option1.isSelected();
 
