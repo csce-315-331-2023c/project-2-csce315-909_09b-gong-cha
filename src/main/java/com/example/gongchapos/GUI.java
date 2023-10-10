@@ -118,11 +118,7 @@ public class GUI extends JFrame {
       ButtonGroup slushieOptions = new ButtonGroup();
       JRadioButton isSlushy = new JRadioButton("Slushy");
       JRadioButton isNotSlushy = new JRadioButton("Not Slushy");
-      ButtonGroup drinkType = new ButtonGroup();
-      JRadioButton milkTea = new JRadioButton("Milk Tea");
-      JRadioButton slushie = new JRadioButton("Slushie");
-      JRadioButton coffee = new JRadioButton("Coffee");
-      JRadioButton other = new JRadioButton("Other");
+
       // Repeat to add to modify drink panel
       JTextField drinkName2 = CreateNewTextField();
       JTextField mediumPrice2 = CreateNewTextField();
@@ -135,11 +131,6 @@ public class GUI extends JFrame {
       ButtonGroup slushieOptions2 = new ButtonGroup();
       JRadioButton isSlushy2 = new JRadioButton("Slushy");
       JRadioButton isNotSlushy2 = new JRadioButton("Not Slushy");
-      ButtonGroup drinkType2 = new ButtonGroup();
-      JRadioButton milkTea2 = new JRadioButton("Milk Tea");
-      JRadioButton slushie2 = new JRadioButton("Slushie");
-      JRadioButton coffee2 = new JRadioButton("Coffee");
-      JRadioButton other2 = new JRadioButton("Other");
 
     JButton checkoutButton = new JButton("Checkout");
     JButton managerCheckoutButton = new JButton("Checkout");
@@ -148,7 +139,11 @@ public class GUI extends JFrame {
         // if button is pressed
         public void actionPerformed(ActionEvent e)
         {
-            String changeDrinkID = drinkID.getText();
+            String changeDrinkIDStr = drinkID.getText();
+            int changeDrinkID = -1;
+            if (!changeDrinkIDStr.equals("")) {
+                changeDrinkID = Integer.parseInt(changeDrinkIDStr);
+            }
             JButton clickedButton = (JButton) e.getSource();
             String buttonName = clickedButton.getText();
             String s = e.getActionCommand();
@@ -274,10 +269,6 @@ public class GUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "No recipe price provided", "Error", JOptionPane.ERROR_MESSAGE); 
                     return;
                 }
-                else if (drinkType.getSelection() == null) {
-                    JOptionPane.showMessageDialog(null, "No drink type selected", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
 
                 if (!requestedToppings.equals("")) {
                     if (requestedToppingsQuantity.equals("")) {
@@ -290,13 +281,71 @@ public class GUI extends JFrame {
                 JOptionPane.showMessageDialog(null, "Drink added successfully, restart application to use button", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
 
-            if (s.equals("Change Name")) {}
-            if (s.equals("Change Ingredients")) {}
-            if (s.equals("Change Toppings")) {}
-            if (s.equals("Change Medium Price")) {}
-            if (s.equals("Change Large Price")) {}
-            if (s.equals("Change Recipe Price")) {}
-            if (s.equals("Change Slushy")) {}
+            if (s.equals("Change Name")) {
+                String changedName = drinkName2.getText();
+                // TODO:
+                // Create SQL query to change the name in the database using an ID and new name
+                // Call it
+            }
+            if (s.equals("Change Ingredients")) {
+                String newIngredientsStr = ingredients2.getText();
+                if (!newIngredientsStr.equals("")) {
+                    String[] newIngredientsStrArr = newIngredientsStr.split(",");
+                    int[] newIngredients = new int[newIngredientsStrArr.length];
+                    for (int i = 0; i < newIngredientsStrArr.length; i++) {
+                        newIngredients[i] = Integer.parseInt(newIngredientsStrArr[i]);
+                    }
+                }
+                // TODO:
+                // Create SQL query to change the ingredients in the database using an ID and newIngredients
+                // Call it
+            }
+            if (s.equals("Change Toppings")) {
+                String newToppingsStr = toppings2.getText();
+                if (!newToppingsStr.equals("")) {
+                    String[] newToppingsStrArr = newToppingsStr.split(",");
+                    int[] newToppings = new int[newToppingsStrArr.length];
+                    for (int i = 0; i < newToppingsStrArr.length; i++) {
+                        newToppings[i] = Integer.parseInt(newToppingsStrArr[i]);
+                    }
+                }
+                // TODO:
+                // Create SQL query to change the ingredients in the database using an ID and newToppings
+                // Call it
+            }
+            if (s.equals("Change Medium Price")) {
+                String priceStr = mediumPrice2.getText();
+                double price = 0;
+                if (!priceStr.equals("")) {
+                    price = Double.parseDouble(priceStr);
+                }
+                // Call SQL query with ID and new price
+                app.updateMedPrice(changeDrinkID, price);
+            }
+            if (s.equals("Change Large Price")) {
+                String priceStr = largePrice2.getText();
+                double price = 0;
+                if (!priceStr.equals("")) {
+                    price = Double.parseDouble(priceStr);
+                }
+                // Call SQL query with ID and new price
+                app.updateLargePrice(changeDrinkID, price);
+            }
+            if (s.equals("Change Recipe Price")) {
+                String priceStr = recipePrice2.getText();
+                double price = 0;
+                if (!priceStr.equals("")) {
+                    price = Double.parseDouble(priceStr);
+                }
+                // Call SQL query with ID and new price
+                app.updateRecipePrice(changeDrinkID, price);
+            }
+            if (s.equals("Change Slushy")) {
+                boolean isASlushy = isSlushy2.isSelected();
+                // TODO:
+                // Create SQL query that can change bool is or isnt slushy
+                // Call it
+            }
         }        
       };
 
