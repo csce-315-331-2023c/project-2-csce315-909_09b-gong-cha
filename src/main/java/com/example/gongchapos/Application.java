@@ -154,6 +154,24 @@ public class Application {
 
 
 
+ // TODO: need to adjust
+  // adds ingredients into recipe_ingredients
+  public void addIngredients(ArrayList<recipeIngredient> ingredients){
+
+    for(recipeIngredient cur_ingredient: ingredients){
+      try
+      {
+        Statement stmt = conn.createStatement();
+        stmt.executeQuery("INSERT INTO recipe_ingredient VALUES (" + cur_ingredient.getRecipeID() + cur_ingredient.getIngredientID() + cur_ingredient.getQuantityUsed() + ")" );
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error accessing Database");
+      }
+    }
+  }
+
+
+
+  // update recipe med_price
   public void updateMedPrice(int recipe_id, double new_quantity){
     try
     {
@@ -163,6 +181,38 @@ public class Application {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
   }
+  // updates recipe large_price
+  public void updateLargePrice(int recipe_id, double new_quantity){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.executeQuery("UPDATE recipe SET large_price =" + new_quantity + "WHERE recipe_id =" + recipe_id);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }
+
+  // updates recipe recipe_price
+  public void updateRecipePrice(int recipe_id, double new_quantity){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.executeQuery("UPDATE recipe SET recipe_price =" + new_quantity + "WHERE recipe_id =" + recipe_id);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }
+
+  // update ingredient stock 
+  public void updateIngredientStock(int ingredient_id, double new_quantity){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.executeQuery("UPDATE ingredient SET stock =" + new_quantity + "WHERE ingredient_id =" + ingredient_id);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }  
 
 
 }
