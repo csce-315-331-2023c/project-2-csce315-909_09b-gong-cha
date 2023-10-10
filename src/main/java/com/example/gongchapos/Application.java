@@ -129,5 +129,40 @@ public class Application {
 
     return outRecipe;
   }
-    
+  
+  // adds ingredients into recipe_ingredients
+  public void addIngredients(ArrayList<recipeIngredient> ingredients){
+
+    for(recipeIngredient cur_ingredient: ingredients){
+      try
+      {
+        Statement stmt = conn.createStatement();
+        stmt.executeQuery("INSERT INTO recipe_ingredient VALUES (" + cur_ingredient.getRecipeID() + cur_ingredient.getIngredientID() + cur_ingredient.getQuantityUsed() + ")" );
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error accessing Database");
+      }
+    }
+  }
+
+
+  // adds toppings into recipe_toppings
+  public void addToppings(ArrayList<Topping> toppings){
+    for(Topping cur_topping: toppings){
+
+    }
+  }
+
+
+
+  public void updateMedPrice(int recipe_id, double new_quantity){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.executeQuery("UPDATE recipe SET med_price =" + new_quantity + "WHERE recipe_id =" + recipe_id);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }
+
+
 }
