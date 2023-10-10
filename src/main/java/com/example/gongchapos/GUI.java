@@ -367,6 +367,7 @@ public class GUI extends JFrame {
       JPanel managerCoffeePanel = new JPanel();
       JPanel managerOtherPanel = new JPanel();
       JPanel managerMilkTeaPanel = new JPanel();
+      JPanel managerInventoryPanel = new JPanel();
 
       //make manageractionspanel
       JPanel managerActionsPanel = new JPanel();
@@ -453,7 +454,8 @@ public class GUI extends JFrame {
       managerTabbedPane.addTab("Coffee", null, managerCoffeePanel, "Does nothing");
       managerTabbedPane.addTab("Other", null, managerOtherPanel, "Does nothing");
       managerTabbedPane.addTab("Manager", null, managerActionsPanel, "Does nothing");
-
+      managerTabbedPane.addTab("Inventory", null, managerInventoryPanel, "Does nothing");
+      
       cashierTabbedPane.addTab("Milk Tea", null, milkteaholder, "Does nothing");
       cashierTabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
       cashierTabbedPane.addTab("Coffee", null, CashierCoffeePanel, "Does nothing");
