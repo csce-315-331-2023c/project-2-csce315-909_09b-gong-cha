@@ -40,6 +40,7 @@ public class Application {
         "jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315331_09b_db",
         "csce315_909_" + netID,
         password);
+        System.out.println("Connected to database successfully");
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println(e.getClass().getName()+": "+e.getMessage());
@@ -52,9 +53,9 @@ public class Application {
     //closing the connection
     try {
       conn.close();
-      JOptionPane.showMessageDialog(null,"Connection Closed.");
+      System.out.println("Connectin Closed");
     } catch(Exception e) {
-      JOptionPane.showMessageDialog(null,"Connection NOT Closed.");
+      System.out.println("Connection not closed");
     }
   }
 
@@ -121,8 +122,7 @@ public class Application {
         recipe_id = result.getInt("recipe_id") + 1;
       }
     } catch (Exception e){
-      System.out.println(e);
-      JOptionPane.showMessageDialog(null,"Error accessing Database 0");
+      JOptionPane.showMessageDialog(null,"Error accessing Database");
     }
 
       return recipe_id;
@@ -140,8 +140,7 @@ public class Application {
       Statement stmt = conn.createStatement();
       stmt.execute("INSERT INTO recipe VALUES('" + recipe_id + "','" + recipe_name + "','" + is_slush + "','" + med_price + "','" + large_price + "','" + recipe_price + "');");
     } catch (Exception e) {
-      System.out.println(e);
-      JOptionPane.showMessageDialog(null, "Error accessing Database 1");
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
 
     for(int i = 0; i < ingredinets.size(); i++)
@@ -166,8 +165,7 @@ public class Application {
         Statement stmt = conn.createStatement();
         stmt.execute("INSERT INTO recipe_ingredient VALUES('" + recipeIngredient.getRecipeID() + "','" + recipeIngredient.getIngredientID() + "','" + recipeIngredient.getQuantityUsed() + "');");
       } catch (Exception e) {
-        System.out.println(e);
-        JOptionPane.showMessageDialog(null, "Error accessing Database 3");
+        JOptionPane.showMessageDialog(null, "Error accessing Database");
       }
     }
 
@@ -175,11 +173,6 @@ public class Application {
     {
       
       Topping topping = getTopping(toppings_array.get(i).strip());
-
-      if (topping == null)
-      {
-        System.out.println("null");
-      }
       recipeToppings recipeTopping = new recipeToppings(recipe_id, topping.getToppingId(), Integer.parseInt(toppings_quantity.get(i)));
       
       try
@@ -228,10 +221,8 @@ public class Application {
   public Topping getTopping(String topping_name)
   {
     Topping outTopping = null;
-    System.out.println("LOOKING FOR: " + topping_name);
     for(Topping currentTopping : toppings)
     {
-      System.out.println("ON TOPPING " + currentTopping.getToppingName());
       if(topping_name.equals(currentTopping.getToppingName()))
       {
         outTopping = currentTopping;
@@ -362,7 +353,7 @@ public class Application {
     return order;
   }
 
-  public void addDrink(int recipe_ID, String notes, boolean is_medium, int ice, int sugar, double subtotal)
+  public void addDrink(int recipe_ID, String notes, boolean is_medium, int ice, int sugar, double subtotal, List<String> toppings_used, List<Integer> toppings_used_quantity)
   {
     Recipe recipe = getRecipe(recipe_ID);
 
@@ -377,6 +368,20 @@ public class Application {
 
     order.setSubtotal(subtotal);
     order.addOrderItem(drink);
+
+    for(int i = 0; i < toppings_used.size(); i++)
+    {
+      Topping topping = getTopping(toppings_used.get(i));
+      orderItemToppings orderItemTopping = new orderItemToppings(drink.getOrderItemID(), topping.getToppingId(), toppings_used_quantity.get(i));
+
+       try
+        {
+          Statement stmt = conn.createStatement();
+          stmt.execute("INSERT INTO order_item_toppings VALUES('" + orderItemTopping.getOrderItemID() + "','" + orderItemTopping.getToppingId() + "','" + orderItemTopping.getQuantityUsed() + "');");
+        } catch (Exception e) {
+          JOptionPane.showMessageDialog(null, "Error accessing Database");
+        }
+    }
   }
 
   public void placeOrder(double tip, String coupon)
@@ -441,12 +446,6 @@ public class Application {
       cur = cur_arr.toArray();
       toReturn[i] = cur; // error here
     }
-    for(int i = 0; i < tempContainer.size(); i++){
-      for(int j = 0; j < 4; j++){
-        System.out.print(toReturn[i][j] + ", ");
-      }
-      System.out.println();
-    }
     return toReturn;  
   }
 
@@ -483,12 +482,6 @@ public class Application {
       Object[] cur = new Object[4];
       cur = cur_arr.toArray();
       toReturn[i] = cur; // error here
-    }
-    for(int i = 0; i < tempContainer.size(); i++){
-      for(int j = 0; j < 4; j++){
-        System.out.print(toReturn[i][j] + ", ");
-      }
-      System.out.println();
     }
     return toReturn;  
   }
