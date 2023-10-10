@@ -123,22 +123,22 @@ public class GUI extends JFrame {
       managerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
       JButton managerBackButton = new JButton("Back");
 
-      ItemButton blackMilkTea= new ItemButton(1, this);
-      ItemButton brownSugarMilkTea = new ItemButton(2, this);
-      ItemButton caramelMilkTea = new ItemButton(3, this);
-      ItemButton earlGreyMilkTea = new ItemButton(4, this);
-      ItemButton earlGreyMilkTea3Js = new ItemButton(5, this);
-      ItemButton greenMilkTea = new ItemButton(6, this);
-      ItemButton oolongMilkTea = new ItemButton(7, this);
-      ItemButton pearlMilkTea = new ItemButton(8, this);
-      ItemButton strawberryMilkTea = new ItemButton(9, this);
-      ItemButton wintermelonMilkTea = new ItemButton(10, this);
+    //   ItemButton blackMilkTea= new ItemButton(1, this);
+    //   ItemButton brownSugarMilkTea = new ItemButton(2, this);
+    //   ItemButton caramelMilkTea = new ItemButton(3, this);
+    //   ItemButton earlGreyMilkTea = new ItemButton(4, this);
+    //   ItemButton earlGreyMilkTea3Js = new ItemButton(5, this);
+    //   ItemButton greenMilkTea = new ItemButton(6, this);
+    //   ItemButton oolongMilkTea = new ItemButton(7, this);
+    //   ItemButton pearlMilkTea = new ItemButton(8, this);
+    //   ItemButton strawberryMilkTea = new ItemButton(9, this);
+    //   ItemButton wintermelonMilkTea = new ItemButton(10, this);
 
-      ItemButton milkCoffee = new ItemButton(24, this);
-      ItemButton coffeeMilkTea = new ItemButton(25, this);
-      ItemButton milkFoamBlackCoffee = new ItemButton(26, this);
-      ItemButton taroMilkSlush = new ItemButton(49, this);
-      ItemButton strawberryMilkSlush = new ItemButton(48, this);
+    //   ItemButton milkCoffee = new ItemButton(24, this);
+    //   ItemButton coffeeMilkTea = new ItemButton(25, this);
+    //   ItemButton milkFoamBlackCoffee = new ItemButton(26, this);
+    //   ItemButton taroMilkSlush = new ItemButton(49, this);
+    //   ItemButton strawberryMilkSlush = new ItemButton(48, this);
       
       // These variables are declared so we can access their values, part of adding a new drink in manager
       JTextField drinkID = new JTextField();
@@ -338,22 +338,22 @@ public class GUI extends JFrame {
       managerButton.addActionListener(actionListener);
       managerBackButton.addActionListener(actionListener);
 
-      blackMilkTea.addActionListener(actionListener);
-      brownSugarMilkTea.addActionListener(actionListener);
-      caramelMilkTea.addActionListener(actionListener);
-      earlGreyMilkTea.addActionListener(actionListener);
-      earlGreyMilkTea3Js.addActionListener(actionListener);
-      greenMilkTea.addActionListener(actionListener);
-      oolongMilkTea.addActionListener(actionListener);
-      pearlMilkTea.addActionListener(actionListener);
-      strawberryMilkTea.addActionListener(actionListener);
-      wintermelonMilkTea.addActionListener(actionListener);
+    //   blackMilkTea.addActionListener(actionListener);
+    //   brownSugarMilkTea.addActionListener(actionListener);
+    //   caramelMilkTea.addActionListener(actionListener);
+    //   earlGreyMilkTea.addActionListener(actionListener);
+    //   earlGreyMilkTea3Js.addActionListener(actionListener);
+    //   greenMilkTea.addActionListener(actionListener);
+    //   oolongMilkTea.addActionListener(actionListener);
+    //   pearlMilkTea.addActionListener(actionListener);
+    //   strawberryMilkTea.addActionListener(actionListener);
+    //   wintermelonMilkTea.addActionListener(actionListener);
       
-      milkCoffee.addActionListener(actionListener);
-      coffeeMilkTea.addActionListener(actionListener);
-      milkFoamBlackCoffee.addActionListener(actionListener);
-      taroMilkSlush.addActionListener(actionListener);
-      strawberryMilkSlush.addActionListener(actionListener);
+    //   milkCoffee.addActionListener(actionListener);
+    //   coffeeMilkTea.addActionListener(actionListener);
+    //   milkFoamBlackCoffee.addActionListener(actionListener);
+    //   taroMilkSlush.addActionListener(actionListener);
+    //   strawberryMilkSlush.addActionListener(actionListener);
 
       // add buttons to panels
       loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
@@ -371,27 +371,27 @@ public class GUI extends JFrame {
       JTabbedPane managerTabbedPane = new JTabbedPane();
       
       CashierMilkTeaPanel = new JPanel();
-      CashierMilkTeaPanel.add(blackMilkTea);
-      CashierMilkTeaPanel.add(brownSugarMilkTea);
-      CashierMilkTeaPanel.add(caramelMilkTea);
-      CashierMilkTeaPanel.add(earlGreyMilkTea);
-      CashierMilkTeaPanel.add(earlGreyMilkTea3Js);
-      CashierMilkTeaPanel.add(greenMilkTea);
-      CashierMilkTeaPanel.add(oolongMilkTea);
-      CashierMilkTeaPanel.add(pearlMilkTea);
-      CashierMilkTeaPanel.add(strawberryMilkTea);
-      CashierMilkTeaPanel.add(wintermelonMilkTea);
+    //   CashierMilkTeaPanel.add(blackMilkTea);
+    //   CashierMilkTeaPanel.add(brownSugarMilkTea);
+    //   CashierMilkTeaPanel.add(caramelMilkTea);
+    //   CashierMilkTeaPanel.add(earlGreyMilkTea);
+    //   CashierMilkTeaPanel.add(earlGreyMilkTea3Js);
+    //   CashierMilkTeaPanel.add(greenMilkTea);
+    //   CashierMilkTeaPanel.add(oolongMilkTea);
+    //   CashierMilkTeaPanel.add(pearlMilkTea);
+    //   CashierMilkTeaPanel.add(strawberryMilkTea);
+    //   CashierMilkTeaPanel.add(wintermelonMilkTea);
 
-      //make cashierslushiepanel
+    //   //make cashierslushiepanel
       CashierSlushiePanel = new JPanel();
-      CashierSlushiePanel.add(taroMilkSlush);
-      CashierSlushiePanel.add(strawberryMilkSlush);
+    //   CashierSlushiePanel.add(taroMilkSlush);
+    //   CashierSlushiePanel.add(strawberryMilkSlush);
 
-      //make cashiercoffeepanel
+    //   //make cashiercoffeepanel
       CashierCoffeePanel = new JPanel();
-      CashierCoffeePanel.add(milkCoffee);
-      CashierCoffeePanel.add(coffeeMilkTea);
-      CashierCoffeePanel.add(milkFoamBlackCoffee);
+    //   CashierCoffeePanel.add(milkCoffee);
+    //   CashierCoffeePanel.add(coffeeMilkTea);
+    //   CashierCoffeePanel.add(milkFoamBlackCoffee);
 
       //make cashierotherpanel
       CashierOtherPanel = new JPanel();
@@ -509,7 +509,6 @@ public class GUI extends JFrame {
       JPanel receiptPanel = createReceiptPanel();
       JPanel managerReceiptPanel = createReceiptPanel();
 
-    //TODO: CHECK IF RELOAD IS WORKING
     ReloadButtons(actionListener);
     //   receiptPanel.setPreferredSize(new Dimension(200, 768));
     //   receiptPanel.setBackground(Color.WHITE);
