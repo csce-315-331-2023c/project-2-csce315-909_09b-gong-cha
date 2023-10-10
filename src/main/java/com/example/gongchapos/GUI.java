@@ -123,22 +123,22 @@ public class GUI extends JFrame {
       managerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
       JButton managerBackButton = new JButton("Back");
 
-      ItemButton blackMilkTea= new ItemButton(1, this);
-      ItemButton brownSugarMilkTea = new ItemButton(2, this);
-      ItemButton caramelMilkTea = new ItemButton(3, this);
-      ItemButton earlGreyMilkTea = new ItemButton(4, this);
-      ItemButton earlGreyMilkTea3Js = new ItemButton(5, this);
-      ItemButton greenMilkTea = new ItemButton(6, this);
-      ItemButton oolongMilkTea = new ItemButton(7, this);
-      ItemButton pearlMilkTea = new ItemButton(8, this);
-      ItemButton strawberryMilkTea = new ItemButton(9, this);
-      ItemButton wintermelonMilkTea = new ItemButton(10, this);
+    //   ItemButton blackMilkTea= new ItemButton(1, this);
+    //   ItemButton brownSugarMilkTea = new ItemButton(2, this);
+    //   ItemButton caramelMilkTea = new ItemButton(3, this);
+    //   ItemButton earlGreyMilkTea = new ItemButton(4, this);
+    //   ItemButton earlGreyMilkTea3Js = new ItemButton(5, this);
+    //   ItemButton greenMilkTea = new ItemButton(6, this);
+    //   ItemButton oolongMilkTea = new ItemButton(7, this);
+    //   ItemButton pearlMilkTea = new ItemButton(8, this);
+    //   ItemButton strawberryMilkTea = new ItemButton(9, this);
+    //   ItemButton wintermelonMilkTea = new ItemButton(10, this);
 
-      ItemButton milkCoffee = new ItemButton(24, this);
-      ItemButton coffeeMilkTea = new ItemButton(25, this);
-      ItemButton milkFoamBlackCoffee = new ItemButton(26, this);
-      ItemButton taroMilkSlush = new ItemButton(49, this);
-      ItemButton strawberryMilkSlush = new ItemButton(48, this);
+    //   ItemButton milkCoffee = new ItemButton(24, this);
+    //   ItemButton coffeeMilkTea = new ItemButton(25, this);
+    //   ItemButton milkFoamBlackCoffee = new ItemButton(26, this);
+    //   ItemButton taroMilkSlush = new ItemButton(49, this);
+    //   ItemButton strawberryMilkSlush = new ItemButton(48, this);
       
       // These variables are declared so we can access their values, part of adding a new drink in manager
       JTextField drinkID = new JTextField();
@@ -205,21 +205,28 @@ public class GUI extends JFrame {
                 loginFrame.setVisible(false);
             }
             //if a drink button is pressed, add it to the receipt panel
-            if (buttonName.equals("<html>Black Milk Tea</html>")) { addItemToReceipt(blackMilkTea, itemListPanel); }
-            if (buttonName.equals("<html>Brown Sugar Milk Tea</html>")) { addItemToReceipt(brownSugarMilkTea, itemListPanel); }
-            if (buttonName.equals("<html>Caramel Milk Tea</html>")) { addItemToReceipt(caramelMilkTea, itemListPanel); }
-            if (buttonName.equals("<html>Earl Grey Milk Tea</html>")) { addItemToReceipt(earlGreyMilkTea, itemListPanel); }
-            if (buttonName.equals("<html>Earl Grey Milk Tea 3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js, itemListPanel); }
-            if (buttonName.equals("<html>Green Milk Tea</html>")) { addItemToReceipt(greenMilkTea, itemListPanel); }
-            if (buttonName.equals("<html>Oolong Milk Tea</html>")) { addItemToReceipt(oolongMilkTea, itemListPanel); }
-            if (buttonName.equals("<html>Pearl Milk Tea</html>")) { addItemToReceipt(pearlMilkTea, itemListPanel); }
-            if (buttonName.equals("<html>Strawberry Milk Tea</html>")) { addItemToReceipt(strawberryMilkTea, itemListPanel); }
-            if (buttonName.equals("<html>Wintermelon Milk Tea</html>")) { addItemToReceipt(wintermelonMilkTea, itemListPanel); }
-            if (buttonName.equals("<html>Milk Coffee</html>")) { addItemToReceipt(milkCoffee, itemListPanel); }
-            if (buttonName.equals("<html>Coffee Milk Tea</html>")) { addItemToReceipt(coffeeMilkTea, itemListPanel); }
-            if (buttonName.equals("<html>Milk Foam Black Coffee</html>")) { addItemToReceipt(milkFoamBlackCoffee, itemListPanel); }
-            if (buttonName.equals("<html>Taro Milk Slush</html>")) { addItemToReceipt(taroMilkSlush, itemListPanel); }
-            if (buttonName.equals("<html>Strawberry Milk Slush</html>")) { addItemToReceipt(strawberryMilkSlush, itemListPanel); }
+            //if an itembutton is pressed, call addItemToReceipt
+            // if (buttonName.equals("<html>Black Milk Tea</html>")) { addItemToReceipt(blackMilkTea, itemListPanel); }
+            // if (buttonName.equals("<html>Brown Sugar Milk Tea</html>")) { addItemToReceipt(brownSugarMilkTea, itemListPanel); }
+            // if (buttonName.equals("<html>Caramel Milk Tea</html>")) { addItemToReceipt(caramelMilkTea, itemListPanel); }
+            // if (buttonName.equals("<html>Earl Grey Milk Tea</html>")) { addItemToReceipt(earlGreyMilkTea, itemListPanel); }
+            // if (buttonName.equals("<html>Earl Grey Milk Tea 3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js, itemListPanel); }
+            // if (buttonName.equals("<html>Green Milk Tea</html>")) { addItemToReceipt(greenMilkTea, itemListPanel); }
+            // if (buttonName.equals("<html>Oolong Milk Tea</html>")) { addItemToReceipt(oolongMilkTea, itemListPanel); }
+            // if (buttonName.equals("<html>Pearl Milk Tea</html>")) { addItemToReceipt(pearlMilkTea, itemListPanel); }
+            // if (buttonName.equals("<html>Strawberry Milk Tea</html>")) { addItemToReceipt(strawberryMilkTea, itemListPanel); }
+            // if (buttonName.equals("<html>Wintermelon Milk Tea</html>")) { addItemToReceipt(wintermelonMilkTea, itemListPanel); }
+            // if (buttonName.equals("<html>Milk Coffee</html>")) { addItemToReceipt(milkCoffee, itemListPanel); }
+            // if (buttonName.equals("<html>Coffee Milk Tea</html>")) { addItemToReceipt(coffeeMilkTea, itemListPanel); }
+            // if (buttonName.equals("<html>Milk Foam Black Coffee</html>")) { addItemToReceipt(milkFoamBlackCoffee, itemListPanel); }
+            // if (buttonName.equals("<html>Taro Milk Slush</html>")) { addItemToReceipt(taroMilkSlush, itemListPanel); }
+            // if (buttonName.equals("<html>Strawberry Milk Slush</html>")) { addItemToReceipt(strawberryMilkSlush, itemListPanel); }
+            // //check to see if the clicked button is a drink button
+
+            if (clickedButton instanceof ItemButton) {
+                //call the function to add the drink to the receipt and cast to clicked button
+                addItemToReceipt((ItemButton) clickedButton, itemListPanel);
+            }
 
             if (clickedButton == checkoutButton) {
                 //ask for tip
@@ -417,6 +424,7 @@ public class GUI extends JFrame {
       };
 
 
+
       // add actionlistener to button
       exitButton.addActionListener(actionListener);
       cashierButton.addActionListener(actionListener);
@@ -424,22 +432,22 @@ public class GUI extends JFrame {
       managerButton.addActionListener(actionListener);
       managerBackButton.addActionListener(actionListener);
 
-      blackMilkTea.addActionListener(actionListener);
-      brownSugarMilkTea.addActionListener(actionListener);
-      caramelMilkTea.addActionListener(actionListener);
-      earlGreyMilkTea.addActionListener(actionListener);
-      earlGreyMilkTea3Js.addActionListener(actionListener);
-      greenMilkTea.addActionListener(actionListener);
-      oolongMilkTea.addActionListener(actionListener);
-      pearlMilkTea.addActionListener(actionListener);
-      strawberryMilkTea.addActionListener(actionListener);
-      wintermelonMilkTea.addActionListener(actionListener);
+    //   blackMilkTea.addActionListener(actionListener);
+    //   brownSugarMilkTea.addActionListener(actionListener);
+    //   caramelMilkTea.addActionListener(actionListener);
+    //   earlGreyMilkTea.addActionListener(actionListener);
+    //   earlGreyMilkTea3Js.addActionListener(actionListener);
+    //   greenMilkTea.addActionListener(actionListener);
+    //   oolongMilkTea.addActionListener(actionListener);
+    //   pearlMilkTea.addActionListener(actionListener);
+    //   strawberryMilkTea.addActionListener(actionListener);
+    //   wintermelonMilkTea.addActionListener(actionListener);
       
-      milkCoffee.addActionListener(actionListener);
-      coffeeMilkTea.addActionListener(actionListener);
-      milkFoamBlackCoffee.addActionListener(actionListener);
-      taroMilkSlush.addActionListener(actionListener);
-      strawberryMilkSlush.addActionListener(actionListener);
+    //   milkCoffee.addActionListener(actionListener);
+    //   coffeeMilkTea.addActionListener(actionListener);
+    //   milkFoamBlackCoffee.addActionListener(actionListener);
+    //   taroMilkSlush.addActionListener(actionListener);
+    //   strawberryMilkSlush.addActionListener(actionListener);
 
       // add buttons to panels
       loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
@@ -457,27 +465,27 @@ public class GUI extends JFrame {
       JTabbedPane managerTabbedPane = new JTabbedPane();
       
       CashierMilkTeaPanel = new JPanel();
-      CashierMilkTeaPanel.add(blackMilkTea);
-      CashierMilkTeaPanel.add(brownSugarMilkTea);
-      CashierMilkTeaPanel.add(caramelMilkTea);
-      CashierMilkTeaPanel.add(earlGreyMilkTea);
-      CashierMilkTeaPanel.add(earlGreyMilkTea3Js);
-      CashierMilkTeaPanel.add(greenMilkTea);
-      CashierMilkTeaPanel.add(oolongMilkTea);
-      CashierMilkTeaPanel.add(pearlMilkTea);
-      CashierMilkTeaPanel.add(strawberryMilkTea);
-      CashierMilkTeaPanel.add(wintermelonMilkTea);
+    //   CashierMilkTeaPanel.add(blackMilkTea);
+    //   CashierMilkTeaPanel.add(brownSugarMilkTea);
+    //   CashierMilkTeaPanel.add(caramelMilkTea);
+    //   CashierMilkTeaPanel.add(earlGreyMilkTea);
+    //   CashierMilkTeaPanel.add(earlGreyMilkTea3Js);
+    //   CashierMilkTeaPanel.add(greenMilkTea);
+    //   CashierMilkTeaPanel.add(oolongMilkTea);
+    //   CashierMilkTeaPanel.add(pearlMilkTea);
+    //   CashierMilkTeaPanel.add(strawberryMilkTea);
+    //   CashierMilkTeaPanel.add(wintermelonMilkTea);
 
-      //make cashierslushiepanel
+    //   //make cashierslushiepanel
       CashierSlushiePanel = new JPanel();
-      CashierSlushiePanel.add(taroMilkSlush);
-      CashierSlushiePanel.add(strawberryMilkSlush);
+    //   CashierSlushiePanel.add(taroMilkSlush);
+    //   CashierSlushiePanel.add(strawberryMilkSlush);
 
-      //make cashiercoffeepanel
+    //   //make cashiercoffeepanel
       CashierCoffeePanel = new JPanel();
-      CashierCoffeePanel.add(milkCoffee);
-      CashierCoffeePanel.add(coffeeMilkTea);
-      CashierCoffeePanel.add(milkFoamBlackCoffee);
+    //   CashierCoffeePanel.add(milkCoffee);
+    //   CashierCoffeePanel.add(coffeeMilkTea);
+    //   CashierCoffeePanel.add(milkFoamBlackCoffee);
 
       //make cashierotherpanel
       CashierOtherPanel = new JPanel();
@@ -691,6 +699,7 @@ public class GUI extends JFrame {
       JPanel receiptPanel = createReceiptPanel();
       JPanel managerReceiptPanel = createReceiptPanel();
 
+    ReloadButtons(actionListener);
     //   receiptPanel.setPreferredSize(new Dimension(200, 768));
     //   receiptPanel.setBackground(Color.WHITE);
     //   receiptPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -911,15 +920,70 @@ public class GUI extends JFrame {
     itemListPanel.revalidate();
     itemListPanel.repaint();
   }
-  void ReloadButtons(){
-    //if name has coffee in it, add to coffee tab
-    //else if name has slushie in it, add to slushie tab
+  void ReloadButtons(ActionListener actionListener){
+    //first, clear out the old buttons in the panels
+    CashierMilkTeaPanel.removeAll();
+    CashierSlushiePanel.removeAll();
+    CashierCoffeePanel.removeAll();
+    CashierOtherPanel.removeAll();
+
+    //then, await query from Application.java to get the list of recipes
+    
+    //create arraylist of ItemButtons
+    //for each recipe in the list of recipes, create a new ItemButton
+    ArrayList<ItemButton> buttons = new ArrayList<ItemButton>();
+
+    for (Recipe recette : app.recipes) {
+        //then, create new buttons for each recipe
+        ItemButton button = new ItemButton(recette.getRecipeID(), this);
+        button.addActionListener(actionListener);
+        buttons.add(button);
+        //then, add the buttons to the panels, if item has slushie option, add to slushie panel
+        if (recette.isSlush()) {
+            CashierSlushiePanel.add(button);
+        }
+        //else if name contains coffee, add to coffee panel
+        else if (recette.getRecipeName().contains("Coffee")) {
+            CashierCoffeePanel.add(button);
+        }
+        else if (recette.getRecipeName().contains("Milk")) {
+            CashierMilkTeaPanel.add(button);
+        }
+        else {
+            CashierOtherPanel.add(button);
+        }
+    }
+
+    
+    //then, repaint the panels
+    CashierCoffeePanel.revalidate();
+    CashierCoffeePanel.repaint();
+    CashierMilkTeaPanel.revalidate();
+    CashierMilkTeaPanel.repaint();
+    CashierSlushiePanel.revalidate();
+    CashierSlushiePanel.repaint();
+    CashierOtherPanel.revalidate();
+    CashierOtherPanel.repaint();
+
+
     
   }
 }
 
 class ItemButton extends JButton {
     private Recipe recipe;
+
+    //alternate constructor:
+    // public ItemButton(int recipe_id, Recipe recette, GUI gui) {
+    //     super("<html>" + gui.app.getRecipe(recipe_id).getRecipeName() + "</html>");
+    //     recipe = gui.app.getRecipe(recipe_id);
+        
+    //     recipe = recette;
+    //     setPreferredSize(new Dimension(100, 100));
+    //     setBackground(Color.GREEN);
+    //     setHorizontalAlignment(SwingConstants.CENTER);
+    //     setVerticalAlignment(SwingConstants.CENTER);
+    // }
 
     public ItemButton(int recipe_id, GUI gui) {
         super("<html>" + gui.app.getRecipe(recipe_id).getRecipeName() + "</html>");
@@ -943,6 +1007,4 @@ class ItemButton extends JButton {
         return recipe.getLargePrice();
     }
 }
-
-
 
