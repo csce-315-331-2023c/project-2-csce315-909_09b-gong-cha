@@ -114,21 +114,6 @@ public class Application {
     return outRecipe;
   }
 
-  // Retuns a recipe given a recipe_id, returns null if recipe not found
-  public Recipe getRecipe(int recipe_id)
-  {
-    Recipe outRecipe = null;
-    for(Recipe currentRecipe : recipes)
-    {
-      if(currentRecipe.getRecipeID() == recipe_id)
-      {
-        outRecipe = currentRecipe;
-        break;
-      }
-    }
-
-    return outRecipe;
-  }
   
   // adds ingredients into recipe_ingredients
   public void addIngredients(ArrayList<recipeIngredient> ingredients){
@@ -154,7 +139,7 @@ public class Application {
 
 
   // update recipe med_price
-  public void updateMedPrice(int recipe_id, double new_quantity){
+   public void updateMedPrice(int recipe_id, double new_quantity){
     try
     {
       Statement stmt = conn.createStatement();
