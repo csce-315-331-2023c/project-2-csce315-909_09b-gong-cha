@@ -123,33 +123,19 @@ public class GUI extends JFrame {
       managerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
       JButton managerBackButton = new JButton("Back");
 
-    //   ItemButton blackMilkTea= new ItemButton(1, this);
-    //   ItemButton brownSugarMilkTea = new ItemButton(2, this);
-    //   ItemButton caramelMilkTea = new ItemButton(3, this);
-    //   ItemButton earlGreyMilkTea = new ItemButton(4, this);
-    //   ItemButton earlGreyMilkTea3Js = new ItemButton(5, this);
-    //   ItemButton greenMilkTea = new ItemButton(6, this);
-    //   ItemButton oolongMilkTea = new ItemButton(7, this);
-    //   ItemButton pearlMilkTea = new ItemButton(8, this);
-    //   ItemButton strawberryMilkTea = new ItemButton(9, this);
-    //   ItemButton wintermelonMilkTea = new ItemButton(10, this);
+      JPanel changeDrinkPanel = new JPanel();
+      JPanel addDrinkPanel = new JPanel();  
 
-    //   ItemButton milkCoffee = new ItemButton(24, this);
-    //   ItemButton coffeeMilkTea = new ItemButton(25, this);
-    //   ItemButton milkFoamBlackCoffee = new ItemButton(26, this);
-    //   ItemButton taroMilkSlush = new ItemButton(49, this);
-    //   ItemButton strawberryMilkSlush = new ItemButton(48, this);
-      
       // These variables are declared so we can access their values, part of adding a new drink in manager
-      JTextField drinkID = new JTextField();
-      JTextField drinkName = new JTextField();
-      JTextField mediumPrice = new JTextField();
-      JTextField largePrice = new JTextField();
-      JTextField recipePrice = new JTextField();
-      JTextField ingredientsQuantity = new JTextField();
-      JTextField toppingsQuantity = new JTextField();
-      JTextField ingredients = new JTextField();
-      JTextField toppings = new JTextField();
+      JTextField drinkID = CreateNewTextField();
+      JTextField drinkName = CreateNewTextField();
+      JTextField mediumPrice = CreateNewTextField();
+      JTextField largePrice = CreateNewTextField();
+      JTextField recipePrice = CreateNewTextField();
+      JTextField ingredientsQuantity = CreateNewTextField();
+      JTextField toppingsQuantity = CreateNewTextField();
+      JTextField ingredients = CreateNewTextField();
+      JTextField toppings = CreateNewTextField();
       ButtonGroup slushieOptions = new ButtonGroup();
       JRadioButton isSlushy = new JRadioButton("Slushy");
       JRadioButton isNotSlushy = new JRadioButton("Not Slushy");
@@ -159,14 +145,14 @@ public class GUI extends JFrame {
       JRadioButton coffee = new JRadioButton("Coffee");
       JRadioButton other = new JRadioButton("Other");
       // Repeat to add to modify drink panel
-      JTextField drinkName2 = new JTextField();
-      JTextField mediumPrice2 = new JTextField();
-      JTextField largePrice2 = new JTextField();
-      JTextField recipePrice2 = new JTextField();
-      JTextField ingredientsQuantity2 = new JTextField();
-      JTextField toppingsQuantity2 = new JTextField();
-      JTextField ingredients2 = new JTextField();
-      JTextField toppings2 = new JTextField();
+      JTextField drinkName2 = CreateNewTextField();
+      JTextField mediumPrice2 = CreateNewTextField();
+      JTextField largePrice2 = CreateNewTextField();
+      JTextField recipePrice2 = CreateNewTextField();
+      JTextField ingredientsQuantity2 = CreateNewTextField();
+      JTextField toppingsQuantity2 = CreateNewTextField();
+      JTextField ingredients2 = CreateNewTextField();
+      JTextField toppings2 = CreateNewTextField();
       ButtonGroup slushieOptions2 = new ButtonGroup();
       JRadioButton isSlushy2 = new JRadioButton("Slushy");
       JRadioButton isNotSlushy2 = new JRadioButton("Not Slushy");
@@ -204,24 +190,6 @@ public class GUI extends JFrame {
                 managerFrame.setVisible(true);
                 loginFrame.setVisible(false);
             }
-            //if a drink button is pressed, add it to the receipt panel
-            //if an itembutton is pressed, call addItemToReceipt
-            // if (buttonName.equals("<html>Black Milk Tea</html>")) { addItemToReceipt(blackMilkTea, itemListPanel); }
-            // if (buttonName.equals("<html>Brown Sugar Milk Tea</html>")) { addItemToReceipt(brownSugarMilkTea, itemListPanel); }
-            // if (buttonName.equals("<html>Caramel Milk Tea</html>")) { addItemToReceipt(caramelMilkTea, itemListPanel); }
-            // if (buttonName.equals("<html>Earl Grey Milk Tea</html>")) { addItemToReceipt(earlGreyMilkTea, itemListPanel); }
-            // if (buttonName.equals("<html>Earl Grey Milk Tea 3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js, itemListPanel); }
-            // if (buttonName.equals("<html>Green Milk Tea</html>")) { addItemToReceipt(greenMilkTea, itemListPanel); }
-            // if (buttonName.equals("<html>Oolong Milk Tea</html>")) { addItemToReceipt(oolongMilkTea, itemListPanel); }
-            // if (buttonName.equals("<html>Pearl Milk Tea</html>")) { addItemToReceipt(pearlMilkTea, itemListPanel); }
-            // if (buttonName.equals("<html>Strawberry Milk Tea</html>")) { addItemToReceipt(strawberryMilkTea, itemListPanel); }
-            // if (buttonName.equals("<html>Wintermelon Milk Tea</html>")) { addItemToReceipt(wintermelonMilkTea, itemListPanel); }
-            // if (buttonName.equals("<html>Milk Coffee</html>")) { addItemToReceipt(milkCoffee, itemListPanel); }
-            // if (buttonName.equals("<html>Coffee Milk Tea</html>")) { addItemToReceipt(coffeeMilkTea, itemListPanel); }
-            // if (buttonName.equals("<html>Milk Foam Black Coffee</html>")) { addItemToReceipt(milkFoamBlackCoffee, itemListPanel); }
-            // if (buttonName.equals("<html>Taro Milk Slush</html>")) { addItemToReceipt(taroMilkSlush, itemListPanel); }
-            // if (buttonName.equals("<html>Strawberry Milk Slush</html>")) { addItemToReceipt(strawberryMilkSlush, itemListPanel); }
-            // //check to see if the clicked button is a drink button
 
             if (clickedButton instanceof ItemButton) {
                 //call the function to add the drink to the receipt and cast to clicked button
@@ -432,23 +400,6 @@ public class GUI extends JFrame {
       managerButton.addActionListener(actionListener);
       managerBackButton.addActionListener(actionListener);
 
-    //   blackMilkTea.addActionListener(actionListener);
-    //   brownSugarMilkTea.addActionListener(actionListener);
-    //   caramelMilkTea.addActionListener(actionListener);
-    //   earlGreyMilkTea.addActionListener(actionListener);
-    //   earlGreyMilkTea3Js.addActionListener(actionListener);
-    //   greenMilkTea.addActionListener(actionListener);
-    //   oolongMilkTea.addActionListener(actionListener);
-    //   pearlMilkTea.addActionListener(actionListener);
-    //   strawberryMilkTea.addActionListener(actionListener);
-    //   wintermelonMilkTea.addActionListener(actionListener);
-      
-    //   milkCoffee.addActionListener(actionListener);
-    //   coffeeMilkTea.addActionListener(actionListener);
-    //   milkFoamBlackCoffee.addActionListener(actionListener);
-    //   taroMilkSlush.addActionListener(actionListener);
-    //   strawberryMilkSlush.addActionListener(actionListener);
-
       // add buttons to panels
       loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
       loginPanel.add(Box.createVerticalStrut(10));
@@ -465,33 +416,17 @@ public class GUI extends JFrame {
       JTabbedPane managerTabbedPane = new JTabbedPane();
       
       CashierMilkTeaPanel = new JPanel();
-    //   CashierMilkTeaPanel.add(blackMilkTea);
-    //   CashierMilkTeaPanel.add(brownSugarMilkTea);
-    //   CashierMilkTeaPanel.add(caramelMilkTea);
-    //   CashierMilkTeaPanel.add(earlGreyMilkTea);
-    //   CashierMilkTeaPanel.add(earlGreyMilkTea3Js);
-    //   CashierMilkTeaPanel.add(greenMilkTea);
-    //   CashierMilkTeaPanel.add(oolongMilkTea);
-    //   CashierMilkTeaPanel.add(pearlMilkTea);
-    //   CashierMilkTeaPanel.add(strawberryMilkTea);
-    //   CashierMilkTeaPanel.add(wintermelonMilkTea);
 
-    //   //make cashierslushiepanel
+      //make cashierslushiepanel
       CashierSlushiePanel = new JPanel();
-    //   CashierSlushiePanel.add(taroMilkSlush);
-    //   CashierSlushiePanel.add(strawberryMilkSlush);
 
-    //   //make cashiercoffeepanel
+      //make cashiercoffeepanel
       CashierCoffeePanel = new JPanel();
-    //   CashierCoffeePanel.add(milkCoffee);
-    //   CashierCoffeePanel.add(coffeeMilkTea);
-    //   CashierCoffeePanel.add(milkFoamBlackCoffee);
 
       //make cashierotherpanel
       CashierOtherPanel = new JPanel();
       JPanel managerInventoryPanel = new JPanel();
-      JPanel changeDrinkPanel = new JPanel();
-      JPanel addDrinkPanel = new JPanel();
+      
       //make manageractionspanel
       JPanel managerActionsPanel = new JPanel();
       addDrinkPanel.setLayout(new BoxLayout(addDrinkPanel, BoxLayout.Y_AXIS));
@@ -499,109 +434,36 @@ public class GUI extends JFrame {
       changeDrinkPanel.setLayout(new BoxLayout(changeDrinkPanel, BoxLayout.Y_AXIS));
       changeDrinkPanel.add(Box.createVerticalStrut(47));
       // declare necessary sections to add a drink
-      JLabel addDrinkLabel = new JLabel("ADD DRINK: ");
-      JLabel nameLabel = new JLabel("Drink name: ");
-      JLabel ingredientsLabel = new JLabel("Ingredients (separated by ','): ");
-      JLabel ingredientsQuantityLabel = new JLabel("Quantity of Ingredients (in same order, separated by ','): ");
-      JLabel toppingsLabel = new JLabel("Toppings (separated by ','): ");
-      JLabel toppingsQuantityLabel = new JLabel("Quantity of Toppings (in same order, separated by ','): ");
-      JLabel mediumLabel = new JLabel("Medium Price: ");
-      JLabel largeLabel = new JLabel("Large Price: ");
-      JLabel recipeLabel = new JLabel("Recipe Price: ");
+      JLabel addDrinkLabel = CreateNewLabel("ADD DRINK: ");
+      JLabel nameLabel = CreateNewLabel("Drink name: ");
+      JLabel ingredientsLabel = CreateNewLabel("Ingredients (separated by ','): ");
+      JLabel ingredientsQuantityLabel = CreateNewLabel("Quantity of Ingredients (in same order, separated by ','): ");
+      JLabel toppingsLabel = CreateNewLabel("Toppings (separated by ','): ");
+      JLabel toppingsQuantityLabel = CreateNewLabel("Quantity of Toppings (in same order, separated by ','): ");
+      JLabel mediumLabel = CreateNewLabel("Medium Price: ");
+      JLabel largeLabel = CreateNewLabel("Large Price: ");
+      JLabel recipeLabel = CreateNewLabel("Recipe Price: ");
 
       // declare necessary sections to modify a drink
-      JLabel modifyDrinkLabel = new JLabel("MODIFY DRINK: ");
-      JLabel drinkIDLabel = new JLabel("ID of drink to modify: ");
-      JLabel nameLabel2 = new JLabel("Drink name: ");
-      JLabel ingredientsLabel2 = new JLabel("Ingredients (separated by ','): ");
-      JLabel ingredientsQuantityLabel2 = new JLabel("Quantity of Ingredients (in same order, separated by ','): ");
-      JLabel toppingsLabel2 = new JLabel("Toppings (separated by ','): ");
-      JLabel toppingsQuantityLabel2 = new JLabel("Quantity of Toppings (in same order, separated by ','): ");
-      JLabel mediumLabel2 = new JLabel("Medium Price: ");
-      JLabel largeLabel2 = new JLabel("Large Price: ");
-      JLabel recipeLabel2 = new JLabel("Recipe Price: ");
+      JLabel modifyDrinkLabel = CreateNewLabel("MODIFY DRINK: ");
+      JLabel drinkIDLabel = CreateNewLabel("ID of drink to modify: ");
+      JLabel nameLabel2 = CreateNewLabel("Drink name: ");
+      JLabel ingredientsLabel2 = CreateNewLabel("Ingredients (separated by ','): ");
+      JLabel ingredientsQuantityLabel2 = CreateNewLabel("Quantity of Ingredients (in same order, separated by ','): ");
+      JLabel toppingsLabel2 = CreateNewLabel("Toppings (separated by ','): ");
+      JLabel toppingsQuantityLabel2 = CreateNewLabel("Quantity of Toppings (in same order, separated by ','): ");
+      JLabel mediumLabel2 = CreateNewLabel("Medium Price: ");
+      JLabel largeLabel2 = CreateNewLabel("Large Price: ");
+      JLabel recipeLabel2 = CreateNewLabel("Recipe Price: ");
 
 
       // Add Drink alignment
-      addDrinkLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-      drinkID.setAlignmentX(Component.LEFT_ALIGNMENT);
-      nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-      drinkName.setAlignmentX(Component.LEFT_ALIGNMENT);
-      ingredientsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-      ingredients.setAlignmentX(Component.LEFT_ALIGNMENT);
-      ingredientsQuantityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-      ingredientsQuantity.setAlignmentX(Component.LEFT_ALIGNMENT);
-      toppingsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-      toppings.setAlignmentX(Component.LEFT_ALIGNMENT);
-      toppingsQuantityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-      toppingsQuantity.setAlignmentX(Component.LEFT_ALIGNMENT);
       isSlushy.setAlignmentX(Component.LEFT_ALIGNMENT);
       isNotSlushy.setAlignmentX(Component.LEFT_ALIGNMENT);
-      mediumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-      mediumPrice.setAlignmentX(Component.LEFT_ALIGNMENT);
-      largeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-      largePrice.setAlignmentX(Component.LEFT_ALIGNMENT);
-      recipeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-      recipePrice.setAlignmentX(Component.LEFT_ALIGNMENT);
 
       // Modify Drink alignment
-      modifyDrinkLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-      drinkIDLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-      nameLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      drinkName2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      ingredientsLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      ingredients2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      ingredientsQuantityLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      ingredientsQuantity2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      toppingsLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      toppings2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      toppingsQuantityLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      toppingsQuantity2.setAlignmentX(Component.LEFT_ALIGNMENT);
       isSlushy2.setAlignmentX(Component.LEFT_ALIGNMENT);
       isNotSlushy2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      mediumLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      mediumPrice2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      largeLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      largePrice2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      recipeLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      recipePrice2.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-      // Set dimensions
-      drinkID.setMinimumSize(new Dimension(200, 20));
-      drinkID.setMaximumSize(new Dimension(200, 20));
-      drinkName.setMinimumSize(new Dimension(200, 20));
-      drinkName.setMaximumSize(new Dimension(200, 20));
-      ingredients.setMinimumSize(new Dimension(200, 100));
-      ingredients.setMaximumSize(new Dimension(200, 100));
-      ingredientsQuantity.setMinimumSize(new Dimension(200, 20));
-      ingredientsQuantity.setMaximumSize(new Dimension(200, 20));
-      mediumPrice.setMinimumSize(new Dimension(200, 20));
-      mediumPrice.setMaximumSize(new Dimension(200, 20));
-      largePrice.setMinimumSize(new Dimension(200, 20));
-      largePrice.setMaximumSize(new Dimension(200, 20));
-      recipePrice.setMinimumSize(new Dimension(200, 20));
-      recipePrice.setMaximumSize(new Dimension(200, 20));
-      toppings.setMinimumSize(new Dimension(200, 100));
-      toppings.setMaximumSize(new Dimension(200, 100));
-      toppingsQuantity.setMinimumSize(new Dimension(200, 20));
-      toppingsQuantity.setMaximumSize(new Dimension(200, 20));
-      // Again for modify drink
-      drinkName2.setMinimumSize(new Dimension(200, 20));
-      drinkName2.setMaximumSize(new Dimension(200, 20));
-      ingredients2.setMinimumSize(new Dimension(200, 100));
-      ingredients2.setMaximumSize(new Dimension(200, 100));
-      ingredientsQuantity2.setMinimumSize(new Dimension(200, 20));
-      ingredientsQuantity2.setMaximumSize(new Dimension(200, 20));
-      mediumPrice2.setMinimumSize(new Dimension(200, 20));
-      mediumPrice2.setMaximumSize(new Dimension(200, 20));
-      largePrice2.setMinimumSize(new Dimension(200, 20));
-      largePrice2.setMaximumSize(new Dimension(200, 20));
-      recipePrice2.setMinimumSize(new Dimension(200, 20));
-      recipePrice2.setMaximumSize(new Dimension(200, 20));
-      toppings2.setMinimumSize(new Dimension(200, 100));
-      toppings2.setMaximumSize(new Dimension(200, 100));
-      toppingsQuantity2.setMinimumSize(new Dimension(200, 20));
-      toppingsQuantity2.setMaximumSize(new Dimension(200, 20));
       
       // Add the objects in the correct order
       //   managerActionsPanel.add(drinkIDLabel);
@@ -968,6 +830,19 @@ public class GUI extends JFrame {
 
     
   }
+
+  JLabel CreateNewLabel(String text) {
+    JLabel label = new JLabel(text);
+    label.setAlignmentX(Component.LEFT_ALIGNMENT);
+    return label;
+  }
+
+  JTextField CreateNewTextField() {
+      JTextField textField = new JTextField();
+      textField.setAlignmentX(Component.LEFT_ALIGNMENT);
+      textField.setMinimumSize(new Dimension(200, 20));
+      return textField;
+  }
 }
 
 class ItemButton extends JButton {
@@ -1007,4 +882,3 @@ class ItemButton extends JButton {
         return recipe.getLargePrice();
     }
 }
-
