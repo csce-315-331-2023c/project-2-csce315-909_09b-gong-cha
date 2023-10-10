@@ -261,7 +261,7 @@ public class Application {
     try
     {
       Statement stmt = conn.createStatement();
-      stmt.executeQuery("UPDATE recipe SET med_price =" + new_quantity + "WHERE recipe_id =" + recipe_id);
+      stmt.execute("UPDATE recipe SET med_price =" + new_quantity + "WHERE recipe_id =" + recipe_id + ";");
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
@@ -271,7 +271,7 @@ public class Application {
     try
     {
       Statement stmt = conn.createStatement();
-      stmt.executeQuery("UPDATE recipe SET large_price =" + new_quantity + "WHERE recipe_id =" + recipe_id);
+      stmt.execute("UPDATE recipe SET large_price =" + new_quantity + "WHERE recipe_id =" + recipe_id + ";");
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
@@ -282,7 +282,7 @@ public class Application {
     try
     {
       Statement stmt = conn.createStatement();
-      stmt.executeQuery("UPDATE recipe SET recipe_price =" + new_quantity + "WHERE recipe_id =" + recipe_id);
+      stmt.execute("UPDATE recipe SET recipe_price =" + new_quantity + "WHERE recipe_id =" + recipe_id + ";");
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
@@ -293,7 +293,7 @@ public class Application {
     try
     {
       Statement stmt = conn.createStatement();
-      stmt.executeQuery("UPDATE ingredient SET stock =" + new_quantity + "WHERE ingredient_id =" + ingredient_id);
+      stmt.execute("UPDATE ingredient SET stock =" + new_quantity + "WHERE ingredient_id =" + ingredient_id + ";");
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }

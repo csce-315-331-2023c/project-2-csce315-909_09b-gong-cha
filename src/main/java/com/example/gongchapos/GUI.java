@@ -116,11 +116,7 @@ public class GUI extends JFrame {
       ButtonGroup slushieOptions = new ButtonGroup();
       JRadioButton isSlushy = new JRadioButton("Slushy");
       JRadioButton isNotSlushy = new JRadioButton("Not Slushy");
-      ButtonGroup drinkType = new ButtonGroup();
-      JRadioButton milkTea = new JRadioButton("Milk Tea");
-      JRadioButton slushie = new JRadioButton("Slushie");
-      JRadioButton coffee = new JRadioButton("Coffee");
-      JRadioButton other = new JRadioButton("Other");
+
       // Repeat to add to modify drink panel
       JTextField drinkName2 = CreateNewTextField();
       JTextField mediumPrice2 = CreateNewTextField();
@@ -133,11 +129,6 @@ public class GUI extends JFrame {
       ButtonGroup slushieOptions2 = new ButtonGroup();
       JRadioButton isSlushy2 = new JRadioButton("Slushy");
       JRadioButton isNotSlushy2 = new JRadioButton("Not Slushy");
-      ButtonGroup drinkType2 = new ButtonGroup();
-      JRadioButton milkTea2 = new JRadioButton("Milk Tea");
-      JRadioButton slushie2 = new JRadioButton("Slushie");
-      JRadioButton coffee2 = new JRadioButton("Coffee");
-      JRadioButton other2 = new JRadioButton("Other");
 
     JButton checkoutButton = new JButton("Checkout");
     JButton managerCheckoutButton = new JButton("Checkout");
@@ -146,6 +137,11 @@ public class GUI extends JFrame {
         // if button is pressed
         public void actionPerformed(ActionEvent e)
         {
+            String changeDrinkIDStr = drinkID.getText();
+            int changeDrinkID = -1;
+            if (!changeDrinkIDStr.equals("")) {
+                changeDrinkID = Integer.parseInt(changeDrinkIDStr);
+            }
             JButton clickedButton = (JButton) e.getSource();
             String buttonName = clickedButton.getText();
             String s = e.getActionCommand();
@@ -271,10 +267,6 @@ public class GUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "No recipe price provided", "Error", JOptionPane.ERROR_MESSAGE); 
                     return;
                 }
-                else if (drinkType.getSelection() == null) {
-                    JOptionPane.showMessageDialog(null, "No drink type selected", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
 
                 if (!requestedToppings.equals("")) {
                     if (requestedToppingsQuantity.equals("")) {
@@ -289,92 +281,89 @@ public class GUI extends JFrame {
                 JOptionPane.showMessageDialog(null, "Drink added successfully, restart application to use button", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
 
-            if (s.equals("Modify Drink")) {
-                String drinkToModify = drinkID.getText();
-                String modifiedDrinkName = drinkName2.getText();
-                String requestedIngredients = ingredients2.getText();
-                String requestedIngredientsQuantity = ingredientsQuantity2.getText();
-                String requestedToppings = toppings2.getText();
-                String requestedToppingsQuantity = toppingsQuantity2.getText();
-                String modifiedMediumPrice = mediumPrice2.getText();
-                String modifiedLargePrice = largePrice2.getText();
-                String modifiedRecipePrice = recipePrice2.getText();
-
-                String[] modifiedIngredients = requestedIngredients.split(",");
-                String[] modifiedIngredientsQuantity = requestedIngredientsQuantity.split(",");
-                String[] modifiedToppings = requestedToppings.split(",");
-                String[] modifiedToppingsQuantity = requestedToppingsQuantity.split(",");
-                ArrayList<String> ingredientsArray = new ArrayList<>();
-                ArrayList<String> ingredientsQuantityArray = new ArrayList<>();
-                ArrayList<String> toppingsArray = new ArrayList<>();
-                ArrayList<String> toppingsQuantityArray = new ArrayList<>();
-
-                for (String ingredient : modifiedIngredients) {
-                    ingredientsArray.add(ingredient);
-                }
-                for (String topping : modifiedToppings) {
-                    toppingsArray.add(topping);
-                }
-                for (String quantity: modifiedIngredientsQuantity) {
-                    ingredientsQuantityArray.add(quantity);
-                }
-                for (String quantity: modifiedToppingsQuantity) {
-                    toppingsQuantityArray.add(quantity);
-                }
-
-                boolean isSlush = isSlushy.isSelected();
-
-                if (drinkToModify.equals("")) {
-                    JOptionPane.showMessageDialog(null, "No drink ID provided", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                if (modifiedDrinkName.equals("")) {
-                    JOptionPane.showMessageDialog(null, "No name provided", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
-                else if (requestedIngredients.equals("")) {
-                    JOptionPane.showMessageDialog(null, "No ingredients provided", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
-                else if (requestedIngredientsQuantity.equals("")) {
-                    JOptionPane.showMessageDialog(null, "No ingredient quantities provided", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
-                else if (slushieOptions2.getSelection() == null) {
-                    JOptionPane.showMessageDialog(null, "Slushie/Not Slushie not selected", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
-                else if (modifiedMediumPrice.equals("")) {
-                    JOptionPane.showMessageDialog(null, "No medium price provided", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
-                else if (modifiedLargePrice.equals("")) {
-                    JOptionPane.showMessageDialog(null, "No large price provided", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
-                else if (modifiedRecipePrice.equals("")) {
-                    JOptionPane.showMessageDialog(null, "No recipe price provided", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
-                else if (drinkType2.getSelection() == null) {
-                    JOptionPane.showMessageDialog(null, "No drink type selected", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
-
-                if (!requestedToppings.equals("")) {
-                    if (requestedToppingsQuantity.equals("")) {
-                        JOptionPane.showMessageDialog(null, "No topping quantities provided", "Error", JOptionPane.ERROR_MESSAGE); 
-                        return;
+            if (s.equals("Change Name")) {
+                String changedName = drinkName2.getText();
+                // TODO:
+                // Create SQL query to change the name in the database using an ID and new name
+                // Call it
+            }
+            if (s.equals("Change Ingredients")) {
+                String newIngredientsStr = ingredients2.getText();
+                if (!newIngredientsStr.equals("")) {
+                    String[] newIngredientsStrArr = newIngredientsStr.split(",");
+                    int[] newIngredients = new int[newIngredientsStrArr.length];
+                    for (int i = 0; i < newIngredientsStrArr.length; i++) {
+                        newIngredients[i] = Integer.parseInt(newIngredientsStrArr[i]);
                     }
                 }
                 // TODO:
-                // CREATE SQL QUERY TO ADD DRINK INFO TO DATABASE
-                JOptionPane.showMessageDialog(null, "Drink modified successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                // Create SQL query to change the ingredients in the database using an ID and newIngredients
+                // Call it
+            }
+            if (s.equals("Change Toppings")) {
+                String newToppingsStr = toppings2.getText();
+                if (!newToppingsStr.equals("")) {
+                    String[] newToppingsStrArr = newToppingsStr.split(",");
+                    int[] newToppings = new int[newToppingsStrArr.length];
+                    for (int i = 0; i < newToppingsStrArr.length; i++) {
+                        newToppings[i] = Integer.parseInt(newToppingsStrArr[i]);
+                    }
+                }
+                // TODO:
+                // Create SQL query to change the ingredients in the database using an ID and newToppings
+                // Call it
+            }
+            if (s.equals("Change Medium Price")) {
+                String priceStr = mediumPrice2.getText();
+                double price = 0;
+                if (!priceStr.equals("")) {
+                    price = Double.parseDouble(priceStr);
+                }
+                // Call SQL query with ID and new price
+                app.updateMedPrice(changeDrinkID, price);
+            }
+            if (s.equals("Change Large Price")) {
+                String priceStr = largePrice2.getText();
+                double price = 0;
+                if (!priceStr.equals("")) {
+                    price = Double.parseDouble(priceStr);
+                }
+                // Call SQL query with ID and new price
+                app.updateLargePrice(changeDrinkID, price);
+            }
+            if (s.equals("Change Recipe Price")) {
+                String priceStr = recipePrice2.getText();
+                double price = 0;
+                if (!priceStr.equals("")) {
+                    price = Double.parseDouble(priceStr);
+                }
+                // Call SQL query with ID and new price
+                app.updateRecipePrice(changeDrinkID, price);
+            }
+            if (s.equals("Change Slushy")) {
+                boolean isASlushy = isSlushy2.isSelected();
+                // TODO:
+                // Create SQL query that can change bool is or isnt slushy
+                // Call it
             }
         }        
       };
 
+      JButton changeName = new JButton("Change Name");
+      JButton changeIngredients = new JButton("Change Ingredients");
+      JButton changeToppings = new JButton("Change Toppings");
+      JButton changeMedPrice = new JButton("Change Medium Price");
+      JButton changeLrgPrice = new JButton("Change Large Price");
+      JButton changeRecipePrice = new JButton("Change Recipe Price");
+      JButton changeSlushy = new JButton("Change Slushy");
 
+      changeName.addActionListener(actionListener);
+      changeIngredients.addActionListener(actionListener);
+      changeToppings.addActionListener(actionListener);
+      changeMedPrice.addActionListener(actionListener);
+      changeLrgPrice.addActionListener(actionListener);
+      changeRecipePrice.addActionListener(actionListener);
+      changeSlushy.addActionListener(actionListener);
 
       // add actionlistener to button
       exitButton.addActionListener(actionListener);
@@ -420,12 +409,19 @@ public class GUI extends JFrame {
       JScrollPane inventoryScrollPane = new JScrollPane(inventoryTable);
       managerInventoryPanel.add(inventoryScrollPane);
 
+      String[] columnNamesToppings = {"Topping_ID", "Topping_Name", "Unit_Price", "Stock"};
+      // Make a JTable out of the data returned from function in Application.java
+      Object[][] dataToppings = app.getToppings();
+      JTable inventoryTable2 = new JTable(dataToppings, columnNamesToppings);
+      JScrollPane inventoryScrollPaneToppings = new JScrollPane(inventoryTable2);
+      managerInventoryPanel.add(inventoryScrollPaneToppings);
+
       //make manageractionspanel
       JPanel managerActionsPanel = new JPanel();
       addDrinkPanel.setLayout(new BoxLayout(addDrinkPanel, BoxLayout.Y_AXIS));
       addDrinkPanel.add(Box.createVerticalStrut(10));
       changeDrinkPanel.setLayout(new BoxLayout(changeDrinkPanel, BoxLayout.Y_AXIS));
-      changeDrinkPanel.add(Box.createVerticalStrut(47));
+    //   changeDrinkPanel.add(Box.createVerticalStrut(47));
       // declare necessary sections to add a drink
       JLabel addDrinkLabel = CreateNewLabel("ADD DRINK: ");
       JLabel nameLabel = CreateNewLabel("Drink name: ");
@@ -482,14 +478,6 @@ public class GUI extends JFrame {
       addDrinkPanel.add(largePrice);
       addDrinkPanel.add(recipeLabel);
       addDrinkPanel.add(recipePrice);
-      drinkType.add(milkTea);
-      drinkType.add(slushie);
-      drinkType.add(coffee);
-      drinkType.add(other);
-      addDrinkPanel.add(milkTea);
-      addDrinkPanel.add(slushie);
-      addDrinkPanel.add(coffee);
-      addDrinkPanel.add(other);
 
       // For change Drink
       changeDrinkPanel.add(modifyDrinkLabel);
@@ -497,41 +485,36 @@ public class GUI extends JFrame {
       changeDrinkPanel.add(drinkID);
       changeDrinkPanel.add(nameLabel2);
       changeDrinkPanel.add(drinkName2);
+      changeDrinkPanel.add(changeName);
       changeDrinkPanel.add(ingredientsLabel2);
       changeDrinkPanel.add(ingredients2);
       changeDrinkPanel.add(ingredientsQuantityLabel2);
       changeDrinkPanel.add(ingredientsQuantity2);
+      changeDrinkPanel.add(changeIngredients);
       changeDrinkPanel.add(toppingsLabel2);
       changeDrinkPanel.add(toppings2);
       changeDrinkPanel.add(toppingsQuantityLabel2);
       changeDrinkPanel.add(toppingsQuantity2);
+      changeDrinkPanel.add(changeToppings);
       slushieOptions2.add(isSlushy2);
       slushieOptions2.add(isNotSlushy2);
       changeDrinkPanel.add(isSlushy2);
       changeDrinkPanel.add(isNotSlushy2);
+      changeDrinkPanel.add(changeSlushy);
       changeDrinkPanel.add(mediumLabel2);
       changeDrinkPanel.add(mediumPrice2);
+      changeDrinkPanel.add(changeMedPrice);
       changeDrinkPanel.add(largeLabel2);
       changeDrinkPanel.add(largePrice2);
+      changeDrinkPanel.add(changeLrgPrice);
       changeDrinkPanel.add(recipeLabel2);
       changeDrinkPanel.add(recipePrice2);
-      drinkType2.add(milkTea2);
-      drinkType2.add(slushie2);
-      drinkType2.add(coffee2);
-      drinkType2.add(other2);
-      changeDrinkPanel.add(milkTea2);
-      changeDrinkPanel.add(slushie2);
-      changeDrinkPanel.add(coffee2);
-      changeDrinkPanel.add(other2);
+      changeDrinkPanel.add(changeRecipePrice);
 
       // Create the new drink button
       JButton newDrinkButton = new JButton("Add New Drink");
       newDrinkButton.addActionListener(actionListener);
       addDrinkPanel.add(newDrinkButton);
-
-      JButton changeDrinkButton = new JButton("Modify Drink");
-      changeDrinkButton.addActionListener(actionListener);
-      changeDrinkPanel.add(changeDrinkButton);
 
       managerActionsPanel.add(addDrinkPanel, BorderLayout.WEST);
       managerActionsPanel.add(changeDrinkPanel, BorderLayout.EAST);
