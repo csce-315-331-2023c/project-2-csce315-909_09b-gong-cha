@@ -28,6 +28,16 @@ public class GUI extends JFrame {
     private JLabel managerTipLabel;
     private JLabel managerTotalLabel;
 
+    //making private labels for tabbed pane
+    JPanel CashierMilkTeaPanel;
+    JPanel CashierSlushiePanel;
+    JPanel CashierCoffeePanel;
+    JPanel CashierOtherPanel;
+
+    //manager chart
+    JPanel managerChartPanel;
+    
+
     protected Application app = null;
 
     public GUI(Application _app)
@@ -96,7 +106,6 @@ public class GUI extends JFrame {
     //3. "create a product usage chart over a given time window".
         //This chart is intended to display the amount of each inventory item / ingredient used 
 
-    JPanel managerChartPanel = new JPanel(); //TODO: add chart to this panel
     //TODO: await response from backend to get back an Object[][] data and a String[] columnNames to populate the table
     //CRUD operations for the inventory, Create, Read, Update, Delete
     //Create CreateInventoryItem function that sends info to backend to add a new item to the inventory
@@ -105,9 +114,7 @@ public class GUI extends JFrame {
     //Delete DeleteInventoryItem function that sends info to backend to delete an item from the inventory
 
 
-    JPanel managerInventoryPanel = new JPanel();
     //requires a function to populate the panel with the inventory items, I want this to be in table form
-    //TODO: add inventory items to this panel
       JButton exitButton = new JButton("Exit");
       exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
       JButton cashierButton = new JButton("Cashier");
@@ -208,6 +215,8 @@ public class GUI extends JFrame {
                 tipLabel.setText("Tip: $" + tip);
                 totalLabel.setText("Total: $" + total);
                 //display total in jdialog box and clear if yes is clicked
+                //TODO: send data to backend to update inventory
+                
                 int result = JOptionPane.showConfirmDialog(null, "Total: $" + total + "\n" + "Clear receipt?", "Checkout", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) { 
                     //clear receipt
@@ -384,31 +393,31 @@ public class GUI extends JFrame {
       JTabbedPane cashierTabbedPane = new JTabbedPane();
       JTabbedPane managerTabbedPane = new JTabbedPane();
       
-      JPanel milkteaholder = new JPanel();
-      milkteaholder.add(blackMilkTea);
-      milkteaholder.add(brownSugarMilkTea);
-      milkteaholder.add(caramelMilkTea);
-      milkteaholder.add(earlGreyMilkTea);
-      milkteaholder.add(earlGreyMilkTea3Js);
-      milkteaholder.add(greenMilkTea);
-      milkteaholder.add(oolongMilkTea);
-      milkteaholder.add(pearlMilkTea);
-      milkteaholder.add(strawberryMilkTea);
-      milkteaholder.add(wintermelonMilkTea);
+      CashierMilkTeaPanel = new JPanel();
+      CashierMilkTeaPanel.add(blackMilkTea);
+      CashierMilkTeaPanel.add(brownSugarMilkTea);
+      CashierMilkTeaPanel.add(caramelMilkTea);
+      CashierMilkTeaPanel.add(earlGreyMilkTea);
+      CashierMilkTeaPanel.add(earlGreyMilkTea3Js);
+      CashierMilkTeaPanel.add(greenMilkTea);
+      CashierMilkTeaPanel.add(oolongMilkTea);
+      CashierMilkTeaPanel.add(pearlMilkTea);
+      CashierMilkTeaPanel.add(strawberryMilkTea);
+      CashierMilkTeaPanel.add(wintermelonMilkTea);
 
       //make cashierslushiepanel
-      JPanel CashierSlushiePanel = new JPanel();
+      CashierSlushiePanel = new JPanel();
       CashierSlushiePanel.add(taroMilkSlush);
       CashierSlushiePanel.add(strawberryMilkSlush);
 
       //make cashiercoffeepanel
-      JPanel CashierCoffeePanel = new JPanel();
+      CashierCoffeePanel = new JPanel();
       CashierCoffeePanel.add(milkCoffee);
       CashierCoffeePanel.add(coffeeMilkTea);
       CashierCoffeePanel.add(milkFoamBlackCoffee);
 
       //make cashierotherpanel
-      JPanel CashierOtherPanel = new JPanel();
+      CashierOtherPanel = new JPanel();
 
       JPanel managerSlushiePanel = new JPanel();
       JPanel managerCoffeePanel = new JPanel();
@@ -517,7 +526,7 @@ public class GUI extends JFrame {
       managerTabbedPane.addTab("Manager", null, managerActionsPanel, "Does nothing");
       managerTabbedPane.addTab("Inventory", null, managerInventoryPanel, "Does nothing");
 
-      cashierTabbedPane.addTab("Milk Tea", null, milkteaholder, "Does nothing");
+      cashierTabbedPane.addTab("Milk Tea", null, CashierMilkTeaPanel, "Does nothing");
       cashierTabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
       cashierTabbedPane.addTab("Coffee", null, CashierCoffeePanel, "Does nothing");
       cashierTabbedPane.addTab("Other", null, CashierOtherPanel, "Does nothing");
@@ -660,7 +669,6 @@ public class GUI extends JFrame {
       JLabel iceLabel = new JLabel("    Ice: " + ice[iceResult]);
 
       // Add the item to the item list panel
-      //TODO: add a button to remove an item from the receipt panel
       //style button to make it small and in same row as item and price labels
       JButton removeItemButton = new JButton("Remove");
       removeItemButton.setPreferredSize(new Dimension(100, 20));
@@ -685,7 +693,6 @@ public class GUI extends JFrame {
     //create button to add toppings
     //should be a dropdown menu with checkboxes
 
-    //TODO: add action listener for editItemButton
         editItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
