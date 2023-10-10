@@ -94,25 +94,7 @@ public class GUI extends JFrame {
       JPanel cashierPanel = new JPanel();
       // JPanel cashierDrinkPanel = new JPanel();
       JPanel managerPanel = new JPanel();
-      /*
-      The manager portal must be able to "create a product usage chart over a given time window".
-      This chart is intended to display the amount of each inventory item / ingredient used  */
 
-        //Tasks:
-    //1. **managers to view, add, and update the items and prices**
-    //2. **allow managers to view and update their inventory**.
-    //3. "create a product usage chart over a given time window".
-        //This chart is intended to display the amount of each inventory item / ingredient used 
-
-    //TODO: await response from backend to get back an Object[][] data and a String[] columnNames to populate the table
-    //CRUD operations for the inventory, Create, Read, Update, Delete
-    //Create CreateInventoryItem function that sends info to backend to add a new item to the inventory
-    //Read ReadInventoryItem function that sends info to backend to get info about an item in the inventory
-    //Update UpdateInventoryItem function that sends info to backend to update info about an item in the inventory
-    //Delete DeleteInventoryItem function that sends info to backend to delete an item from the inventory
-
-
-    //requires a function to populate the panel with the inventory items, I want this to be in table form
       JButton exitButton = new JButton("Exit");
       exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
       JButton cashierButton = new JButton("Cashier");
@@ -124,6 +106,7 @@ public class GUI extends JFrame {
 
       JPanel changeDrinkPanel = new JPanel();
       JPanel addDrinkPanel = new JPanel();  
+
 
       // These variables are declared so we can access their values, part of adding a new drink in manager
       JTextField drinkID = CreateNewTextField();
@@ -428,6 +411,7 @@ public class GUI extends JFrame {
 
       //make cashierotherpanel
       CashierOtherPanel = new JPanel();
+
       JPanel managerInventoryPanel = new JPanel();
       
       //make manageractionspanel
@@ -565,13 +549,6 @@ public class GUI extends JFrame {
       JPanel managerReceiptPanel = createReceiptPanel();
 
     ReloadButtons(actionListener);
-    //   receiptPanel.setPreferredSize(new Dimension(200, 768));
-    //   receiptPanel.setBackground(Color.WHITE);
-    //   receiptPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-    //   receiptPanel.setLayout(new BoxLayout(receiptPanel, BoxLayout.Y_AXIS));
-    //   //add name of server and an exit button that clears the receipt panel(i.e. the current order)
-    //   receiptPanel.add(new JLabel("Server: " + "John Doe"));
-    //   receiptPanel.add(Box.createRigidArea(new Dimension(0, 10)));
       
       itemListPanel = new JPanel();
       itemListPanel.setLayout(new BoxLayout(itemListPanel, BoxLayout.Y_AXIS));
@@ -600,7 +577,6 @@ public class GUI extends JFrame {
       cashierFrame.add(cashierTabbedPane, BorderLayout.WEST);
       cashierFrame.add(cashierBackButton, BorderLayout.SOUTH);
       cashierFrame.add(cashierPanel);
-      // cashierFrame.add(cashierDrinkPanel, BorderLayout.CENTER);
 
       managerFrame.add(managerReceiptPanel, BorderLayout.EAST);
       managerFrame.add(managerTabbedPane, BorderLayout.WEST);
@@ -673,12 +649,17 @@ public class GUI extends JFrame {
 
     
       // Create components for the new item
+      //make itemlabel wrap
       JLabel itemLabel = new JLabel(itemName);
+
       JLabel priceLabel = new JLabel("    $" + itemPrice);
       JLabel sugarLabel = new JLabel("    Sugar: " + sugar[sugarResult]);
       JLabel iceLabel = new JLabel("    Ice: " + ice[iceResult]);
-
-      // Add the item to the item list panel
+      JPanel minitoppanel = new JPanel();
+      //make minitoppanel boxlayout and scrollable
+      minitoppanel.setLayout(new BoxLayout(minitoppanel, BoxLayout.Y_AXIS));
+      //make panel grow with the items placed in it
+      minitoppanel.setAlignmentX(Component.LEFT_ALIGNMENT);      
       //style button to make it small and in same row as item and price labels
       JButton removeItemButton = new JButton("Remove");
       removeItemButton.setPreferredSize(new Dimension(100, 20));
@@ -695,6 +676,13 @@ public class GUI extends JFrame {
                 itemListPanel.remove(iceLabel);
                 itemListPanel.remove(removeItemButton);
                 itemListPanel.remove(editItemButton);
+                //subtract from subtotal the price of the item
+                //TODO: query database for price of toppings too.
+                subtotal -= itemPrice;
+                //update subtotal and total labels
+                subtotalLabel.setText("Subtotal: $" + subtotal);
+                total = subtotal + tip;
+                totalLabel.setText("Total: $" + total);
                 itemListPanel.revalidate();
                 itemListPanel.repaint();
             }
@@ -718,18 +706,18 @@ public class GUI extends JFrame {
                 //TODO: query database for toppings and topping prices
                 String[] availableToppings = {"Sugar", "Milk", "Honey", "Caramel"};
 
-                // Create checkboxes for each topping
-                List<JCheckBox> checkboxes = new ArrayList<>();
+                //create spinners for each topping
+                List<JSpinner> spinners = new ArrayList<>();
                 for (String topping : availableToppings) {
-                    JCheckBox checkbox = new JCheckBox(topping);
-                    checkboxes.add(checkbox);
-                    toppingsPanel.add(checkbox);
-                }
+                    SpinnerModel spinnerModel = new SpinnerNumberModel(0, 0, 10, 1); // Change the range and step as needed
+                    JSpinner spinner = new JSpinner(spinnerModel);
+                    JLabel spinnerLabel = new JLabel(topping);
 
-                // Create a spinner to control the quantity
-                SpinnerModel spinnerModel = new SpinnerNumberModel(0, 0, 10, 1); // Change the range and step as needed
-                JSpinner quantitySpinner = new JSpinner(spinnerModel);
-                JLabel quantityLabel = new JLabel("Quantity:");
+                    toppingsPanel.add(spinnerLabel);
+                    toppingsPanel.add(spinner);
+                    //add spinner to list of spinners
+                    spinners.add(spinner);
+                }
 
                 // Create a button to confirm toppings selection
                 JButton confirmButton = new JButton("Confirm");
@@ -739,27 +727,33 @@ public class GUI extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         // Process the selected toppings and quantity
-                        int quantity = (int) quantitySpinner.getValue();
-                        List<String> selectedToppings = new ArrayList<>();
-                        for (JCheckBox checkbox : checkboxes) {
-                            if (checkbox.isSelected()) {
-                                selectedToppings.add(checkbox.getText());
+                        int quantity;
+
+                        List<_topping> selectedToppings = new ArrayList<>();
+                        //iterate over spinners and get quantity, if not 0, add to list of toppings
+                        for (int i = 0; i < spinners.size(); i++) {
+                            JSpinner spinner = spinners.get(i);
+                            String topping = availableToppings[i];
+                            quantity = (int) spinner.getValue();
+                            if (quantity != 0) {
+                                //add topping to list of toppings
+                                _topping newTopping = new _topping(topping, quantity);
+                                minitoppanel.add(new JLabel(topping + ": " + quantity));
+
+                                selectedToppings.add(newTopping);
                             }
                         }
-
-                        // TODO: Add logic to update the receipt with selected toppings and quantity
-                        // You can use selectedToppings and quantity here
-
                         // Close the dialog
                         dialog.dispose();
+                        minitoppanel.revalidate();
+                        minitoppanel.repaint();
                     }
                 });
 
                 // Add components to the dialog
                 dialog.add(toppingsPanel, BorderLayout.CENTER);
                 JPanel controlPanel = new JPanel();
-                controlPanel.add(quantityLabel);
-                controlPanel.add(quantitySpinner);
+
                 controlPanel.add(confirmButton);
                 dialog.add(controlPanel, BorderLayout.SOUTH);
 
@@ -774,6 +768,7 @@ public class GUI extends JFrame {
     itemListPanel.add(priceLabel);
     itemListPanel.add(sugarLabel);
     itemListPanel.add(iceLabel);
+    itemListPanel.add(minitoppanel);
 
     // Update the running total
     subtotal += itemPrice;
@@ -856,18 +851,6 @@ public class GUI extends JFrame {
 class ItemButton extends JButton {
     private Recipe recipe;
 
-    //alternate constructor:
-    // public ItemButton(int recipe_id, Recipe recette, GUI gui) {
-    //     super("<html>" + gui.app.getRecipe(recipe_id).getRecipeName() + "</html>");
-    //     recipe = gui.app.getRecipe(recipe_id);
-        
-    //     recipe = recette;
-    //     setPreferredSize(new Dimension(100, 100));
-    //     setBackground(Color.GREEN);
-    //     setHorizontalAlignment(SwingConstants.CENTER);
-    //     setVerticalAlignment(SwingConstants.CENTER);
-    // }
-
     public ItemButton(int recipe_id, GUI gui) {
         super("<html>" + gui.app.getRecipe(recipe_id).getRecipeName() + "</html>");
         recipe = gui.app.getRecipe(recipe_id);
@@ -894,3 +877,15 @@ class ItemButton extends JButton {
         return recipe.getLargePrice();
     }
 }
+
+//make a class for toppings
+class _topping{
+    String name;
+    int quantity;
+
+    public _topping(String name, int quantity){
+        this.name = name;
+        this.quantity = quantity;
+    }
+}
+
