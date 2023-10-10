@@ -16,16 +16,12 @@ public class GUI extends JFrame {
 
     //stuff for the cashier frame
     private JPanel itemListPanel; // Panel to hold item labels
-    private JPanel managerItemListPanel;
     private double subtotal;
     private double tip;
     private double total;
     private JLabel subtotalLabel;
     private JLabel tipLabel;
     private JLabel totalLabel;
-    private JLabel managerSubtotalLabel;
-    private JLabel managerTipLabel;
-    private JLabel managerTotalLabel;
 
     protected Application app = null;
 
@@ -205,34 +201,6 @@ public class GUI extends JFrame {
                     itemListPanel.repaint();
                 }
             }
-            if (clickedButton == managerCheckoutButton) {
-                //ask for tip
-                String tipString = JOptionPane.showInputDialog("Enter tip amount: ");
-                tip = Double.parseDouble(tipString);
-                //update tip and total
-                total = subtotal + tip;
-                //update tip and total labels
-                managerTipLabel.setText("Tip: $" + tip);
-                managerTotalLabel.setText("Total: $" + total);
-                //display total in jdialog box and clear if yes is clicked
-                int result = JOptionPane.showConfirmDialog(null, "Total: $" + total + "\n" + "Clear receipt?", "Checkout", JOptionPane.YES_NO_OPTION);
-                if (result == JOptionPane.YES_OPTION) { 
-                    //clear receipt
-                    managerItemListPanel.removeAll();
-                    //reset subtotal, tip, and total
-                    subtotal = 0;
-                    tip = 0;
-                    total = 0;
-                    //update subtotal, tip, and total labels
-                    managerSubtotalLabel.setText("Subtotal: $" + subtotal);
-                    managerTipLabel.setText("Tip: $" + tip);
-                    managerTotalLabel.setText("Total: $" + total);
-                    
-                    //repaint receipt panel
-                    managerItemListPanel.revalidate();
-                    managerItemListPanel.repaint();
-                }
-            }
 
             if (s.equals("Add New Drink")) {
                 // String newDrinkID = drinkID.getText();
@@ -269,8 +237,6 @@ public class GUI extends JFrame {
 
 
                 boolean isSlush = option1.isSelected();
-
-                System.out.print(newDrinkName);
 
                 // Basic error handling cases
                 // if (newDrinkID.equals("")) { 
@@ -388,11 +354,6 @@ public class GUI extends JFrame {
 
       //make cashierotherpanel
       JPanel CashierOtherPanel = new JPanel();
-
-      JPanel managerSlushiePanel = new JPanel();
-      JPanel managerCoffeePanel = new JPanel();
-      JPanel managerOtherPanel = new JPanel();
-      JPanel managerMilkTeaPanel = new JPanel();
       JPanel managerInventoryPanel = new JPanel();
 
       //make manageractionspanel
@@ -453,8 +414,8 @@ public class GUI extends JFrame {
       toppingsQuantity.setMaximumSize(new Dimension(200, 20));
       
       // Add the objects in the correct order
-    //   managerActionsPanel.add(drinkIDLabel);
-    //   managerActionsPanel.add(drinkID);
+      //   managerActionsPanel.add(drinkIDLabel);
+      //   managerActionsPanel.add(drinkID);
       managerActionsPanel.add(nameLabel);
       managerActionsPanel.add(drinkName);
       managerActionsPanel.add(ingredientsLabel);
@@ -489,10 +450,6 @@ public class GUI extends JFrame {
       newDrinkButton.addActionListener(actionListener);
       managerActionsPanel.add(newDrinkButton);
 
-      managerTabbedPane.addTab("Milk Tea", null, managerMilkTeaPanel, "Does nothing");
-      managerTabbedPane.addTab("Slushie", null, managerSlushiePanel, "Does nothing");
-      managerTabbedPane.addTab("Coffee", null, managerCoffeePanel, "Does nothing");
-      managerTabbedPane.addTab("Other", null, managerOtherPanel, "Does nothing");
       managerTabbedPane.addTab("Manager", null, managerActionsPanel, "Does nothing");
       managerTabbedPane.addTab("Inventory", null, managerInventoryPanel, "Does nothing");
 
@@ -534,35 +491,17 @@ public class GUI extends JFrame {
       receiptPanel2_bottom.add(tipLabel);
       receiptPanel2_bottom.add(totalLabel);
 
-      // Repeat for manager side
-      managerItemListPanel = new JPanel();
-      managerItemListPanel.setLayout(new BoxLayout(managerItemListPanel, BoxLayout.Y_AXIS));
-      JScrollPane managerItemScrollPane = new JScrollPane(managerItemListPanel);
-      managerReceiptPanel.add(managerItemScrollPane);
-      JPanel managerReceiptPanel2_bottom = new JPanel();
-
-      managerReceiptPanel2_bottom.setLayout(new BoxLayout(managerReceiptPanel2_bottom, BoxLayout.Y_AXIS));
-      managerSubtotalLabel = new JLabel("Subtotal: $" + subtotal);
-      managerTipLabel = new JLabel("Tip: $" + tip);
-      managerTotalLabel = new JLabel("Total: $" + total);
-
-      managerReceiptPanel2_bottom.add(managerSubtotalLabel);
-      managerReceiptPanel2_bottom.add(managerTipLabel);
-      managerReceiptPanel2_bottom.add(managerTotalLabel);
-
       // Add the checkout buttons
       checkoutButton.addActionListener(actionListener);
       managerCheckoutButton.addActionListener(actionListener);
 
       receiptPanel2_bottom.add(checkoutButton);
-      managerReceiptPanel2_bottom.add(managerCheckoutButton);
 
       // //i want to make sure the information on the order is always at the bottom of the receipt panel
       // receiptPanel.add(Box.createVerticalGlue());
     
       //put receiptPanel2_bottom at the bottom of the receipt panel
       receiptPanel.add(receiptPanel2_bottom,BorderLayout.SOUTH);
-      managerReceiptPanel.add(managerReceiptPanel2_bottom,BorderLayout.SOUTH);
 
       cashierFrame.add(receiptPanel, BorderLayout.EAST);    
       cashierFrame.add(cashierTabbedPane, BorderLayout.WEST);
