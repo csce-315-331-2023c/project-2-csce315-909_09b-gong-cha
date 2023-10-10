@@ -670,6 +670,13 @@ public class GUI extends JFrame {
                 itemListPanel.remove(iceLabel);
                 itemListPanel.remove(removeItemButton);
                 itemListPanel.remove(editItemButton);
+                //subtract from subtotal the price of the item
+                //TODO: query database for price of toppings too.
+                subtotal -= itemPrice;
+                //update subtotal and total labels
+                subtotalLabel.setText("Subtotal: $" + subtotal);
+                total = subtotal + tip;
+                totalLabel.setText("Total: $" + total);
                 itemListPanel.revalidate();
                 itemListPanel.repaint();
             }
