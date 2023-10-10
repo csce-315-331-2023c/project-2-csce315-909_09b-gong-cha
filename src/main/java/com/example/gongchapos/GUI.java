@@ -5,7 +5,6 @@ import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import com.example.gongchapos.Application;
 
 //create class for the POS system cashier end
 
@@ -189,6 +188,8 @@ public class GUI extends JFrame {
                 tipLabel.setText("Tip: $" + tip);
                 totalLabel.setText("Total: $" + total);
                 //display total in jdialog box and clear if yes is clicked
+                app.placeOrder(tip, "");
+               
                 //TODO: send data to backend to update inventory
                 
                 int result = JOptionPane.showConfirmDialog(null, "Total: $" + total + "\n" + "Clear receipt?", "Checkout", JOptionPane.YES_NO_OPTION);
@@ -203,6 +204,8 @@ public class GUI extends JFrame {
                     subtotalLabel.setText("Subtotal: $" + subtotal);
                     tipLabel.setText("Tip: $" + tip);
                     totalLabel.setText("Total: $" + total);
+
+                    app.setOrderStatus(true);
                     
                     //repaint receipt panel
                     itemListPanel.revalidate();
@@ -610,12 +613,15 @@ public class GUI extends JFrame {
               options,
               options[0]
       );
-  
+      
+      boolean size;
       if (result == 0) {
           itemPrice = itemButton.getMediumPrice();
+          size = true;
       } 
       else {
           itemPrice = itemButton.getLargePrice();
+          size = false;
       }
       Object[] sugar = {"0%", "25%", "50%", "75%", "100%"};
         int sugarResult = JOptionPane.showOptionDialog(
@@ -768,6 +774,8 @@ public class GUI extends JFrame {
     subtotal += itemPrice;
     total = subtotal + tip;
 
+    app.addDrink(itemButton.getItemID(), "note", size, iceResult, sugarResult, subtotal);
+
     // Update the labels in receiptPanel2
     subtotalLabel.setText("Subtotal: $" + subtotal);
     tipLabel.setText("Tip: $" + tip);
@@ -851,6 +859,10 @@ class ItemButton extends JButton {
         setBackground(Color.GREEN);
         setHorizontalAlignment(SwingConstants.CENTER);
         setVerticalAlignment(SwingConstants.CENTER);
+    }
+
+    public int getItemID() {
+        return recipe.getRecipeID();
     }
 
     public String getItemName() {

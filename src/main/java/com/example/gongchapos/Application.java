@@ -3,14 +3,27 @@ package com.example.gongchapos;
 import java.sql.*;
 import java.util.*;
 import javax.swing.JOptionPane;
+import java.time.*;
 
 public class Application {
 
-  GUI gui;
-  List<Recipe> recipes = new ArrayList<Recipe>();
-  Connection conn = null;
+  protected GUI gui;
+  protected List<Recipe> recipes = new ArrayList<Recipe>();
+  protected Connection conn = null;
+  private Order order = null;
+
+  private boolean isNewOrder = true;
 
 
+  public boolean getOrderStatus()
+  {
+    return isNewOrder;
+  }
+
+  public void setOrderStatus(boolean status)
+  {
+    isNewOrder = status;
+  }
 
   public void run(String netID, String password)
   {
@@ -44,24 +57,6 @@ public class Application {
     }
   }
 
-  public String BasicQuery(String query)
-  {
-    String output = "";
-    try
-    {
-      Statement stmt = conn.createStatement();
-      ResultSet result = stmt.executeQuery(query);
-      while (result.next()) 
-      {
-        output += result.getString("order_id")+"\n";
-      }
-    } catch (Exception e){
-        JOptionPane.showMessageDialog(null,"Error accessing Database");
-    }
-
-    return output;
-  }
-
   private void populateRecipes()
   {
     try
@@ -92,7 +87,7 @@ public class Application {
     try
     {
       Statement stmt = conn.createStatement();
-      stmt.executeQuery("INSERT INTO Recipe VALUES(" + recipe_id + recipe_name + is_slush + med_price + large_price + recipe_price + ");");
+      stmt.executeQuery("INSERT INTO recipe VALUES(" + recipe_id + "," + recipe_name + "," + is_slush + "," + med_price + "," + large_price + "," + recipe_price + ");");
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
@@ -196,5 +191,101 @@ public class Application {
     }
   }  
 
+  private int newOrderID()
+  {
+    int order_id = -1;
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM order_ ORDER BY Order_ID DESC LIMIT 1;");
+      while(result.next())
+      {
+        order_id = result.getInt("Order_ID") + 1;
+      }
+    } catch (Exception e){
+      JOptionPane.showMessageDialog(null,"Error accessing Database");
+    }
 
+      return order_id;
+    }
+
+    private int newItemID()
+  {
+    int order_id = -1;
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM order_item ORDER BY order_item_id DESC LIMIT 1;");
+      while(result.next())
+      {
+        order_id = result.getInt("order_item_id") + 1;
+      }
+      } catch (Exception e){
+        JOptionPane.showMessageDialog(null,"Error accessing Database");
+      }
+      return order_id;
+    }
+
+  public Order createNewOrder()
+  {
+    LocalDate date = LocalDate.now();
+
+    order = new Order(date.toString());
+    int ID = newOrderID();
+    if(ID != -1)
+    {
+      order.setOrderID(ID);
+    }
+    
+    return order;
+  }
+
+  public Order getOrder()
+  {
+    return order;
+  }
+
+  public void addDrink(int recipe_ID, String notes, boolean is_medium, int ice, int sugar, double subtotal)
+  {
+    Recipe recipe = getRecipe(recipe_ID);
+
+    Drink drink = new Drink(recipe, notes, is_medium, ice, sugar);
+    drink.setOrderItemID(newItemID());
+
+    if(getOrderStatus())
+    {
+        setOrderStatus(false);
+        order = createNewOrder();
+    }
+
+    order.setSubtotal(subtotal);
+    order.addOrderItem(drink);
+  }
+
+  public void placeOrder(double tip, String coupon)
+  {
+    order.setTip(tip);
+    order.setCouponCode(coupon);
+
+    LocalTime time = LocalTime.now();
+    order.setTime(time.toString().substring(0, time.toString().length() - 7));
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.execute("INSERT INTO order_ VALUES ('" + order.getOrderID() + "','" + order.getDate() + "','" + order.getSubtotal() + "','" + order.getTip() + "','" + order.getCouponCode() + "','" + order.getTime() + "');");
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+
+    for(Drink current_drink : order.order_items)
+    {
+      try
+      {
+        Statement stmt = conn.createStatement();
+        stmt.execute("INSERT INTO order_item VALUES ('" + current_drink.getOrderItemID() + "','" + current_drink.getRecipeID() + "','" + order.getOrderID() + "','" + current_drink.getNotes() + "','" + current_drink.isMedium() + "','" + current_drink.getIce() + "','" + current_drink.getSugar() + "','" + current_drink.getItemPrice() + "');" );
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error accessing Database");
+      }
+    }
+  }
 }
