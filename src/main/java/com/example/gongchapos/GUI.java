@@ -17,12 +17,16 @@ public class GUI extends JFrame {
 
     //stuff for the cashier frame
     private JPanel itemListPanel; // Panel to hold item labels
+    private JPanel managerItemListPanel;
     private double subtotal;
     private double tip;
     private double total;
     private JLabel subtotalLabel;
     private JLabel tipLabel;
     private JLabel totalLabel;
+    private JLabel managerSubtotalLabel;
+    private JLabel managerTipLabel;
+    private JLabel managerTotalLabel;
 
     protected Application app = null;
 
@@ -136,6 +140,8 @@ public class GUI extends JFrame {
       JTextField mediumPrice = new JTextField();
       JTextField largePrice = new JTextField();
       JTextField recipePrice = new JTextField();
+      JTextField ingredientsQuantity = new JTextField();
+      JTextField toppingsQuantity = new JTextField();
       JTextArea ingredients = new JTextArea();
       JTextArea toppings = new JTextArea();
       ButtonGroup slushieOptions = new ButtonGroup();
@@ -146,6 +152,9 @@ public class GUI extends JFrame {
       JRadioButton slushie = new JRadioButton("Slushie");
       JRadioButton coffee = new JRadioButton("Coffee");
       JRadioButton other = new JRadioButton("Other");
+
+    JButton checkoutButton = new JButton("Checkout");
+    JButton managerCheckoutButton = new JButton("Checkout");
 
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
@@ -173,23 +182,23 @@ public class GUI extends JFrame {
                 loginFrame.setVisible(false);
             }
             //if a drink button is pressed, add it to the receipt panel
-            if (buttonName.equals("<html>Black Milk Tea</html>")) { addItemToReceipt(blackMilkTea); }
-            if (buttonName.equals("<html>Brown Sugar Milk Tea</html>")) { addItemToReceipt(brownSugarMilkTea); }
-            if (buttonName.equals("<html>Caramel Milk Tea</html>")) { addItemToReceipt(caramelMilkTea); }
-            if (buttonName.equals("<html>Earl Grey Milk Tea</html>")) { addItemToReceipt(earlGreyMilkTea); }
-            if (buttonName.equals("<html>Earl Grey Milk Tea 3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js); }
-            if (buttonName.equals("<html>Green Milk Tea</html>")) { addItemToReceipt(greenMilkTea); }
-            if (buttonName.equals("<html>Oolong Milk Tea</html>")) { addItemToReceipt(oolongMilkTea); }
-            if (buttonName.equals("<html>Pearl Milk Tea</html>")) { addItemToReceipt(pearlMilkTea); }
-            if (buttonName.equals("<html>Strawberry Milk Tea</html>")) { addItemToReceipt(strawberryMilkTea); }
-            if (buttonName.equals("<html>Wintermelon Milk Tea</html>")) { addItemToReceipt(wintermelonMilkTea); }
-            if (buttonName.equals("<html>Milk Coffee</html>")) { addItemToReceipt(milkCoffee); }
-            if (buttonName.equals("<html>Coffee Milk Tea</html>")) { addItemToReceipt(coffeeMilkTea); }
-            if (buttonName.equals("<html>Milk Foam Black Coffee</html>")) { addItemToReceipt(milkFoamBlackCoffee); }
-            if (buttonName.equals("<html>Taro Milk Slush</html>")) { addItemToReceipt(taroMilkSlush); }
-            if (buttonName.equals("<html>Strawberry Milk Slush</html>")) { addItemToReceipt(strawberryMilkSlush); }
+            if (buttonName.equals("<html>Black Milk Tea</html>")) { addItemToReceipt(blackMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Brown Sugar Milk Tea</html>")) { addItemToReceipt(brownSugarMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Caramel Milk Tea</html>")) { addItemToReceipt(caramelMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Earl Grey Milk Tea</html>")) { addItemToReceipt(earlGreyMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Earl Grey Milk Tea 3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js, itemListPanel); }
+            if (buttonName.equals("<html>Green Milk Tea</html>")) { addItemToReceipt(greenMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Oolong Milk Tea</html>")) { addItemToReceipt(oolongMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Pearl Milk Tea</html>")) { addItemToReceipt(pearlMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Strawberry Milk Tea</html>")) { addItemToReceipt(strawberryMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Wintermelon Milk Tea</html>")) { addItemToReceipt(wintermelonMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Milk Coffee</html>")) { addItemToReceipt(milkCoffee, itemListPanel); }
+            if (buttonName.equals("<html>Coffee Milk Tea</html>")) { addItemToReceipt(coffeeMilkTea, itemListPanel); }
+            if (buttonName.equals("<html>Milk Foam Black Coffee</html>")) { addItemToReceipt(milkFoamBlackCoffee, itemListPanel); }
+            if (buttonName.equals("<html>Taro Milk Slush</html>")) { addItemToReceipt(taroMilkSlush, itemListPanel); }
+            if (buttonName.equals("<html>Strawberry Milk Slush</html>")) { addItemToReceipt(strawberryMilkSlush, itemListPanel); }
 
-            if (s.equals("Checkout")) {
+            if (clickedButton == checkoutButton) {
                 //ask for tip
                 String tipString = JOptionPane.showInputDialog("Enter tip amount: ");
                 tip = Double.parseDouble(tipString);
@@ -217,20 +226,54 @@ public class GUI extends JFrame {
                     itemListPanel.repaint();
                 }
             }
+            if (clickedButton == managerCheckoutButton) {
+                //ask for tip
+                String tipString = JOptionPane.showInputDialog("Enter tip amount: ");
+                tip = Double.parseDouble(tipString);
+                //update tip and total
+                total = subtotal + tip;
+                //update tip and total labels
+                managerTipLabel.setText("Tip: $" + tip);
+                managerTotalLabel.setText("Total: $" + total);
+                //display total in jdialog box and clear if yes is clicked
+                int result = JOptionPane.showConfirmDialog(null, "Total: $" + total + "\n" + "Clear receipt?", "Checkout", JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) { 
+                    //clear receipt
+                    managerItemListPanel.removeAll();
+                    //reset subtotal, tip, and total
+                    subtotal = 0;
+                    tip = 0;
+                    total = 0;
+                    //update subtotal, tip, and total labels
+                    managerSubtotalLabel.setText("Subtotal: $" + subtotal);
+                    managerTipLabel.setText("Tip: $" + tip);
+                    managerTotalLabel.setText("Total: $" + total);
+                    
+                    //repaint receipt panel
+                    managerItemListPanel.revalidate();
+                    managerItemListPanel.repaint();
+                }
+            }
 
             if (s.equals("Add New Drink")) {
-                String newDrinkID = drinkID.getText();
+                // String newDrinkID = drinkID.getText();
                 String newDrinkName = drinkName.getText();
                 String requestedIngredients = ingredients.getText();
+                String requestedIngredientsQuantity = ingredientsQuantity.getText();
                 String requestedToppings = toppings.getText();
+                String requestedToppingsQuantity = toppingsQuantity.getText();
                 String newMediumPrice = mediumPrice.getText();
                 String newLargePrice = largePrice.getText();
                 String newRecipePrice = recipePrice.getText();
 
                 String[] newIngredients = requestedIngredients.split(",");
+                String[] newIngredientsQuantity = requestedIngredientsQuantity.split(",");
                 String[] newToppings = requestedToppings.split(",");
+                String[] newToppingsQuantity = requestedToppingsQuantity.split(",");
                 ArrayList<String> ingredientsArray = new ArrayList<>();
+                ArrayList<String> ingredientsQuantityArray = new ArrayList<>();
                 ArrayList<String> toppingsArray = new ArrayList<>();
+                ArrayList<String> toppingsQuantityArray = new ArrayList<>();
 
                 for (String ingredient : newIngredients) {
                     ingredientsArray.add(ingredient);
@@ -238,22 +281,33 @@ public class GUI extends JFrame {
                 for (String topping : newToppings) {
                     toppingsArray.add(topping);
                 }
+                for (String quantity: newIngredientsQuantity) {
+                    ingredientsQuantityArray.add(quantity);
+                }
+                for (String quantity: newToppingsQuantity) {
+                    toppingsQuantityArray.add(quantity);
+                }
+
 
                 boolean isSlush = option1.isSelected();
 
                 System.out.print(newDrinkName);
 
                 // Basic error handling cases
-                if (newDrinkID.equals("")) { 
-                    JOptionPane.showMessageDialog(null, "No ID provided", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
-                else if (newDrinkName.equals("")) {
+                // if (newDrinkID.equals("")) { 
+                //     JOptionPane.showMessageDialog(null, "No ID provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                //     return;
+                // }
+                if (newDrinkName.equals("")) {
                     JOptionPane.showMessageDialog(null, "No name provided", "Error", JOptionPane.ERROR_MESSAGE); 
                     return;
                 }
                 else if (requestedIngredients.equals("")) {
                     JOptionPane.showMessageDialog(null, "No ingredients provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (requestedIngredientsQuantity.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No ingredient quantities provided", "Error", JOptionPane.ERROR_MESSAGE); 
                     return;
                 }
                 else if (slushieOptions.getSelection() == null) {
@@ -275,6 +329,13 @@ public class GUI extends JFrame {
                 else if (drinkType.getSelection() == null) {
                     JOptionPane.showMessageDialog(null, "No drink type selected", "Error", JOptionPane.ERROR_MESSAGE); 
                     return;
+                }
+
+                if (!requestedToppings.equals("")) {
+                    if (requestedToppingsQuantity.equals("")) {
+                        JOptionPane.showMessageDialog(null, "No topping quantities provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                        return;
+                    }
                 }
                 // TODO:
                 // CREATE SQL QUERY TO ADD DRINK INFO TO DATABASE
@@ -353,6 +414,7 @@ public class GUI extends JFrame {
       JPanel managerCoffeePanel = new JPanel();
       JPanel managerOtherPanel = new JPanel();
       JPanel managerMilkTeaPanel = new JPanel();
+      JPanel managerInventoryPanel = new JPanel();
 
       //make manageractionspanel
       JPanel managerActionsPanel = new JPanel();
@@ -362,7 +424,9 @@ public class GUI extends JFrame {
       JLabel drinkIDLabel = new JLabel("Drink ID: ");
       JLabel nameLabel = new JLabel("Drink name: ");
       JLabel ingredientsLabel = new JLabel("Ingredients (separated by ','): ");
+      JLabel ingredientsQuantityLabel = new JLabel("Quantity of Ingredients (in same order, separated by ','): ");
       JLabel toppingsLabel = new JLabel("Toppings (separated by ','): ");
+      JLabel toppingsQuantityLabel = new JLabel("Quantity of Toppings (in same order, separated by ','): ");
       JLabel mediumLabel = new JLabel("Medium Price: ");
       JLabel largeLabel = new JLabel("Large Price: ");
       JLabel recipeLabel = new JLabel("Recipe Price: ");
@@ -374,8 +438,12 @@ public class GUI extends JFrame {
       drinkName.setAlignmentX(Component.LEFT_ALIGNMENT);
       ingredientsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       ingredients.setAlignmentX(Component.LEFT_ALIGNMENT);
+      ingredientsQuantityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      ingredientsQuantity.setAlignmentX(Component.LEFT_ALIGNMENT);
       toppingsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       toppings.setAlignmentX(Component.LEFT_ALIGNMENT);
+      toppingsQuantityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      toppingsQuantity.setAlignmentX(Component.LEFT_ALIGNMENT);
       option1.setAlignmentX(Component.LEFT_ALIGNMENT);
       option2.setAlignmentX(Component.LEFT_ALIGNMENT);
       mediumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -392,6 +460,8 @@ public class GUI extends JFrame {
       drinkName.setMaximumSize(new Dimension(200, 20));
       ingredients.setMinimumSize(new Dimension(200, 100));
       ingredients.setMaximumSize(new Dimension(200, 100));
+      ingredientsQuantity.setMinimumSize(new Dimension(200, 20));
+      ingredientsQuantity.setMaximumSize(new Dimension(200, 20));
       mediumPrice.setMinimumSize(new Dimension(200, 20));
       mediumPrice.setMaximumSize(new Dimension(200, 20));
       largePrice.setMinimumSize(new Dimension(200, 20));
@@ -400,16 +470,22 @@ public class GUI extends JFrame {
       recipePrice.setMaximumSize(new Dimension(200, 20));
       toppings.setMinimumSize(new Dimension(200, 100));
       toppings.setMaximumSize(new Dimension(200, 100));
+      toppingsQuantity.setMinimumSize(new Dimension(200, 20));
+      toppingsQuantity.setMaximumSize(new Dimension(200, 20));
       
       // Add the objects in the correct order
-      managerActionsPanel.add(drinkIDLabel);
-      managerActionsPanel.add(drinkID);
+    //   managerActionsPanel.add(drinkIDLabel);
+    //   managerActionsPanel.add(drinkID);
       managerActionsPanel.add(nameLabel);
       managerActionsPanel.add(drinkName);
       managerActionsPanel.add(ingredientsLabel);
       managerActionsPanel.add(ingredients);
+      managerActionsPanel.add(ingredientsQuantityLabel);
+      managerActionsPanel.add(ingredientsQuantity);
       managerActionsPanel.add(toppingsLabel);
       managerActionsPanel.add(toppings);
+      managerActionsPanel.add(toppingsQuantityLabel);
+      managerActionsPanel.add(toppingsQuantity);
       slushieOptions.add(option1);
       slushieOptions.add(option2);
       managerActionsPanel.add(option1);
@@ -439,6 +515,7 @@ public class GUI extends JFrame {
       managerTabbedPane.addTab("Coffee", null, managerCoffeePanel, "Does nothing");
       managerTabbedPane.addTab("Other", null, managerOtherPanel, "Does nothing");
       managerTabbedPane.addTab("Manager", null, managerActionsPanel, "Does nothing");
+      managerTabbedPane.addTab("Inventory", null, managerInventoryPanel, "Does nothing");
 
       cashierTabbedPane.addTab("Milk Tea", null, milkteaholder, "Does nothing");
       cashierTabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
@@ -478,16 +555,30 @@ public class GUI extends JFrame {
       receiptPanel2_bottom.add(tipLabel);
       receiptPanel2_bottom.add(totalLabel);
 
-      // Create the Checkout button
-      JButton checkoutButton = new JButton("Checkout");
-      checkoutButton.addActionListener(actionListener);
+      // Repeat for manager side
+      managerItemListPanel = new JPanel();
+      managerItemListPanel.setLayout(new BoxLayout(managerItemListPanel, BoxLayout.Y_AXIS));
+      JScrollPane managerItemScrollPane = new JScrollPane(managerItemListPanel);
+      managerReceiptPanel.add(managerItemScrollPane);
+      JPanel managerReceiptPanel2_bottom = new JPanel();
 
-      JButton managerCheckoutButton = new JButton("Checkout");
+      managerReceiptPanel2_bottom.setLayout(new BoxLayout(managerReceiptPanel2_bottom, BoxLayout.Y_AXIS));
+      managerSubtotalLabel = new JLabel("Subtotal: $" + subtotal);
+      managerTipLabel = new JLabel("Tip: $" + tip);
+      managerTotalLabel = new JLabel("Total: $" + total);
+
+      managerReceiptPanel2_bottom.add(managerSubtotalLabel);
+      managerReceiptPanel2_bottom.add(managerTipLabel);
+      managerReceiptPanel2_bottom.add(managerTotalLabel);
+
+      // Add the checkout buttons
+      checkoutButton.addActionListener(actionListener);
       managerCheckoutButton.addActionListener(actionListener);
 
       receiptPanel2_bottom.add(checkoutButton);
     
       receiptPanel.add(receiptPanel2_bottom,BorderLayout.SOUTH);
+      managerReceiptPanel.add(managerReceiptPanel2_bottom,BorderLayout.SOUTH);
 
       cashierFrame.add(receiptPanel, BorderLayout.EAST);    
       cashierFrame.add(cashierTabbedPane, BorderLayout.WEST);
@@ -512,7 +603,7 @@ public class GUI extends JFrame {
       loginFrame.setVisible(true);
     }
 
-    private void addItemToReceipt(ItemButton itemButton) {
+    private void addItemToReceipt(ItemButton itemButton, JPanel panel) {
       // Get item details from the button
       //ask user if they want the medium price or large price
       
