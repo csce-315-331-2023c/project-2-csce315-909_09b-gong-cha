@@ -286,6 +286,8 @@ public class GUI extends JFrame {
                 }
                 // TODO:
                 // CREATE SQL QUERY TO ADD DRINK INFO TO DATABASE
+                app.createRecipe(newDrinkName, isSlush, Integer.parseInt(newMediumPrice), Integer.parseInt(newLargePrice), Integer.parseInt(newRecipePrice), ingredientsArray, ingredientsQuantityArray, toppingsArray, toppingsQuantityArray);
+                
                 JOptionPane.showMessageDialog(null, "Drink added successfully, restart application to use button", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
 
