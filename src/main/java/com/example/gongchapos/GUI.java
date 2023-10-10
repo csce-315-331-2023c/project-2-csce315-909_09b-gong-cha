@@ -45,6 +45,17 @@ public class GUI extends JFrame {
       return button;
     }    
 
+    public static JPanel createReceiptPanel() {
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(200, 768));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        //add name of server and an exit button that clears the receipt panel(i.e. the current order)
+        panel.add(new JLabel("Server: " + "John Doe"));
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        return panel;
+    }
 
     public void launchGUI()
     {
@@ -96,6 +107,23 @@ public class GUI extends JFrame {
       ItemButton taroMilkSlush = new ItemButton(49, this);
       ItemButton strawberryMilkSlush = new ItemButton(48, this);
       
+      // These variables are declared so we can access their values, part of adding a new drink in manager
+      JTextField drinkID = new JTextField();
+      JTextField drinkName = new JTextField();
+      JTextField mediumPrice = new JTextField();
+      JTextField largePrice = new JTextField();
+      JTextField recipePrice = new JTextField();
+      JTextArea ingredients = new JTextArea();
+      JTextArea toppings = new JTextArea();
+      ButtonGroup slushieOptions = new ButtonGroup();
+      JRadioButton option1 = new JRadioButton("Slushy");
+      JRadioButton option2 = new JRadioButton("Not Slushy");
+      ButtonGroup drinkType = new ButtonGroup();
+      JRadioButton milkTea = new JRadioButton("Milk Tea");
+      JRadioButton slushie = new JRadioButton("Slushie");
+      JRadioButton coffee = new JRadioButton("Coffee");
+      JRadioButton other = new JRadioButton("Other");
+
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
         public void actionPerformed(ActionEvent e)
@@ -126,7 +154,7 @@ public class GUI extends JFrame {
             if (buttonName.equals("<html>Brown Sugar Milk Tea</html>")) { addItemToReceipt(brownSugarMilkTea); }
             if (buttonName.equals("<html>Caramel Milk Tea</html>")) { addItemToReceipt(caramelMilkTea); }
             if (buttonName.equals("<html>Earl Grey Milk Tea</html>")) { addItemToReceipt(earlGreyMilkTea); }
-            if (buttonName.equals("<html>Earl Grey Milk Tea<br>3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js); }
+            if (buttonName.equals("<html>Earl Grey Milk Tea 3Js</html>")) { addItemToReceipt(earlGreyMilkTea3Js); }
             if (buttonName.equals("<html>Green Milk Tea</html>")) { addItemToReceipt(greenMilkTea); }
             if (buttonName.equals("<html>Oolong Milk Tea</html>")) { addItemToReceipt(oolongMilkTea); }
             if (buttonName.equals("<html>Pearl Milk Tea</html>")) { addItemToReceipt(pearlMilkTea); }
@@ -165,6 +193,60 @@ public class GUI extends JFrame {
                     itemListPanel.revalidate();
                     itemListPanel.repaint();
                 }
+            }
+
+            if (s.equals("Add New Drink")) {
+                String newDrinkID = drinkID.getText();
+                String newDrinkName = drinkName.getText();
+                String requestedIngredients = ingredients.getText();
+                String requestedToppings = toppings.getText();
+                String newMediumPrice = mediumPrice.getText();
+                String newLargePrice = largePrice.getText();
+                String newRecipePrice = recipePrice.getText();
+
+                String[] newIngredients = requestedIngredients.split(",");
+                String[] newToppings = requestedToppings.split(",");
+
+                boolean isSlush = option1.isSelected();
+
+                System.out.print(newDrinkName);
+
+                // Basic error handling cases
+                if (newDrinkID.equals("")) { 
+                    JOptionPane.showMessageDialog(null, "No ID provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (newDrinkName.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No name provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (requestedIngredients.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No ingredients provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (slushieOptions.getSelection() == null) {
+                    JOptionPane.showMessageDialog(null, "Slushie/Not Slushie not selected", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (newMediumPrice.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No medium price provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (newLargePrice.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No large price provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (newRecipePrice.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No recipe price provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (drinkType.getSelection() == null) {
+                    JOptionPane.showMessageDialog(null, "No drink type selected", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                // TODO:
+                // CREATE SQL QUERY TO ADD DRINK INFO TO DATABASE
+                JOptionPane.showMessageDialog(null, "Drink added successfully, restart application to use button", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         }        
       };
@@ -206,7 +288,8 @@ public class GUI extends JFrame {
       cashierPanel.add(cashierBackButton);
 
 
-      JTabbedPane tabbedPane = new JTabbedPane();
+      JTabbedPane cashierTabbedPane = new JTabbedPane();
+      JTabbedPane managerTabbedPane = new JTabbedPane();
       
       JPanel milkteaholder = new JPanel();
       milkteaholder.add(blackMilkTea);
@@ -231,25 +314,122 @@ public class GUI extends JFrame {
       CashierCoffeePanel.add(coffeeMilkTea);
       CashierCoffeePanel.add(milkFoamBlackCoffee);
 
-      tabbedPane.addTab("Milk Tea", null, milkteaholder, "Does nothing");
-      tabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
-      tabbedPane.addTab("Coffee", null, CashierCoffeePanel, "Does nothing");
+      //make cashierotherpanel
+      JPanel CashierOtherPanel = new JPanel();
+
+      JPanel managerSlushiePanel = new JPanel();
+      JPanel managerCoffeePanel = new JPanel();
+      JPanel managerOtherPanel = new JPanel();
+      JPanel managerMilkTeaPanel = new JPanel();
+
+      //make manageractionspanel
+      JPanel managerActionsPanel = new JPanel();
+      managerActionsPanel.setLayout(new BoxLayout(managerActionsPanel, BoxLayout.Y_AXIS));
+      managerActionsPanel.add(Box.createVerticalStrut(10));
+      // declare necessary sections to add a drink
+      JLabel drinkIDLabel = new JLabel("Drink ID: ");
+      JLabel nameLabel = new JLabel("Drink name: ");
+      JLabel ingredientsLabel = new JLabel("Ingredients (separated by ','): ");
+      JLabel toppingsLabel = new JLabel("Toppings (separated by ','): ");
+      JLabel mediumLabel = new JLabel("Medium Price: ");
+      JLabel largeLabel = new JLabel("Large Price: ");
+      JLabel recipeLabel = new JLabel("Recipe Price: ");
+
+      // Set alignment
+      drinkIDLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      drinkID.setAlignmentX(Component.LEFT_ALIGNMENT);
+      nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      drinkName.setAlignmentX(Component.LEFT_ALIGNMENT);
+      ingredientsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      ingredients.setAlignmentX(Component.LEFT_ALIGNMENT);
+      toppingsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      toppings.setAlignmentX(Component.LEFT_ALIGNMENT);
+      option1.setAlignmentX(Component.LEFT_ALIGNMENT);
+      option2.setAlignmentX(Component.LEFT_ALIGNMENT);
+      mediumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      mediumPrice.setAlignmentX(Component.LEFT_ALIGNMENT);
+      largeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      largePrice.setAlignmentX(Component.LEFT_ALIGNMENT);
+      recipeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      recipePrice.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+      // Set dimensions
+      drinkID.setMinimumSize(new Dimension(200, 20));
+      drinkID.setMaximumSize(new Dimension(200, 20));
+      drinkName.setMinimumSize(new Dimension(200, 20));
+      drinkName.setMaximumSize(new Dimension(200, 20));
+      ingredients.setMinimumSize(new Dimension(200, 100));
+      ingredients.setMaximumSize(new Dimension(200, 100));
+      mediumPrice.setMinimumSize(new Dimension(200, 20));
+      mediumPrice.setMaximumSize(new Dimension(200, 20));
+      largePrice.setMinimumSize(new Dimension(200, 20));
+      largePrice.setMaximumSize(new Dimension(200, 20));
+      recipePrice.setMinimumSize(new Dimension(200, 20));
+      recipePrice.setMaximumSize(new Dimension(200, 20));
+      toppings.setMinimumSize(new Dimension(200, 100));
+      toppings.setMaximumSize(new Dimension(200, 100));
+      
+      // Add the objects in the correct order
+      managerActionsPanel.add(drinkIDLabel);
+      managerActionsPanel.add(drinkID);
+      managerActionsPanel.add(nameLabel);
+      managerActionsPanel.add(drinkName);
+      managerActionsPanel.add(ingredientsLabel);
+      managerActionsPanel.add(ingredients);
+      managerActionsPanel.add(toppingsLabel);
+      managerActionsPanel.add(toppings);
+      slushieOptions.add(option1);
+      slushieOptions.add(option2);
+      managerActionsPanel.add(option1);
+      managerActionsPanel.add(option2);
+      managerActionsPanel.add(mediumLabel);
+      managerActionsPanel.add(mediumPrice);
+      managerActionsPanel.add(largeLabel);
+      managerActionsPanel.add(largePrice);
+      managerActionsPanel.add(recipeLabel);
+      managerActionsPanel.add(recipePrice);
+      drinkType.add(milkTea);
+      drinkType.add(slushie);
+      drinkType.add(coffee);
+      drinkType.add(other);
+      managerActionsPanel.add(milkTea);
+      managerActionsPanel.add(slushie);
+      managerActionsPanel.add(coffee);
+      managerActionsPanel.add(other);
+
+      // Create the new drink button
+      JButton newDrinkButton = new JButton("Add New Drink");
+      newDrinkButton.addActionListener(actionListener);
+      managerActionsPanel.add(newDrinkButton);
+
+      managerTabbedPane.addTab("Milk Tea", null, managerMilkTeaPanel, "Does nothing");
+      managerTabbedPane.addTab("Slushie", null, managerSlushiePanel, "Does nothing");
+      managerTabbedPane.addTab("Coffee", null, managerCoffeePanel, "Does nothing");
+      managerTabbedPane.addTab("Other", null, managerOtherPanel, "Does nothing");
+      managerTabbedPane.addTab("Manager", null, managerActionsPanel, "Does nothing");
+
+      cashierTabbedPane.addTab("Milk Tea", null, milkteaholder, "Does nothing");
+      cashierTabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
+      cashierTabbedPane.addTab("Coffee", null, CashierCoffeePanel, "Does nothing");
+      cashierTabbedPane.addTab("Other", null, CashierOtherPanel, "Does nothing");
       //put pearlmilkTea in the milk tea tab
-      tabbedPane.setPreferredSize(new Dimension(824, 768));
+      cashierTabbedPane.setPreferredSize(new Dimension(824, 768));
+      managerTabbedPane.setPreferredSize(new Dimension(824, 768));
       //put the teas in the milk tea tab
       
       // add panel to frame
       loginFrame.add(loginPanel);
     
-      JPanel receiptPanel = new JPanel();
+      JPanel receiptPanel = createReceiptPanel();
+      JPanel managerReceiptPanel = createReceiptPanel();
 
-      receiptPanel.setPreferredSize(new Dimension(200, 768));
-      receiptPanel.setBackground(Color.WHITE);
-      receiptPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-      receiptPanel.setLayout(new BoxLayout(receiptPanel, BoxLayout.Y_AXIS));
-      //add name of server and an exit button that clears the receipt panel(i.e. the current order)
-      receiptPanel.add(new JLabel("Server: " + "John Doe"));
-      receiptPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+    //   receiptPanel.setPreferredSize(new Dimension(200, 768));
+    //   receiptPanel.setBackground(Color.WHITE);
+    //   receiptPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    //   receiptPanel.setLayout(new BoxLayout(receiptPanel, BoxLayout.Y_AXIS));
+    //   //add name of server and an exit button that clears the receipt panel(i.e. the current order)
+    //   receiptPanel.add(new JLabel("Server: " + "John Doe"));
+    //   receiptPanel.add(Box.createRigidArea(new Dimension(0, 10)));
       
       itemListPanel = new JPanel();
       itemListPanel.setLayout(new BoxLayout(itemListPanel, BoxLayout.Y_AXIS));
@@ -270,6 +450,9 @@ public class GUI extends JFrame {
       JButton checkoutButton = new JButton("Checkout");
       checkoutButton.addActionListener(actionListener);
 
+      JButton managerCheckoutButton = new JButton("Checkout");
+      managerCheckoutButton.addActionListener(actionListener);
+
       receiptPanel2_bottom.add(checkoutButton);
 
       // //i want to make sure the information on the order is always at the bottom of the receipt panel
@@ -279,14 +462,14 @@ public class GUI extends JFrame {
       receiptPanel.add(receiptPanel2_bottom,BorderLayout.SOUTH);
 
       cashierFrame.add(receiptPanel, BorderLayout.EAST);    
-      cashierFrame.add(tabbedPane, BorderLayout.WEST);
+      cashierFrame.add(cashierTabbedPane, BorderLayout.WEST);
       cashierFrame.add(cashierBackButton, BorderLayout.SOUTH);
       cashierFrame.add(cashierPanel);
       // cashierFrame.add(cashierDrinkPanel, BorderLayout.CENTER);
 
-      
+      managerFrame.add(managerReceiptPanel, BorderLayout.EAST);
+      managerFrame.add(managerTabbedPane, BorderLayout.WEST);
       managerFrame.add(managerBackButton, BorderLayout.SOUTH);
-
       managerFrame.add(managerPanel);
     //   managerFrame.add(managerDrinkPanel, BorderLayout.CENTER);
 
