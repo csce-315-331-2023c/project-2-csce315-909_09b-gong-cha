@@ -71,8 +71,6 @@ public class GUI extends JFrame {
 
     public void launchGUI()
     {
-      JOptionPane.showMessageDialog(null,"Opened database successfully");
-
       //initalize subtotal, tip, and total
       subtotal = 0;
       tip = 0;
@@ -612,6 +610,9 @@ public class GUI extends JFrame {
       String itemName = itemButton.getItemName();
       double itemPrice;
 
+      List<String> selectedToppings = new ArrayList<String>();
+            List<Integer> selectedToppingsQuantity = new ArrayList<>();
+
       Object[] options = {"Medium", "Large"};
       int result = JOptionPane.showOptionDialog(
               null,
@@ -739,7 +740,6 @@ public class GUI extends JFrame {
                         // Process the selected toppings and quantity
                         int quantity;
 
-                        List<_topping> selectedToppings = new ArrayList<>();
                         //iterate over spinners and get quantity, if not 0, add to list of toppings
                         for (int i = 0; i < spinners.size(); i++) {
                             JSpinner spinner = spinners.get(i);
@@ -747,10 +747,10 @@ public class GUI extends JFrame {
                             quantity = (int) spinner.getValue();
                             if (quantity != 0) {
                                 //add topping to list of toppings
-                                _topping newTopping = new _topping(topping, quantity);
                                 minitoppanel.add(new JLabel(topping + ": " + quantity));
 
-                                selectedToppings.add(newTopping);
+                                selectedToppings.add(topping);
+                                selectedToppingsQuantity.add(quantity);
                             }
                         }
                         // Close the dialog
@@ -784,7 +784,7 @@ public class GUI extends JFrame {
     subtotal += itemPrice;
     total = subtotal + tip;
 
-    app.addDrink(itemButton.getItemID(), "note", size, iceResult, sugarResult, subtotal);
+    app.addDrink(itemButton.getItemID(), "note", size, iceResult, sugarResult, subtotal, selectedToppings, selectedToppingsQuantity);
 
     // Update the labels in receiptPanel2
     subtotalLabel.setText("Subtotal: $" + subtotal);
