@@ -409,6 +409,13 @@ public class GUI extends JFrame {
       JScrollPane inventoryScrollPane = new JScrollPane(inventoryTable);
       managerInventoryPanel.add(inventoryScrollPane);
 
+      String[] columnNamesToppings = {"Topping_ID", "Topping_Name", "Unit_Price", "Stock"};
+      // Make a JTable out of the data returned from function in Application.java
+      Object[][] dataToppings = app.getToppings();
+      JTable inventoryTable2 = new JTable(dataToppings, columnNamesToppings);
+      JScrollPane inventoryScrollPaneToppings = new JScrollPane(inventoryTable2);
+      managerInventoryPanel.add(inventoryScrollPaneToppings);
+
       //make manageractionspanel
       JPanel managerActionsPanel = new JPanel();
       addDrinkPanel.setLayout(new BoxLayout(addDrinkPanel, BoxLayout.Y_AXIS));
