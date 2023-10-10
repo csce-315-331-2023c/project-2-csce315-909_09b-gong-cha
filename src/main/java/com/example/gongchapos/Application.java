@@ -146,11 +146,11 @@ public class Application {
 
 
   // adds toppings into recipe_toppings
-  public void addToppings(ArrayList<Topping> toppings){
-    for(Topping cur_topping: toppings){
+  // public void addToppings(ArrayList<Topping> toppings){
+  //   for(Topping cur_topping: toppings){
 
-    }
-  }
+  //   }
+  // }
 
 
 
