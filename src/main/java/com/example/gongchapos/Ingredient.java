@@ -6,4 +6,23 @@ public class Ingredient {
     String ingredient_name;
     int stock;
     double unit_price;
+    
+    public int getID(){
+        return this.ingredient_id;
+    }
+
+    public String getName(){
+        return this.ingredient_name;
+    }
+
+    public int getStock(){
+        return this.stock;
+    }
+
+    public double getUnitPrice(){
+        return this.unit_price;
+    }
+
+
 }
+
