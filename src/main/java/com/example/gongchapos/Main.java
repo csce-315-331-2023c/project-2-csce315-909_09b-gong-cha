@@ -17,5 +17,7 @@ public class Main {
 
         Application app = new Application();
         app.run(netID, password);
+        Object[][] ingredients = app.getIngredients(); // 35, 4
+        Object[][] toppigns = app.getToppings(); 
     }
 }
