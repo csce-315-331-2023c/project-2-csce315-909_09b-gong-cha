@@ -6,6 +6,13 @@ public class recipeIngredient {
     int ingredient_id;
     int quantity_used;
     
+    public recipeIngredient(int _recipe_id, int __ingredient_id, int _quantity_used)
+    {
+        recipe_id = _recipe_id;
+        ingredient_id = __ingredient_id;
+        quantity_used = _quantity_used;
+    }
+
     public int getRecipeID(){
         return this.recipe_id;
     }

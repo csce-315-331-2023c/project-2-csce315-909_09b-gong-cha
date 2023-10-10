@@ -9,6 +9,7 @@ public class Application {
 
   protected GUI gui;
   protected List<Recipe> recipes = new ArrayList<Recipe>();
+  protected List<Topping> toppings = new ArrayList<Topping>();
   protected Connection conn = null;
   private Order order = null;
 
@@ -28,7 +29,7 @@ public class Application {
   public void run(String netID, String password)
   {
     ConnectToDatabase(netID, password);
-    populateRecipes();
+    populate();
     gui = new GUI(this);
   }
 
@@ -57,8 +58,15 @@ public class Application {
     }
   }
 
+  private void populate()
+  {
+    populateRecipes();
+    populateToppings();
+  }
+
   private void populateRecipes()
   {
+    recipes.clear();
     try
     {
       Statement stmt = conn.createStatement();
@@ -79,18 +87,110 @@ public class Application {
     }
   }
 
-  // creates a new recipe and inserts it into the database
-  public void createRecipe(int recipe_id, String recipe_name, boolean is_slush, double med_price, double large_price, double recipe_price)
+
+  private void populateToppings()
   {
+    toppings.clear();
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM toppings;");
+      while(result.next())
+      {
+        Topping currentTopping = new Topping(result.getInt("topping_id"),
+                                             result.getString("topping_name"),
+                                             result.getInt("stock"),
+                                             result.getDouble("unit_price"));
+
+        toppings.add(currentTopping);
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database Toppings");
+    }
+  }
+
+  private int newRecipeID()
+  {
+    int recipe_id = -1;
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM recipe ORDER BY recipe_id DESC LIMIT 1;");
+      while(result.next())
+      {
+        recipe_id = result.getInt("recipe_id") + 1;
+      }
+    } catch (Exception e){
+      System.out.println(e);
+      JOptionPane.showMessageDialog(null,"Error accessing Database 0");
+    }
+
+      return recipe_id;
+  }
+
+  // creates a new recipe and inserts it into the database
+  public void createRecipe(String recipe_name, boolean is_slush, double med_price, double large_price, double recipe_price, ArrayList<String> ingredinets, 
+                           ArrayList<String> ingredients_quantity, ArrayList<String> toppings_array, ArrayList<String> toppings_quantity)
+  {
+    int recipe_id = newRecipeID();
     Recipe newRecipe = new Recipe(recipe_id, recipe_name, is_slush, med_price, large_price, recipe_price);
     recipes.add(newRecipe);
     try
     {
       Statement stmt = conn.createStatement();
-      stmt.executeQuery("INSERT INTO recipe VALUES(" + recipe_id + "," + recipe_name + "," + is_slush + "," + med_price + "," + large_price + "," + recipe_price + ");");
+      stmt.execute("INSERT INTO recipe VALUES('" + recipe_id + "','" + recipe_name + "','" + is_slush + "','" + med_price + "','" + large_price + "','" + recipe_price + "');");
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, "Error accessing Database");
+      System.out.println(e);
+      JOptionPane.showMessageDialog(null, "Error accessing Database 1");
     }
+
+    for(int i = 0; i < ingredinets.size(); i++)
+    {
+      int ingredient_id = -1;
+      try
+      {
+        Statement stmt = conn.createStatement();
+        ResultSet result = stmt.executeQuery("SELECT * FROM ingredient WHERE ingredient_name = '" + ingredinets.get(i).strip() + "';");
+        while(result.next())
+        {
+          ingredient_id = result.getInt("ingredient_id");
+        }
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error accessing Database 2");
+      }
+
+      recipeIngredient recipeIngredient = new recipeIngredient(recipe_id, ingredient_id, Integer.parseInt(ingredients_quantity.get(i).strip()));
+      
+      try
+      {
+        Statement stmt = conn.createStatement();
+        stmt.execute("INSERT INTO recipe_ingredient VALUES('" + recipeIngredient.getRecipeID() + "','" + recipeIngredient.getIngredientID() + "','" + recipeIngredient.getQuantityUsed() + "');");
+      } catch (Exception e) {
+        System.out.println(e);
+        JOptionPane.showMessageDialog(null, "Error accessing Database 3");
+      }
+    }
+
+    for(int i = 0; i < toppings_array.size(); i++)
+    {
+      
+      Topping topping = getTopping(toppings_array.get(i).strip());
+
+      if (topping == null)
+      {
+        System.out.println("null");
+      }
+      recipeToppings recipeTopping = new recipeToppings(recipe_id, topping.getToppingId(), Integer.parseInt(toppings_quantity.get(i)));
+      
+      try
+      {
+        Statement stmt = conn.createStatement();
+        stmt.execute("INSERT INTO recipe_toppings VALUES('" + recipeTopping.getRecipeID() + "','" + recipeTopping.getToppingId() + "','" + recipeTopping.getQuantityUsed() + "');");
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error accessing Database 4");
+      }
+    }
+    
   }
 
   // Retuns a recipe given a name, returns null if recipe not found
@@ -123,6 +223,23 @@ public class Application {
     }
 
     return outRecipe;
+  }
+
+  public Topping getTopping(String topping_name)
+  {
+    Topping outTopping = null;
+    System.out.println("LOOKING FOR: " + topping_name);
+    for(Topping currentTopping : toppings)
+    {
+      System.out.println("ON TOPPING " + currentTopping.getToppingName());
+      if(topping_name.equals(currentTopping.getToppingName()))
+      {
+        outTopping = currentTopping;
+        break;
+      }
+    }
+
+    return outTopping;
   }
   
   // adds ingredients into recipe_ingredients
@@ -287,6 +404,7 @@ public class Application {
         JOptionPane.showMessageDialog(null, "Error accessing Database");
       }
     }
+    setOrderStatus(true);
   }
 
   public Object[][] getIngredients(){

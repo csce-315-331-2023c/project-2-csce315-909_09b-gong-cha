@@ -7,6 +7,14 @@ public class Topping {
     int stock;
     double unit_price;
 
+    public Topping(int _topping_id, String _topping_name, int _stock, double _unit_price)
+    {
+        topping_id = _topping_id;
+        topping_name = _topping_name;
+        stock = _stock;
+        unit_price = _unit_price;
+    }
+
     public int getToppingId(){
         return this.topping_id;
     }
