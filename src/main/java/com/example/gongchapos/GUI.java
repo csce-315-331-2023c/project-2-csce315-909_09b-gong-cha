@@ -119,6 +119,8 @@ public class GUI extends JFrame {
       JTextField mediumPrice = new JTextField();
       JTextField largePrice = new JTextField();
       JTextField recipePrice = new JTextField();
+      JTextField ingredientsQuantity = new JTextField();
+      JTextField toppingsQuantity = new JTextField();
       JTextArea ingredients = new JTextArea();
       JTextArea toppings = new JTextArea();
       ButtonGroup slushieOptions = new ButtonGroup();
@@ -233,18 +235,24 @@ public class GUI extends JFrame {
             }
 
             if (s.equals("Add New Drink")) {
-                String newDrinkID = drinkID.getText();
+                // String newDrinkID = drinkID.getText();
                 String newDrinkName = drinkName.getText();
                 String requestedIngredients = ingredients.getText();
+                String requestedIngredientsQuantity = ingredientsQuantity.getText();
                 String requestedToppings = toppings.getText();
+                String requestedToppingsQuantity = toppingsQuantity.getText();
                 String newMediumPrice = mediumPrice.getText();
                 String newLargePrice = largePrice.getText();
                 String newRecipePrice = recipePrice.getText();
 
                 String[] newIngredients = requestedIngredients.split(",");
+                String[] newIngredientsQuantity = requestedIngredientsQuantity.split(",");
                 String[] newToppings = requestedToppings.split(",");
+                String[] newToppingsQuantity = requestedToppingsQuantity.split(",");
                 ArrayList<String> ingredientsArray = new ArrayList<>();
+                ArrayList<String> ingredientsQuantityArray = new ArrayList<>();
                 ArrayList<String> toppingsArray = new ArrayList<>();
+                ArrayList<String> toppingsQuantityArray = new ArrayList<>();
 
                 for (String ingredient : newIngredients) {
                     ingredientsArray.add(ingredient);
@@ -252,22 +260,33 @@ public class GUI extends JFrame {
                 for (String topping : newToppings) {
                     toppingsArray.add(topping);
                 }
+                for (String quantity: newIngredientsQuantity) {
+                    ingredientsQuantityArray.add(quantity);
+                }
+                for (String quantity: newToppingsQuantity) {
+                    toppingsQuantityArray.add(quantity);
+                }
+
 
                 boolean isSlush = option1.isSelected();
 
                 System.out.print(newDrinkName);
 
                 // Basic error handling cases
-                if (newDrinkID.equals("")) { 
-                    JOptionPane.showMessageDialog(null, "No ID provided", "Error", JOptionPane.ERROR_MESSAGE); 
-                    return;
-                }
-                else if (newDrinkName.equals("")) {
+                // if (newDrinkID.equals("")) { 
+                //     JOptionPane.showMessageDialog(null, "No ID provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                //     return;
+                // }
+                if (newDrinkName.equals("")) {
                     JOptionPane.showMessageDialog(null, "No name provided", "Error", JOptionPane.ERROR_MESSAGE); 
                     return;
                 }
                 else if (requestedIngredients.equals("")) {
                     JOptionPane.showMessageDialog(null, "No ingredients provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if (requestedIngredientsQuantity.equals("")) {
+                    JOptionPane.showMessageDialog(null, "No ingredient quantities provided", "Error", JOptionPane.ERROR_MESSAGE); 
                     return;
                 }
                 else if (slushieOptions.getSelection() == null) {
@@ -289,6 +308,13 @@ public class GUI extends JFrame {
                 else if (drinkType.getSelection() == null) {
                     JOptionPane.showMessageDialog(null, "No drink type selected", "Error", JOptionPane.ERROR_MESSAGE); 
                     return;
+                }
+
+                if (!requestedToppings.equals("")) {
+                    if (requestedToppingsQuantity.equals("")) {
+                        JOptionPane.showMessageDialog(null, "No topping quantities provided", "Error", JOptionPane.ERROR_MESSAGE); 
+                        return;
+                    }
                 }
                 // TODO:
                 // CREATE SQL QUERY TO ADD DRINK INFO TO DATABASE
@@ -377,7 +403,9 @@ public class GUI extends JFrame {
       JLabel drinkIDLabel = new JLabel("Drink ID: ");
       JLabel nameLabel = new JLabel("Drink name: ");
       JLabel ingredientsLabel = new JLabel("Ingredients (separated by ','): ");
+      JLabel ingredientsQuantityLabel = new JLabel("Quantity of Ingredients (in same order, separated by ','): ");
       JLabel toppingsLabel = new JLabel("Toppings (separated by ','): ");
+      JLabel toppingsQuantityLabel = new JLabel("Quantity of Toppings (in same order, separated by ','): ");
       JLabel mediumLabel = new JLabel("Medium Price: ");
       JLabel largeLabel = new JLabel("Large Price: ");
       JLabel recipeLabel = new JLabel("Recipe Price: ");
@@ -389,8 +417,12 @@ public class GUI extends JFrame {
       drinkName.setAlignmentX(Component.LEFT_ALIGNMENT);
       ingredientsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       ingredients.setAlignmentX(Component.LEFT_ALIGNMENT);
+      ingredientsQuantityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      ingredientsQuantity.setAlignmentX(Component.LEFT_ALIGNMENT);
       toppingsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       toppings.setAlignmentX(Component.LEFT_ALIGNMENT);
+      toppingsQuantityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      toppingsQuantity.setAlignmentX(Component.LEFT_ALIGNMENT);
       option1.setAlignmentX(Component.LEFT_ALIGNMENT);
       option2.setAlignmentX(Component.LEFT_ALIGNMENT);
       mediumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -407,6 +439,8 @@ public class GUI extends JFrame {
       drinkName.setMaximumSize(new Dimension(200, 20));
       ingredients.setMinimumSize(new Dimension(200, 100));
       ingredients.setMaximumSize(new Dimension(200, 100));
+      ingredientsQuantity.setMinimumSize(new Dimension(200, 20));
+      ingredientsQuantity.setMaximumSize(new Dimension(200, 20));
       mediumPrice.setMinimumSize(new Dimension(200, 20));
       mediumPrice.setMaximumSize(new Dimension(200, 20));
       largePrice.setMinimumSize(new Dimension(200, 20));
@@ -415,16 +449,22 @@ public class GUI extends JFrame {
       recipePrice.setMaximumSize(new Dimension(200, 20));
       toppings.setMinimumSize(new Dimension(200, 100));
       toppings.setMaximumSize(new Dimension(200, 100));
+      toppingsQuantity.setMinimumSize(new Dimension(200, 20));
+      toppingsQuantity.setMaximumSize(new Dimension(200, 20));
       
       // Add the objects in the correct order
-      managerActionsPanel.add(drinkIDLabel);
-      managerActionsPanel.add(drinkID);
+    //   managerActionsPanel.add(drinkIDLabel);
+    //   managerActionsPanel.add(drinkID);
       managerActionsPanel.add(nameLabel);
       managerActionsPanel.add(drinkName);
       managerActionsPanel.add(ingredientsLabel);
       managerActionsPanel.add(ingredients);
+      managerActionsPanel.add(ingredientsQuantityLabel);
+      managerActionsPanel.add(ingredientsQuantity);
       managerActionsPanel.add(toppingsLabel);
       managerActionsPanel.add(toppings);
+      managerActionsPanel.add(toppingsQuantityLabel);
+      managerActionsPanel.add(toppingsQuantity);
       slushieOptions.add(option1);
       slushieOptions.add(option2);
       managerActionsPanel.add(option1);
@@ -455,7 +495,7 @@ public class GUI extends JFrame {
       managerTabbedPane.addTab("Other", null, managerOtherPanel, "Does nothing");
       managerTabbedPane.addTab("Manager", null, managerActionsPanel, "Does nothing");
       managerTabbedPane.addTab("Inventory", null, managerInventoryPanel, "Does nothing");
-      
+
       cashierTabbedPane.addTab("Milk Tea", null, milkteaholder, "Does nothing");
       cashierTabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
       cashierTabbedPane.addTab("Coffee", null, CashierCoffeePanel, "Does nothing");
