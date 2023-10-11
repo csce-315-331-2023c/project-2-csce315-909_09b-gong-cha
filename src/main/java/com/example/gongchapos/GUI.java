@@ -181,10 +181,22 @@ public class GUI extends JFrame {
                 tipLabel.setText("Tip: $" + tip);
                 totalLabel.setText("Total: $" + total);
                 //display total in jdialog box and clear if yes is clicked
+
+                app.createNewOrder();
+                for (_drink drink : drinks) {
+                    //create toppings used List<string>
+                    //create toppings quantity List<int>
+                    List<String> toppingsUsed = new ArrayList<String>();
+                    List<Integer> toppingsQuantity = new ArrayList<>();
+                    for (_topping top : drink.toppings) {
+                        toppingsUsed.add(top.topping.getToppingName());
+                        toppingsQuantity.add(top.quantity);
+                    }
+                    app.addDrink(drink.recipe.getRecipeID(), "", drink.is_medium, drink.ice, drink.sugar, subtotal, toppingsUsed, toppingsQuantity);
+
+                }
                 app.placeOrder(tip, "");
-               
-                //TODO: send data to backend to update inventory
-                
+
                 int result = JOptionPane.showConfirmDialog(null, "Total: $" + total + "\n" + "Clear receipt?", "Checkout", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) { 
                     //clear receipt
@@ -707,7 +719,14 @@ public class GUI extends JFrame {
 
                 // Sample toppings (you can replace this with your actual toppings)
                 //TODO: query database for toppings and topping prices
-                String[] availableToppings = {"Sugar", "Milk", "Honey", "Caramel"};
+                //create string of available toppings based on database toppings.
+                //vector of toppings
+                Vector<String> availableToppings = new Vector<String>();
+
+                for (Topping top : app.toppings) {
+                    availableToppings.add(top.getToppingName());
+                }
+                // String[] availableToppings = {"Sugar", "Milk", "Honey", "Caramel"};
 
                 //create spinners for each topping
                 List<JSpinner> spinners = new ArrayList<>();
@@ -731,21 +750,36 @@ public class GUI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         // Process the selected toppings and quantity
                         int quantity;
-
+                        int topping_price = 0;
                         ArrayList<_topping> selectedToppings = new ArrayList<>();
                         //iterate over spinners and get quantity, if not 0, add to list of toppings
                         for (int i = 0; i < spinners.size(); i++) {
                             JSpinner spinner = spinners.get(i);
-                            String topping = availableToppings[i];
+                            String topping = availableToppings.get(i);
+                            Topping topping_fr = app.toppings.get(i);
                             quantity = (int) spinner.getValue();
                             if (quantity != 0) {
                                 //add topping to list of toppings
+                                _topping newTopping = new _topping(topping_fr, topping, quantity);
+                                minitoppanel.add(new JLabel("    "+topping + ": " + quantity));
+                                
+                                topping_price += newTopping.topping.unit_price * quantity;
                                 minitoppanel.add(new JLabel(topping + ": " + quantity));
 
-                                selectedToppings.add(topping);
+                                selectedToppings.add(newTopping);
                                 selectedToppingsQuantity.add(quantity);
                             }
                         }
+                        //update the subtotal and total
+                        subtotal += topping_price;
+                        total = subtotal + tip;
+                        System.out.print("subtotal: " + subtotal + " total: " + total);
+                        //update subtotal and total labels
+                        subtotalLabel.setText("Subtotal: $" + subtotal);
+                        totalLabel.setText("Total: $" + total);
+
+                        itemListPanel.revalidate();
+                        itemListPanel.repaint();
                         // Close the dialog
                         newDrink.toppings = selectedToppings;
                         dialog.dispose();
@@ -884,11 +918,14 @@ class ItemButton extends JButton {
 //make a class for toppings
 class _topping{
     String name;
+    Topping topping;
     int quantity;
 
-    public _topping(String name, int quantity){
+    public _topping(Topping topping, String name, int quantity){
+        this.topping = topping;
         this.name = name;
         this.quantity = quantity;
+
     }
 }
 
@@ -922,7 +959,7 @@ class _drink{
         }
 
         for(_topping topping : toppings){
-            price += topping.quantity * 1; //TODO: query database for topping price
+            price += topping.quantity * topping.topping.unit_price; 
         }
     }
 }
