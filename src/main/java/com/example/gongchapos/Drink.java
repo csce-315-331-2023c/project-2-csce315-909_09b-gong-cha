@@ -91,7 +91,7 @@ public class Drink extends Application{
     void insertTopping(Topping topping, int quantity)
     {
         used_toppings.put(topping, quantity);
-        item_price += topping.getUnitPrice();
+        item_price += (topping.getUnitPrice() * quantity);
     }
 
     Map<Topping, Integer> getToppingsUsed()
