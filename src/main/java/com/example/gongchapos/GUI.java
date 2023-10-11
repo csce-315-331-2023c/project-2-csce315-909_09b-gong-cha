@@ -935,8 +935,6 @@ public class GUI extends JFrame {
     subtotal += itemPrice;
     total = subtotal + tip;
 
-    app.addDrink(itemButton.getItemID(), "note", size, iceResult, sugarResult, subtotal, selectedToppings, selectedToppingsQuantity);
-
     // Update the labels in receiptPanel2
     subtotalLabel.setText("Subtotal: $" + subtotal);
     tipLabel.setText("Tip: $" + tip);
