@@ -186,11 +186,15 @@ public class GUI extends JFrame {
                 for (_drink drink : drinks) {
                     //create toppings used List<string>
                     //create toppings quantity List<int>
-                    List<String> toppingsUsed = new ArrayList<String>();
+                    List<String> toppingsUsed = new ArrayList<>();
                     List<Integer> toppingsQuantity = new ArrayList<>();
                     for (_topping top : drink.toppings) {
                         toppingsUsed.add(top.topping.getToppingName());
                         toppingsQuantity.add(top.quantity);
+                    }
+                    //print contents of toppingsUsed and toppingsQuantity
+                    for(int i = 0; i < toppingsUsed.size(); i++) {
+                        System.out.println(toppingsUsed.get(i) + " " + toppingsQuantity.get(i));
                     }
                     app.addDrink(drink.recipe.getRecipeID(), "", drink.is_medium, drink.ice, drink.sugar, subtotal, toppingsUsed, toppingsQuantity);
 
@@ -688,6 +692,7 @@ public class GUI extends JFrame {
                 itemListPanel.remove(iceLabel);
                 itemListPanel.remove(removeItemButton);
                 itemListPanel.remove(editItemButton);
+                itemListPanel.remove(minitoppanel);
                 //remove drink from drinks
                 //subtract from subtotal the price of the item
                 //TODO: query database for price of toppings too.
@@ -727,7 +732,6 @@ public class GUI extends JFrame {
                 for (Topping top : app.toppings) {
                     availableToppings.add(top.getToppingName());
                 }
-                // String[] availableToppings = {"Sugar", "Milk", "Honey", "Caramel"};
 
                 //create spinners for each topping
                 List<JSpinner> spinners = new ArrayList<>();
@@ -765,7 +769,6 @@ public class GUI extends JFrame {
                                 minitoppanel.add(new JLabel("    "+topping + ": " + quantity));
                                 
                                 topping_price += newTopping.topping.unit_price * quantity;
-                                minitoppanel.add(new JLabel(topping + ": " + quantity));
 
                                 selectedToppings.add(newTopping);
                                 selectedToppingsQuantity.add(quantity);
@@ -774,7 +777,6 @@ public class GUI extends JFrame {
                         //update the subtotal and total
                         subtotal += topping_price;
                         total = subtotal + tip;
-                        System.out.print("subtotal: " + subtotal + " total: " + total);
                         //update subtotal and total labels
                         subtotalLabel.setText("Subtotal: $" + subtotal);
                         totalLabel.setText("Total: $" + total);
