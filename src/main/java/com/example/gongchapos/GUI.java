@@ -11,6 +11,8 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class GUI extends JFrame {
+    //make list of order items
+
     static JFrame loginFrame;
     static JFrame cashierFrame;
     static JFrame managerFrame;
@@ -32,7 +34,9 @@ public class GUI extends JFrame {
 
     //manager chart
     JPanel managerChartPanel;
-    
+
+    //list of drinks
+    ArrayList<_drink> drinks = new ArrayList<>();
 
     protected Application app = null;
 
@@ -175,13 +179,12 @@ public class GUI extends JFrame {
       JScrollPane inventoryScrollPaneToppings = new JScrollPane(inventoryTable2);
       managerInventoryPanel.add(inventoryScrollPaneToppings);
 
-      // TODO: Finish implementation of table
-    //   String[] columnNamesDrinks = {"Recipe_ID", "Recipe_Name", "isSlush", "Med_Price", "Large_Price", "Recipe_Price"};
-    //   // Make a JTable out of drink data returned from function in Application.java
-    //   Object[][] dataDrinks = app.getRecipes();
-    //   JTable drinksTable = new JTable(dataDrinks, columnNamesDrinks);
-    //   JScrollPane drinkScrollPane = new JScrollPane(drinkTable);
-    //   viewDrinksPanel.add(drinkScrollPane);
+      String[] columnNamesDrinks = {"Recipe_ID", "Recipe_Name", "isSlush", "Med_Price", "Large_Price", "Recipe_Price"};
+      // Make a JTable out of drink data returned from function in Application.java
+      Object[][] dataDrinks = app.getRecipes();
+      JTable drinksTable = new JTable(dataDrinks, columnNamesDrinks);
+      JScrollPane drinkScrollPane = new JScrollPane(drinksTable);
+      viewDrinksPanel.add(drinkScrollPane);
 
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
@@ -229,10 +232,26 @@ public class GUI extends JFrame {
                 tipLabel.setText("Tip: $" + tip);
                 totalLabel.setText("Total: $" + total);
                 //display total in jdialog box and clear if yes is clicked
+
+                app.createNewOrder();
+                for (_drink drink : drinks) {
+                    //create toppings used List<string>
+                    //create toppings quantity List<int>
+                    List<String> toppingsUsed = new ArrayList<>();
+                    List<Integer> toppingsQuantity = new ArrayList<>();
+                    for (_topping top : drink.toppings) {
+                        toppingsUsed.add(top.topping.getToppingName());
+                        toppingsQuantity.add(top.quantity);
+                    }
+                    //print contents of toppingsUsed and toppingsQuantity
+                    for(int i = 0; i < toppingsUsed.size(); i++) {
+                        System.out.println(toppingsUsed.get(i) + " " + toppingsQuantity.get(i));
+                    }
+                    app.addDrink(drink.recipe.getRecipeID(), "", drink.is_medium, drink.ice, drink.sugar, subtotal, toppingsUsed, toppingsQuantity);
+
+                }
                 app.placeOrder(tip, "");
-               
-                //TODO: send data to backend to update inventory
-                
+
                 int result = JOptionPane.showConfirmDialog(null, "Total: $" + total + "\n" + "Clear receipt?", "Checkout", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) { 
                     //clear receipt
@@ -326,15 +345,16 @@ public class GUI extends JFrame {
                 }
                 // CREATE SQL QUERY TO ADD DRINK INFO TO DATABASE
                 app.createRecipe(newDrinkName, isSlush, Integer.parseInt(newMediumPrice), Integer.parseInt(newLargePrice), Integer.parseInt(newRecipePrice), ingredientsArray, ingredientsQuantityArray, toppingsArray, toppingsQuantityArray);
-                // RefreshDrinkTable(drinksTable columnNamesDrinks, viewDrinksPanel);
+                //reload buttons
+                ReloadButtons(this);
                 JOptionPane.showMessageDialog(null, "Drink added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
 
             if (s.equals("Change Name")) {
                 String changedName = drinkName2.getText();
-                // TODO: Change Name
                 // Create SQL query to change the name in the database using changeDrinkID and new name
                 // Call it
+                app.updateRecipeName(changeDrinkID, changedName);
                 // Call function to refresh drink table
             }
             if (s.equals("Change Ingredients")) {
@@ -411,9 +431,10 @@ public class GUI extends JFrame {
                 if (!ingredientStock.equals("")) {
                     int stockINT = Integer.parseInt(ingredientStock);
                 }
-                // TODO: Add New Ingredient
+                
                 // Create SQL query to add a new ingredient and call it using ingredient name, unitPriceDBL, and stockINT
                 // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
+                app.addIngredients(ingredientNameStr, Double.parseDouble(ingredientUnitPrice), Integer.parseInt(ingredientStock));
             }
             if (s.equals("Change Ingredient Name")) {
                 String ingredientIDStr = modifyIngredientID.getText();
@@ -864,7 +885,7 @@ public class GUI extends JFrame {
     private void addItemToReceipt(ItemButton itemButton, JPanel panel) {
       // Get item details from the button
       //ask user if they want the medium price or large price
-      
+
       String itemName = itemButton.getItemName();
       double itemPrice;
 
@@ -916,9 +937,12 @@ public class GUI extends JFrame {
             ice[0]
     );
 
-    
-      // Create components for the new item
-      //make itemlabel wrap
+    //TODO: DRINK FUNCTIONALITY
+    //create new drink object
+      _drink newDrink = new _drink(itemButton.getRecipe(), size, iceResult, sugarResult);
+      //add drink to array
+      drinks.add(newDrink);
+
       JLabel itemLabel = new JLabel(itemName);
 
       JLabel priceLabel = new JLabel("    $" + itemPrice);
@@ -945,9 +969,14 @@ public class GUI extends JFrame {
                 itemListPanel.remove(iceLabel);
                 itemListPanel.remove(removeItemButton);
                 itemListPanel.remove(editItemButton);
+                itemListPanel.remove(minitoppanel);
+                //remove drink from drinks
                 //subtract from subtotal the price of the item
                 //TODO: query database for price of toppings too.
-                subtotal -= itemPrice;
+
+                subtotal -= newDrink.price;
+                drinks.remove(newDrink);
+
                 //update subtotal and total labels
                 subtotalLabel.setText("Subtotal: $" + subtotal);
                 total = subtotal + tip;
@@ -973,7 +1002,13 @@ public class GUI extends JFrame {
 
                 // Sample toppings (you can replace this with your actual toppings)
                 //TODO: query database for toppings and topping prices
-                String[] availableToppings = {"Sugar", "Milk", "Honey", "Caramel"};
+                //create string of available toppings based on database toppings.
+                //vector of toppings
+                Vector<String> availableToppings = new Vector<String>();
+
+                for (Topping top : app.toppings) {
+                    availableToppings.add(top.getToppingName());
+                }
 
                 //create spinners for each topping
                 List<JSpinner> spinners = new ArrayList<>();
@@ -997,21 +1032,36 @@ public class GUI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         // Process the selected toppings and quantity
                         int quantity;
-
+                        int topping_price = 0;
+                        ArrayList<_topping> selectedToppings = new ArrayList<>();
                         //iterate over spinners and get quantity, if not 0, add to list of toppings
                         for (int i = 0; i < spinners.size(); i++) {
                             JSpinner spinner = spinners.get(i);
-                            String topping = availableToppings[i];
+                            String topping = availableToppings.get(i);
+                            Topping topping_fr = app.toppings.get(i);
                             quantity = (int) spinner.getValue();
                             if (quantity != 0) {
                                 //add topping to list of toppings
-                                minitoppanel.add(new JLabel(topping + ": " + quantity));
+                                _topping newTopping = new _topping(topping_fr, topping, quantity);
+                                minitoppanel.add(new JLabel("    "+topping + ": " + quantity));
+                                
+                                topping_price += newTopping.topping.unit_price * quantity;
 
-                                selectedToppings.add(topping);
+                                selectedToppings.add(newTopping);
                                 selectedToppingsQuantity.add(quantity);
                             }
                         }
+                        //update the subtotal and total
+                        subtotal += topping_price;
+                        total = subtotal + tip;
+                        //update subtotal and total labels
+                        subtotalLabel.setText("Subtotal: $" + subtotal);
+                        totalLabel.setText("Total: $" + total);
+
+                        itemListPanel.revalidate();
+                        itemListPanel.repaint();
                         // Close the dialog
+                        newDrink.toppings = selectedToppings;
                         dialog.dispose();
                         minitoppanel.revalidate();
                         minitoppanel.repaint();
@@ -1060,10 +1110,6 @@ public class GUI extends JFrame {
     CashierCoffeePanel.removeAll();
     CashierOtherPanel.removeAll();
 
-    //then, await query from Application.java to get the list of recipes
-    
-    //create arraylist of ItemButtons
-    //for each recipe in the list of recipes, create a new ItemButton
     ArrayList<ItemButton> buttons = new ArrayList<ItemButton>();
 
     for (Recipe recette : app.recipes) {
@@ -1075,7 +1121,6 @@ public class GUI extends JFrame {
         if (recette.isSlush()) {
             CashierSlushiePanel.add(button);
         }
-        //else if name contains coffee, add to coffee panel
         else if (recette.getRecipeName().contains("Coffee")) {
             CashierCoffeePanel.add(button);
         }
@@ -1144,16 +1189,59 @@ class ItemButton extends JButton {
     public double getLargePrice() {
         return recipe.getLargePrice();
     }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
 }
 
 //make a class for toppings
 class _topping{
     String name;
+    Topping topping;
     int quantity;
 
-    public _topping(String name, int quantity){
+    public _topping(Topping topping, String name, int quantity){
+        this.topping = topping;
         this.name = name;
         this.quantity = quantity;
+
     }
 }
+
+class _drink{
+    Recipe recipe;
+    ArrayList<_topping> toppings;
+    boolean is_medium;
+    int ice;
+    int sugar;
+    double price; //price of drink is calculated using recipe price and topping prices
+
+    public _drink(Recipe recipe, boolean is_medium,int ice, int sugar){
+        this.recipe = recipe;
+        this.is_medium = is_medium;
+        this.ice = ice;
+        this.sugar = sugar;
+        if (is_medium) {
+            price = recipe.getMediumPrice();
+        }
+        else{
+            price = recipe.getLargePrice();
+        }
+    }
+
+    public void updateprice(){
+        if(is_medium){
+            price = recipe.getMediumPrice();
+        }
+        else{
+            price = recipe.getLargePrice();
+        }
+
+        for(_topping topping : toppings){
+            price += topping.quantity * topping.topping.unit_price; 
+        }
+    }
+}
+
 

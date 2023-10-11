@@ -90,11 +90,13 @@ SELECT * FROM Toppings WHERE Stock < 20;
 SELECT * FROM Recipe WHERE Recipe_Name LIKE '%Lemon%';
 
 --return the ingredients and quantity of ingredients in a particular recipe (Black Milk Tea)
-SELECT Recipe_Name, Ingredient_Name, Recipe_Ingredient.Quantity_Used FROM Recipe NATURAL JOIN Recipe_Ingredient NATURAL JOIN Ingredient WHERE Recipe_Name = 'Black Milk Tea';
+SELECT Recipe_Name, Ingredient_Name, Recipe_Ingredient.Quantity_Used FROM Recipe NATURAL JOIN Recipe_Ingredient NATURAL JOIN Ingredient WHERE Recipe_Name = 'Black Tea';
 
+SELECT Recipe_Name, Topping_Name, Recipe_Toppings.Quantity_Used FROM Recipe NATURAL JOIN Recipe_Toppings NATURAL JOIN Toppings WHERE Recipe_Name = 'Lemon Ai-Yu White Pearls';
 --return all the order items for a given Order_ (we use the Order_ID to identify the order)
 Select * FROM Order_Item WHERE Order_ID = 5;
 
+SELECT * FROM Order_Item WHERE date_ = '2023-10-10';
 --return the number of order items on a particular day (requries join between Order_ and Order_Item) TODO: currently not working
 SELECT Order_ID, Order_.Date_, COUNT(Order_Item_ID) FROM Order_ NATURAL JOIN Order_Item WHERE Date_ = '2020-11-01';
 

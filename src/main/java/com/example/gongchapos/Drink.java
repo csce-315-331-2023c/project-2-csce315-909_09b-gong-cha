@@ -1,5 +1,6 @@
 package com.example.gongchapos;
 
+import java.util.*;
 public class Drink extends Application{
     private
     int order_item_id;
@@ -12,6 +13,8 @@ public class Drink extends Application{
     String[] ice_values = {"none", "light", "regular"};
     String[] sugar_values = {"0%", "30%", "50%", "70%", "100%"};
     double item_price;
+
+    Map<Topping, Integer> used_toppings = new HashMap<Topping, Integer>();
 
     Recipe recipe;
 
@@ -85,5 +88,15 @@ public class Drink extends Application{
         return item_price;
     }
 
+    void insertTopping(Topping topping, int quantity)
+    {
+        used_toppings.put(topping, quantity);
+        item_price += (topping.getUnitPrice() * quantity);
+    }
+
+    Map<Topping, Integer> getToppingsUsed()
+    {
+        return used_toppings;
+    }
 
 }
