@@ -399,6 +399,12 @@ public class Application {
 
     Drink drink = new Drink(recipe, notes, is_medium, ice, sugar);
     drink.setOrderItemID(newItemID());
+    
+    for(int i = 0; i < toppings_used.size(); i++)
+    {
+      Topping topping = getTopping(toppings_used.get(i));
+      drink.insertTopping(topping, toppings_used_quantity.get(i));
+    }
 
     if(getOrderStatus())
     {
@@ -408,20 +414,6 @@ public class Application {
 
     order.setSubtotal(subtotal);
     order.addOrderItem(drink);
-
-    for(int i = 0; i < toppings_used.size(); i++)
-    {
-      Topping topping = getTopping(toppings_used.get(i));
-      orderItemToppings orderItemTopping = new orderItemToppings(drink.getOrderItemID(), topping.getToppingId(), toppings_used_quantity.get(i));
-
-       try
-        {
-          Statement stmt = conn.createStatement();
-          stmt.execute("INSERT INTO order_item_toppings VALUES('" + orderItemTopping.getOrderItemID() + "','" + orderItemTopping.getToppingId() + "','" + orderItemTopping.getQuantityUsed() + "');");
-        } catch (Exception e) {
-          JOptionPane.showMessageDialog(null, "Error accessing Database");
-        }
-    }
   }
 
   public void placeOrder(double tip, String coupon)
@@ -436,7 +428,7 @@ public class Application {
       Statement stmt = conn.createStatement();
       stmt.execute("INSERT INTO order_ VALUES ('" + order.getOrderID() + "','" + order.getDate() + "','" + order.getSubtotal() + "','" + order.getTip() + "','" + order.getCouponCode() + "','" + order.getTime() + "');");
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, "Error accessing Database");
+      JOptionPane.showMessageDialog(null, "Error accessing Database 1");
     }
 
     for(Drink current_drink : order.order_items)
@@ -446,10 +438,22 @@ public class Application {
         Statement stmt = conn.createStatement();
         stmt.execute("INSERT INTO order_item VALUES ('" + current_drink.getOrderItemID() + "','" + current_drink.getRecipeID() + "','" + order.getOrderID() + "','" + current_drink.getNotes() + "','" + current_drink.isMedium() + "','" + current_drink.getIce() + "','" + current_drink.getSugar() + "','" + current_drink.getItemPrice() + "');" );
       } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error accessing Database");
+        JOptionPane.showMessageDialog(null, "Error accessing Database 2");
       }
 
-      
+      for(Map.Entry<Topping, Integer> current_topping : current_drink.getToppingsUsed().entrySet())
+      {
+        orderItemToppings orderItemTopping = new orderItemToppings(current_drink.getOrderItemID(), current_topping.getKey().getToppingId(), current_topping.getValue());
+
+        try
+        {
+          Statement stmt = conn.createStatement();
+          stmt.execute("INSERT INTO order_item_toppings VALUES('" + orderItemTopping.getOrderItemID() + "','" + orderItemTopping.getToppingId() + "','" + orderItemTopping.getQuantityUsed() + "');");
+        } catch (Exception e) {
+          System.out.println(e);
+          JOptionPane.showMessageDialog(null, "Error accessing Database 0");
+        }
+      }
 
     }
     setOrderStatus(true);
