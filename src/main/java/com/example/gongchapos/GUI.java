@@ -533,9 +533,9 @@ public class GUI extends JFrame {
                 if (!toppingStockStr.equals("")) {
                     toppingStock = Integer.parseInt(toppingStockStr);
                 }
-                // TODO: Change Stock
                 // Create SQL query to change stock given int ID and int stock
                 // Call query
+                app.updateToppingsStock(toppingID, toppingStock);
                 // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
             }
         }        
