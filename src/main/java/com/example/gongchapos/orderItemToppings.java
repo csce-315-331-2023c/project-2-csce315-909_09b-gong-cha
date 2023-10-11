@@ -30,8 +30,7 @@ public class orderItemToppings {
     *
     * @return The order item ID.
     */
-    public
-    int getOrderItemID()
+    public int getOrderItemID()
     {
         return order_item_id;
     }
@@ -41,7 +40,7 @@ public class orderItemToppings {
     *
     * @return The topping ID.
     */
-    int getToppingId()
+    public int getToppingId()
     {
         return topping_id;
     }
@@ -51,7 +50,7 @@ public class orderItemToppings {
     *
     * @return The quantity used.
     */
-    int getQuantityUsed()
+    public int getQuantityUsed()
     {
         return quantity_used;
     }
