@@ -503,6 +503,7 @@ public class GUI extends JFrame {
                 // TODO: Change Topping Name
                 // Create SQL query to change topping name given int ID and String name
                 // Call query
+                app.updateToppingsName(toppingID, toppingNameStr);
                 // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
             }
             if(s.equals("Change Topping Unit Price")) {
@@ -519,6 +520,7 @@ public class GUI extends JFrame {
                 // TODO: Change Unit Price
                 // Create SQL query to change unit price given int ID and double unit_price
                 // Call query
+                app.updateToppingsUnitPrice(toppingID, newUnitPrice);
                 // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
             }
             if(s.equals("Change Topping Stock")) {
@@ -658,7 +660,7 @@ public class GUI extends JFrame {
       JLabel toppingStockLabel = CreateNewLabel("Stock: ");
 
       // declare necessary sections to modify a topping
-      JLabel modifytoppingLabel = CreateNewLabel("MODIFY INGREDIENT: ");
+      JLabel modifytoppingLabel = CreateNewLabel("MODIFY TOPPING: ");
       JLabel toppingIDLabel = CreateNewLabel("Topping ID (REQUIRED): ");
       JLabel modifyToppingNameLabel = CreateNewLabel("Topping Name: ");
       JLabel modifyToppingUnitPriceLabel = CreateNewLabel("Unit Price: ");

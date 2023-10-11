@@ -329,11 +329,21 @@ public class Application {
     }
   }  
 
-  public void updateToppingsStock(int topping_id, int new_quantity){
+  public void updateToppingsStock(int topping_id, double new_quantity){
     try
     {
       Statement stmt = conn.createStatement();
       stmt.execute("UPDATE toppings SET stock = " + new_quantity + "WHERE topping_id = " + topping_id + ";");
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }  
+
+  public void updateToppingsUnitPrice(int topping_id, double new_quantity){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.execute("UPDATE toppings SET unit_price = " + new_quantity + " WHERE topping_id = " + topping_id + ";");
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
