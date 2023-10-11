@@ -359,15 +359,17 @@ public class GUI extends JFrame {
             }
             if (s.equals("Change Ingredients")) {
                 String newIngredientsStr = ingredients2.getText();
-                if (!newIngredientsStr.equals("")) {
+                String newIngredientsQuantitiesStr = ingredientsQuantity2.getText();
+                if (!newIngredientsQuantitiesStr.equals("")) {
                     String[] newIngredientsStrArr = newIngredientsStr.split(",");
+                    String[] newIngredientsQuantitiesStrArr = newIngredientsQuantitiesStr.split(",");
                     ArrayList<String> newIngredientsArr = new ArrayList<>();
+                    ArrayList<Integer> newIngredientsQuantitiesArr = new ArrayList<>();
                     for (String topping : newIngredientsStrArr) {
                         newIngredientsArr.add(topping);
                     }
-                    int[] newIngredients = new int[newIngredientsStrArr.length];
-                    for (int i = 0; i < newIngredientsStrArr.length; i++) {
-                        newIngredients[i] = Integer.parseInt(newIngredientsStrArr[i]);
+                    for (String quantity : newIngredientsQuantitiesStrArr) {
+                        newIngredientsQuantitiesArr.add(Integer.parseInt(quantity));
                     }
                 }
                 // TODO: Change Ingredients
@@ -500,7 +502,6 @@ public class GUI extends JFrame {
                 if (!toppingIDStr.equals("")) {
                     toppingID = Integer.parseInt(toppingIDStr);
                 }
-                // TODO: Change Topping Name
                 // Create SQL query to change topping name given int ID and String name
                 // Call query
                 app.updateToppingsName(toppingID, toppingNameStr);
@@ -517,7 +518,6 @@ public class GUI extends JFrame {
                 if (!toppingUnitPrice.equals("")) {
                     newUnitPrice = Double.parseDouble(toppingUnitPrice);
                 }
-                // TODO: Change Unit Price
                 // Create SQL query to change unit price given int ID and double unit_price
                 // Call query
                 app.updateToppingsUnitPrice(toppingID, newUnitPrice);
