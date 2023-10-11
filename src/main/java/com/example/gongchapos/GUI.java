@@ -490,14 +490,17 @@ public class GUI extends JFrame {
                 String toppingNameStr = toppingName.getText();
                 String toppingUnitPriceStr = toppingUnitPrice.getText();
                 String toppingStockStr = toppingStock.getText();
+                double unitPriceDBL = -1;
+                int stockINT = -1;
                 if (!toppingUnitPriceStr.equals("")) {
-                    double unitPriceDBL = Double.parseDouble(toppingUnitPriceStr);
+                    unitPriceDBL = Double.parseDouble(toppingUnitPriceStr);
                 }
                 if (!toppingStockStr.equals("")) {
-                    int stockINT = Integer.parseInt(toppingStockStr);
+                    stockINT = Integer.parseInt(toppingStockStr);
                 }
                 // TODO: Add New Topping
                 // Create SQL query to add a new topping and call it using topping name, unitPriceDBL, and stockINT
+                app.addToppings(toppingNameStr, unitPriceDBL, stockINT);
                 // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
             }
             if(s.equals("Change Topping Name")) {
