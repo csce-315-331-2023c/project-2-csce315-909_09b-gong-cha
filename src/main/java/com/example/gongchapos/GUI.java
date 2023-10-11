@@ -386,8 +386,9 @@ public class GUI extends JFrame {
                 if (!ingredientStock.equals("")) {
                     int stockINT = Integer.parseInt(ingredientStock);
                 }
-                // TODO: Add New Ingredient
+                
                 // Create SQL query to add a new ingredient and call it using ingredient name, unitPriceDBL, and stockINT
+                app.addIngredients(ingredientNameStr, Double.parseDouble(ingredientUnitPrice), Integer.parseInt(ingredientStock));
             }
             if (s.equals("Change Ingredient Name")) {
                 String ingredientIDStr = modifyIngredientID.getText();

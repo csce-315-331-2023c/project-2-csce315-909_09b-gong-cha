@@ -183,7 +183,7 @@ public class Application {
         JOptionPane.showMessageDialog(null, "Error accessing Database 4");
       }
     }
-    
+    populate();
   }
 
   // Retuns a recipe given a name, returns null if recipe not found
@@ -234,26 +234,55 @@ public class Application {
   }
   
   // adds ingredients into recipe_ingredients
-  public void addIngredients(ArrayList<recipeIngredient> ingredients){
-
-    for(recipeIngredient cur_ingredient: ingredients){
-      try
+  public void addIngredients(String name, double price, int stock)
+  {
+    int ingredient_id = -1;
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM ingredient ORDER BY ingredient_id DESC LIMIT 1;");
+      while(result.next())
       {
-        Statement stmt = conn.createStatement();
-        stmt.executeQuery("INSERT INTO recipe_ingredient VALUES (" + cur_ingredient.getRecipeID() + cur_ingredient.getIngredientID() + cur_ingredient.getQuantityUsed() + ")" );
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error accessing Database");
+        ingredient_id = result.getInt("ingredient_id") + 1;
       }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");  
     }
+    
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.execute("INSERT INTO ingredient VALUES ('" + ingredient_id + "','" + name + "','" + price + "','" + stock + "');" );
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+    
   }
 
 
   // adds toppings into recipe_toppings
-  // public void addToppings(ArrayList<Topping> toppings){
-  //   for(Topping cur_topping: toppings){
-
-  //   }
-  // }
+  public void addToppings(String name, double price, int stock){
+    int topping_id = -1;
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM toppings ORDER BY topping_id DESC LIMIT 1;");
+      while(result.next())
+      {
+        topping_id = result.getInt("topping_id") + 1;
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");  
+    }
+    
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.execute("INSERT INTO toppings VALUES ('" + topping_id + "','" + name + "','" + price + "','" + stock + "');" );
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }
 
 
   // update recipe med_price
@@ -293,7 +322,17 @@ public class Application {
     try
     {
       Statement stmt = conn.createStatement();
-      stmt.execute("UPDATE ingredient SET stock =" + new_quantity + "WHERE ingredient_id =" + ingredient_id + ";");
+      stmt.execute("UPDATE ingredient SET stock = " + new_quantity + "WHERE ingredient_id = " + ingredient_id + ";");
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }  
+
+  public void updateToppingsStock(int topping_id, double new_quantity){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.execute("UPDATE toppings SET stock = " + new_quantity + "WHERE topping_id = " + topping_id + ";");
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
@@ -409,6 +448,9 @@ public class Application {
       } catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Error accessing Database");
       }
+
+      
+
     }
     setOrderStatus(true);
   }
