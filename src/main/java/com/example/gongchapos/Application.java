@@ -289,6 +289,7 @@ public class Application {
   public void updateMedPrice(int recipe_id, double new_quantity){
     try
     {
+
       Statement stmt = conn.createStatement();
       stmt.execute("UPDATE recipe SET med_price =" + new_quantity + "WHERE recipe_id =" + recipe_id + ";");
     } catch (Exception e) {
@@ -356,7 +357,7 @@ public class Application {
       return order_id;
     }
 
-    private int newItemID()
+  private int newItemID()
   {
     int order_id = -1;
     try
@@ -529,7 +530,103 @@ public class Application {
     return toReturn;  
   }
 
+  public void updateRecipeName(int recipe_id, String new_name){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.execute("UPDATE recipe SET recipe_name  = '" + new_name + "' WHERE recipe_id = '" + recipe_id + "';");
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }
 
+  public Object[][] getRecipes(){
+    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM recipe;");
+      while(result.next())
+      {
+        ArrayList<String> cur_recipe = new ArrayList<String>();
+        String recipe_id = String.valueOf(result.getInt("recipe_id"));
+        String recipe_name = result.getString("recipe_name");
+        String is_slush = String.valueOf(result.getBoolean("is_slush"));
+        String med_price = String.valueOf(result.getDouble("med_price"));
+        String large_price = String.valueOf(result.getDouble("large_price"));
+        String recipe_price = String.valueOf(result.getDouble("recipe_price"));
+
+        cur_recipe.add(recipe_id);
+        cur_recipe.add(recipe_name);
+        cur_recipe.add(is_slush);
+        cur_recipe.add(med_price);
+        cur_recipe.add(large_price);
+        cur_recipe.add(recipe_price);
+
+        tempContainer.add(cur_recipe);
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  
+    Object[][] toReturn = new Object[tempContainer.size()][6];
+    for(int i = 0; i < tempContainer.size(); i++){
+      ArrayList<String> cur_arr = tempContainer.get(i);
+      Object[] cur = new Object[6];
+      cur = cur_arr.toArray();
+      toReturn[i] = cur; // error here
+    }
+    return toReturn;  
+  }
+
+  public int getIngredientId(String ingredient_name){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM ingredient;");
+      while(result.next())
+      {
+        if (result.getString("ingredient_name").equals(ingredient_name)){
+          return result.getInt("ingredient_id");
+        }
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+    return 0;
+  }
+
+
+  // public void testFunction(){
+
+  // }
+
+  // public void modifyMultipleIngredients(int recipe_id, ArrayList<String> ingredient_names, ArrayList<Integer> quantities){
+
+  //   // remove ingredients with recipe_id from recipe_ingredient
+  //   try
+  //   {
+  //     Statement stmt = conn.createStatement();
+  //     ResultSet result = stmt.executeQuery("SELECT * FROM ingredient WHERE recipe_id = '" + );
+  //     while(result.next())
+  //     {
+  //       if (result.getString("ingredient_name").equals(ingredient_name)){
+  //         return result.getInt("ingredient_id");
+  //       }
+  //     }
+  //   } catch (Exception e) {
+  //     JOptionPane.showMessageDialog(null, "Error accessing Database");
+  //   }
+
+
+
+  //   // obtain ingredient_id using ingredient_name from arraylist of ingredient_names
+
+  //   // insert into table new ingredients with recipe id and quantity
+
+
+  // }
 
   
 }
