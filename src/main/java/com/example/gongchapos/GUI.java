@@ -5,6 +5,7 @@ import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 //create class for the POS system cashier end
 
@@ -103,6 +104,8 @@ public class GUI extends JFrame {
       JPanel addDrinkPanel = new JPanel();  
       JPanel addIngredientPanel = new JPanel();
       JPanel changeIngredientPanel = new JPanel();
+      JPanel addToppingPanel = new JPanel();
+      JPanel changeToppingPanel = new JPanel();
 
 
       // These variables are declared so we can access their values, part of adding a new drink in manager
@@ -140,8 +143,45 @@ public class GUI extends JFrame {
       JTextField modifyUnitPrice = CreateNewTextField();
       JTextField modifyStock = CreateNewTextField();
 
-    JButton checkoutButton = new JButton("Checkout");
-    JButton managerCheckoutButton = new JButton("Checkout");
+      // Repeat to add to add topping panel
+      JTextField toppingName = CreateNewTextField();
+      JTextField toppingUnitPrice = CreateNewTextField();
+      JTextField toppingStock = CreateNewTextField();
+
+      // Repeat to add to modify topping panel
+      JTextField modifyToppingID = CreateNewTextField();
+      JTextField modifyToppingName = CreateNewTextField();
+      JTextField modifyToppingUnitPrice = CreateNewTextField();
+      JTextField modifyToppingStock = CreateNewTextField();
+
+      JButton checkoutButton = new JButton("Checkout");
+      JButton managerCheckoutButton = new JButton("Checkout");
+
+      JPanel changeInventoryPanel = new JPanel();
+      JPanel viewDrinksPanel = new JPanel();
+      JPanel managerInventoryPanel = new JPanel();
+      
+      String[] columnNames = {"Ingredient_ID", "Ingredient_Name", "Unit_Price", "Stock"};
+      // Make a JTable out of the data returned from function in Application.java
+      Object[][] data = app.getIngredients();
+      JTable inventoryTable = new JTable(data, columnNames);
+      JScrollPane inventoryScrollPane = new JScrollPane(inventoryTable);
+      managerInventoryPanel.add(inventoryScrollPane);
+
+      String[] columnNamesToppings = {"Topping_ID", "Topping_Name", "Unit_Price", "Stock"};
+      // Make a JTable out of the data returned from function in Application.java
+      Object[][] dataToppings = app.getToppings();
+      JTable inventoryTable2 = new JTable(dataToppings, columnNamesToppings);
+      JScrollPane inventoryScrollPaneToppings = new JScrollPane(inventoryTable2);
+      managerInventoryPanel.add(inventoryScrollPaneToppings);
+
+      // TODO: Finish implementation of table
+    //   String[] columnNamesDrinks = {"Recipe_ID", "Recipe_Name", "isSlush", "Med_Price", "Large_Price", "Recipe_Price"};
+    //   // Make a JTable out of drink data returned from function in Application.java
+    //   Object[][] dataDrinks = app.getRecipes();
+    //   JTable drinksTable = new JTable(dataDrinks, columnNamesDrinks);
+    //   JScrollPane drinkScrollPane = new JScrollPane(drinkTable);
+    //   viewDrinksPanel.add(drinkScrollPane);
 
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
@@ -286,7 +326,7 @@ public class GUI extends JFrame {
                 }
                 // CREATE SQL QUERY TO ADD DRINK INFO TO DATABASE
                 app.createRecipe(newDrinkName, isSlush, Integer.parseInt(newMediumPrice), Integer.parseInt(newLargePrice), Integer.parseInt(newRecipePrice), ingredientsArray, ingredientsQuantityArray, toppingsArray, toppingsQuantityArray);
-                
+                // RefreshDrinkTable(drinksTable columnNamesDrinks, viewDrinksPanel);
                 JOptionPane.showMessageDialog(null, "Drink added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
 
@@ -295,6 +335,7 @@ public class GUI extends JFrame {
                 // TODO: Change Name
                 // Create SQL query to change the name in the database using changeDrinkID and new name
                 // Call it
+                // Call function to refresh drink table
             }
             if (s.equals("Change Ingredients")) {
                 String newIngredientsStr = ingredients2.getText();
@@ -338,6 +379,7 @@ public class GUI extends JFrame {
                 }
                 // Call SQL query with ID and new price
                 app.updateMedPrice(changeDrinkID, price);
+                // RefreshDrinkTable(drinksTable columnNamesDrinks, viewDrinksPanel);
             }
             if (s.equals("Change Large Price")) {
                 String priceStr = largePrice2.getText();
@@ -347,6 +389,7 @@ public class GUI extends JFrame {
                 }
                 // Call SQL query with ID and new price
                 app.updateLargePrice(changeDrinkID, price);
+                // RefreshDrinkTable(drinksTable columnNamesDrinks, viewDrinksPanel);
             }
             if (s.equals("Change Recipe Price")) {
                 String priceStr = recipePrice2.getText();
@@ -356,6 +399,7 @@ public class GUI extends JFrame {
                 }
                 // Call SQL query with ID and new price
                 app.updateRecipePrice(changeDrinkID, price);
+                // RefreshDrinkTable(drinksTable columnNamesDrinks, viewDrinksPanel);
             }
             if (s.equals("Add New Ingredient")) {
                 String ingredientNameStr = ingredientName.getText();
@@ -369,6 +413,7 @@ public class GUI extends JFrame {
                 }
                 // TODO: Add New Ingredient
                 // Create SQL query to add a new ingredient and call it using ingredient name, unitPriceDBL, and stockINT
+                // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
             }
             if (s.equals("Change Ingredient Name")) {
                 String ingredientIDStr = modifyIngredientID.getText();
@@ -380,6 +425,7 @@ public class GUI extends JFrame {
                 // TODO: Change Ingredient Name
                 // Create SQL query to change ingredient name given int ID and String name
                 // Call query
+                // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
             }
             if (s.equals("Change Unit Price")) {
                 String ingredientIDStr = modifyIngredientID.getText();
@@ -395,6 +441,7 @@ public class GUI extends JFrame {
                 // TODO: Change Unit Price
                 // Create SQL query to change unit price given int ID and double unit_price
                 // Call query
+                // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
             }
             if (s.equals("Change Stock")) {
                 String ingredientIDStr = modifyIngredientID.getText();
@@ -410,6 +457,65 @@ public class GUI extends JFrame {
                 // TODO: Change Stock
                 // Create SQL query to change stock given int ID and int stock
                 // Call query
+                // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
+            }
+            if(s.equals("Add New Topping")) {
+                String toppingNameStr = toppingName.getText();
+                String toppingUnitPriceStr = toppingUnitPrice.getText();
+                String toppingStockStr = toppingStock.getText();
+                if (!toppingUnitPriceStr.equals("")) {
+                    double unitPriceDBL = Double.parseDouble(toppingUnitPriceStr);
+                }
+                if (!toppingStockStr.equals("")) {
+                    int stockINT = Integer.parseInt(toppingStockStr);
+                }
+                // TODO: Add New Topping
+                // Create SQL query to add a new topping and call it using topping name, unitPriceDBL, and stockINT
+                // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
+            }
+            if(s.equals("Change Topping Name")) {
+                String toppingIDStr = modifyToppingID.getText();
+                String toppingNameStr = modifyToppingName.getText();
+                int toppingID = -1;
+                if (!toppingIDStr.equals("")) {
+                    toppingID = Integer.parseInt(toppingIDStr);
+                }
+                // TODO: Change Topping Name
+                // Create SQL query to change topping name given int ID and String name
+                // Call query
+                // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
+            }
+            if(s.equals("Change Topping Unit Price")) {
+                String toppingIDStr = modifyToppingID.getText();
+                String toppingUnitPrice = modifyToppingUnitPrice.getText();
+                double newUnitPrice = -1;
+                int toppingID = -1;
+                if (!toppingIDStr.equals("")) {
+                   toppingID = Integer.parseInt(toppingIDStr);
+                }
+                if (!toppingUnitPrice.equals("")) {
+                    newUnitPrice = Double.parseDouble(toppingUnitPrice);
+                }
+                // TODO: Change Unit Price
+                // Create SQL query to change unit price given int ID and double unit_price
+                // Call query
+                // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
+            }
+            if(s.equals("Change Topping Stock")) {
+                String toppingIDStr = modifyToppingID.getText();
+                String toppingStockStr = modifyToppingStock.getText();
+                int toppingStock = -1;
+                int toppingID = -1;
+                if (!toppingIDStr.equals("")) {
+                    toppingID = Integer.parseInt(toppingIDStr);
+                }
+                if (!toppingStockStr.equals("")) {
+                    toppingStock = Integer.parseInt(toppingStockStr);
+                }
+                // TODO: Change Stock
+                // Create SQL query to change stock given int ID and int stock
+                // Call query
+                // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
             }
         }        
       };
@@ -426,6 +532,10 @@ public class GUI extends JFrame {
       JButton changeUnitPrice = new JButton("Change Unit Price");
       JButton changeStock = new JButton ("Change Stock");
 
+      JButton changeToppingName = new JButton("Change Topping Name");
+      JButton changeToppingUnitPrice = new JButton("Change Topping Unit Price");
+      JButton changeToppingStock = new JButton ("Change Topping Stock");
+
       changeName.addActionListener(actionListener);
       changeIngredients.addActionListener(actionListener);
       changeToppings.addActionListener(actionListener);
@@ -433,6 +543,12 @@ public class GUI extends JFrame {
       changeLrgPrice.addActionListener(actionListener);
       changeRecipePrice.addActionListener(actionListener);
       changeSlushy.addActionListener(actionListener);
+      changeIngredientName.addActionListener(actionListener);
+      changeUnitPrice.addActionListener(actionListener);
+      changeStock.addActionListener(actionListener);
+      changeToppingName.addActionListener(actionListener);
+      changeToppingUnitPrice.addActionListener(actionListener);
+      changeToppingStock.addActionListener(actionListener);
 
       // add actionlistener to button
       exitButton.addActionListener(actionListener);
@@ -467,32 +583,6 @@ public class GUI extends JFrame {
       //make cashierotherpanel
       CashierOtherPanel = new JPanel();
 
-      JPanel changeInventoryPanel = new JPanel();
-      JPanel viewDrinksPanel = new JPanel();
-      JPanel managerInventoryPanel = new JPanel();
-      
-      String[] columnNames = {"Ingredient_ID", "Ingredient_Name", "Unit_Price", "Stock"};
-      // Make a JTable out of the data returned from function in Application.java
-      Object[][] data = app.getIngredients();
-      JTable inventoryTable = new JTable(data, columnNames);
-      JScrollPane inventoryScrollPane = new JScrollPane(inventoryTable);
-      managerInventoryPanel.add(inventoryScrollPane);
-
-      String[] columnNamesToppings = {"Topping_ID", "Topping_Name", "Unit_Price", "Stock"};
-      // Make a JTable out of the data returned from function in Application.java
-      Object[][] dataToppings = app.getToppings();
-      JTable inventoryTable2 = new JTable(dataToppings, columnNamesToppings);
-      JScrollPane inventoryScrollPaneToppings = new JScrollPane(inventoryTable2);
-      managerInventoryPanel.add(inventoryScrollPaneToppings);
-
-      // TODO: Finish implementation of table
-    //   String[] columnNamesDrinks = {};
-    //   // Make a JTable out of drink data returned from function in Application.java
-    //   Object[][] dataDrinks = app.getDrinks();
-    //   JTable drinkTable = new JTable(dataDrinks, columnNamesDrinks);
-    //   JScrollPane drinkScrollPane = new JScrollPane(drinkTable);
-    //   viewDrinksPanel.add(drinkScrollPane);
-
       //make manageractionspanel
       JPanel managerActionsPanel = new JPanel();
       addDrinkPanel.setLayout(new BoxLayout(addDrinkPanel, BoxLayout.Y_AXIS));
@@ -502,6 +592,8 @@ public class GUI extends JFrame {
       // Do same thing for ingredients
       addIngredientPanel.setLayout(new BoxLayout(addIngredientPanel, BoxLayout.Y_AXIS));
       changeIngredientPanel.setLayout(new BoxLayout(changeIngredientPanel, BoxLayout.Y_AXIS));
+      addToppingPanel.setLayout(new BoxLayout(addToppingPanel, BoxLayout.Y_AXIS));
+      changeToppingPanel.setLayout(new BoxLayout(changeToppingPanel, BoxLayout.Y_AXIS));
 
       // declare necessary sections to add a drink
       JLabel addDrinkLabel = CreateNewLabel("ADD DRINK: ");
@@ -538,6 +630,19 @@ public class GUI extends JFrame {
       JLabel modifyNameLabel = CreateNewLabel("Ingredient Name: ");
       JLabel modifyUnitPriceLabel = CreateNewLabel("Unit Price: ");
       JLabel modifyStockLabel = CreateNewLabel("Stock: ");
+    
+      // declare necessary sections to add a topping
+      JLabel addToppingLabel = CreateNewLabel("ADD TOPPING: ");
+      JLabel toppingNameLabel = CreateNewLabel("Topping Name: ");
+      JLabel toppingUnitPriceLabel = CreateNewLabel("Unit Price: ");
+      JLabel toppingStockLabel = CreateNewLabel("Stock: ");
+
+      // declare necessary sections to modify a topping
+      JLabel modifytoppingLabel = CreateNewLabel("MODIFY INGREDIENT: ");
+      JLabel toppingIDLabel = CreateNewLabel("Topping ID (REQUIRED): ");
+      JLabel modifyToppingNameLabel = CreateNewLabel("Topping Name: ");
+      JLabel modifyToppingUnitPriceLabel = CreateNewLabel("Unit Price: ");
+      JLabel modifyToppingStockLabel = CreateNewLabel("Stock: ");
 
       // Add Drink alignment
       isSlushy.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -618,6 +723,29 @@ public class GUI extends JFrame {
       changeIngredientPanel.add(modifyStock);
       changeIngredientPanel.add(changeStock);
 
+      // For add topping
+      addToppingPanel.add(addToppingLabel);
+      addToppingPanel.add(toppingNameLabel);
+      addToppingPanel.add(toppingName);
+      addToppingPanel.add(toppingUnitPriceLabel);
+      addToppingPanel.add(toppingUnitPrice);
+      addToppingPanel.add(toppingStockLabel);
+      addToppingPanel.add(toppingStock);
+
+      // For modify topping
+      changeToppingPanel.add(modifytoppingLabel);
+      changeToppingPanel.add(toppingIDLabel);
+      changeToppingPanel.add(modifyToppingID);
+      changeToppingPanel.add(modifyToppingNameLabel);
+      changeToppingPanel.add(modifyToppingName);
+      changeToppingPanel.add(changeToppingName);
+      changeToppingPanel.add(modifyToppingUnitPriceLabel);
+      changeToppingPanel.add(modifyToppingUnitPrice);
+      changeToppingPanel.add(changeToppingUnitPrice);
+      changeToppingPanel.add(modifyToppingStockLabel);
+      changeToppingPanel.add(modifyToppingStock);
+      changeToppingPanel.add(changeToppingStock);
+    
       // Create the new drink button
       JButton newDrinkButton = new JButton("Add New Drink");
       newDrinkButton.addActionListener(actionListener);
@@ -627,11 +755,17 @@ public class GUI extends JFrame {
       newIngredientButton.addActionListener(actionListener);
       addIngredientPanel.add(newIngredientButton);
 
+      JButton newToppingButton = new JButton("Add New Topping");
+      newToppingButton.addActionListener(actionListener);
+      addToppingPanel.add(newToppingButton);
+
       managerActionsPanel.add(addDrinkPanel, BorderLayout.WEST);
       managerActionsPanel.add(changeDrinkPanel, BorderLayout.EAST);
 
       changeInventoryPanel.add(addIngredientPanel, BorderLayout.WEST);
-      changeInventoryPanel.add(changeIngredientPanel, BorderLayout.EAST);
+      changeInventoryPanel.add(changeIngredientPanel, BorderLayout.WEST);
+      changeInventoryPanel.add(addToppingPanel, BorderLayout.EAST);
+      changeInventoryPanel.add(changeToppingPanel, BorderLayout.EAST);
 
       managerTabbedPane.addTab("Inventory", null, managerInventoryPanel, "Does nothing");
       managerTabbedPane.addTab("Add/Update Inventory Items", null, changeInventoryPanel, "Does nothing");
@@ -698,6 +832,33 @@ public class GUI extends JFrame {
       managerFrame.setResizable(false);
 
       loginFrame.setVisible(true);
+    }
+
+    public void RefreshIngredientTable(JTable table, String[] columnNames, JPanel panel) {
+        // TODO: refresh the table with new values
+        Object[][] newData = app.getIngredients();
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setDataVector(newData, columnNames);
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    public void RefreshToppingTable(JTable table, String[] columnNames, JPanel panel) {
+        // TODO: refresh the table with new values
+        Object[][] newData = app.getToppings();
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setDataVector(newData, columnNames);
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    public void RefreshDrinkTable(JTable table, String[] columnNames, JPanel panel) {
+        // TODO: refresh the table with new values
+        // Object[][] newData = app.getDrinks();
+        // DefaultTableModel model = (DefaultTableModel) table.getModel();
+        // model.setDataVector(newData, columnNames);
+        // panel.revalidate();
+        // panel.repaint();
     }
 
     private void addItemToReceipt(ItemButton itemButton, JPanel panel) {
