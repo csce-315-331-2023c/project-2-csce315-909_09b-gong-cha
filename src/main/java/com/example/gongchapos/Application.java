@@ -289,7 +289,7 @@ public class Application {
   }
 
   // update ingredient stock 
-  public void updateIngredientStock(int ingredient_id, double new_quantity){
+  public void updateIngredientStock(int ingredient_id, int new_quantity){
     try
     {
       Statement stmt = conn.createStatement();

@@ -456,7 +456,7 @@ public class GUI extends JFrame {
                 }
                 // TODO: Change Stock
                 // Create SQL query to change stock given int ID and int stock
-                // Call query
+                app.updateIngredientStock(ingredientID, ingredientStock);
                 // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
             }
             if(s.equals("Add New Topping")) {
