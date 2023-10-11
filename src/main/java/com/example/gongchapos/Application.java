@@ -322,11 +322,31 @@ public class Application {
   }
 
   // update ingredient stock 
-  public void updateIngredientStock(int ingredient_id, double new_quantity){
+  public void updateIngredientStock(int ingredient_id, int new_quantity){
     try
     {
       Statement stmt = conn.createStatement();
       stmt.execute("UPDATE ingredient SET stock = " + new_quantity + "WHERE ingredient_id = " + ingredient_id + ";");
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }  
+
+  public void updateIngredientName(int ingredient_id, String new_name){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.execute("UPDATE ingredient SET ingredient_name = '" + new_name + "' WHERE ingredient_id = " + ingredient_id + ";");
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }  
+
+  public void updateIngredientUnitPrice(int ingredient_id, double new_quantity){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.execute("UPDATE ingredient SET unit_price = " + new_quantity + " WHERE ingredient_id = " + ingredient_id + ";");
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
@@ -337,6 +357,26 @@ public class Application {
     {
       Statement stmt = conn.createStatement();
       stmt.execute("UPDATE toppings SET stock = " + new_quantity + "WHERE topping_id = " + topping_id + ";");
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }  
+
+  public void updateToppingsName(int topping_id, String new_name){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.execute("UPDATE toppings SET topping_name = '" + new_name + "' WHERE topping_id = " + topping_id + ";");
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }  
+
+  public void updateToppingsUnitPrice(int topping_id, double new_quantity){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.execute("UPDATE toppings SET unit_price = " + new_quantity + " WHERE topping_id = " + topping_id + ";");
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
