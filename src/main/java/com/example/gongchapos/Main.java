@@ -1,5 +1,4 @@
 package com.example.gongchapos;
-
 public class Main {
     
 
@@ -17,5 +16,6 @@ public class Main {
 
         Application app = new Application();
         app.run(netID, password);
+
     }
 }
