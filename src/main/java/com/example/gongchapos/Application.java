@@ -11,6 +11,8 @@ public class Application {
   protected List<Recipe> recipes = new ArrayList<Recipe>();
   protected List<Topping> toppings = new ArrayList<Topping>();
   protected Connection conn = null;
+  private int order_id = -1;
+  private int item_id = -1;
   private Order order = null;
 
   private boolean isNewOrder = true;
@@ -30,6 +32,8 @@ public class Application {
   {
     ConnectToDatabase(netID, password);
     populate();
+    order_id = newOrderID();
+    item_id = newItemID();
     gui = new GUI(this);
   }
 
@@ -289,7 +293,6 @@ public class Application {
   public void updateMedPrice(int recipe_id, double new_quantity){
     try
     {
-
       Statement stmt = conn.createStatement();
       stmt.execute("UPDATE recipe SET med_price =" + new_quantity + "WHERE recipe_id =" + recipe_id + ";");
     } catch (Exception e) {
@@ -377,7 +380,7 @@ public class Application {
       return order_id;
     }
 
-  private int newItemID()
+    private int newItemID()
   {
     int order_id = -1;
     try
@@ -399,7 +402,8 @@ public class Application {
     LocalDate date = LocalDate.now();
 
     order = new Order(date.toString());
-    int ID = newOrderID();
+    int ID = order_id;
+    order_id++;
     if(ID != -1)
     {
       order.setOrderID(ID);
@@ -419,22 +423,31 @@ public class Application {
     Recipe recipe = getRecipe(recipe_ID);
 
     Drink drink = new Drink(recipe, notes, is_medium, ice, sugar);
-    drink.setOrderItemID(newItemID());
-    
-    for(int i = 0; i < toppings_used.size(); i++)
-    {
-      Topping topping = getTopping(toppings_used.get(i));
-      drink.insertTopping(topping, toppings_used_quantity.get(i));
-    }
-
+    drink.setOrderItemID(item_id);
+    item_id++;
     if(getOrderStatus())
     {
         setOrderStatus(false);
         order = createNewOrder();
     }
-
+    System.out.println("Order ID: " + order.getOrderID());
+    
     order.setSubtotal(subtotal);
     order.addOrderItem(drink);
+
+    for(int i = 0; i < toppings_used.size(); i++)
+    {
+      Topping topping = getTopping(toppings_used.get(i));
+      orderItemToppings orderItemTopping = new orderItemToppings(drink.getOrderItemID(), topping.getToppingId(), toppings_used_quantity.get(i));
+
+       try
+        {
+          Statement stmt = conn.createStatement();
+          stmt.execute("INSERT INTO order_item_toppings VALUES('" + orderItemTopping.getOrderItemID() + "','" + orderItemTopping.getToppingId() + "','" + orderItemTopping.getQuantityUsed() + "');");
+        } catch (Exception e) {
+          JOptionPane.showMessageDialog(null, "Error accessing Database");
+        }
+    }
   }
 
   public void placeOrder(double tip, String coupon)
@@ -449,7 +462,7 @@ public class Application {
       Statement stmt = conn.createStatement();
       stmt.execute("INSERT INTO order_ VALUES ('" + order.getOrderID() + "','" + order.getDate() + "','" + order.getSubtotal() + "','" + order.getTip() + "','" + order.getCouponCode() + "','" + order.getTime() + "');");
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, "Error accessing Database 1");
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
 
     for(Drink current_drink : order.order_items)
@@ -459,22 +472,10 @@ public class Application {
         Statement stmt = conn.createStatement();
         stmt.execute("INSERT INTO order_item VALUES ('" + current_drink.getOrderItemID() + "','" + current_drink.getRecipeID() + "','" + order.getOrderID() + "','" + current_drink.getNotes() + "','" + current_drink.isMedium() + "','" + current_drink.getIce() + "','" + current_drink.getSugar() + "','" + current_drink.getItemPrice() + "');" );
       } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error accessing Database 2");
+        JOptionPane.showMessageDialog(null, "Error accessing Database");
       }
 
-      for(Map.Entry<Topping, Integer> current_topping : current_drink.getToppingsUsed().entrySet())
-      {
-        orderItemToppings orderItemTopping = new orderItemToppings(current_drink.getOrderItemID(), current_topping.getKey().getToppingId(), current_topping.getValue());
-
-        try
-        {
-          Statement stmt = conn.createStatement();
-          stmt.execute("INSERT INTO order_item_toppings VALUES('" + orderItemTopping.getOrderItemID() + "','" + orderItemTopping.getToppingId() + "','" + orderItemTopping.getQuantityUsed() + "');");
-        } catch (Exception e) {
-          System.out.println(e);
-          JOptionPane.showMessageDialog(null, "Error accessing Database 0");
-        }
-      }
+      
 
     }
     setOrderStatus(true);
@@ -622,35 +623,97 @@ public class Application {
   }
 
 
-  // public void testFunction(){
+  public void modifyMultipleIngredients(int recipe_id, ArrayList<String> ingredient_names, ArrayList<Integer> quantities){
 
-  // }
+    // remove ingredients with recipe_id from recipe_ingredient
+    try
+    {
+      Statement stmt = conn.createStatement();
+      String query = "DELETE FROM recipe_ingredient WHERE recipe_id = '" + recipe_id + "';" ;
+      PreparedStatement st = conn.prepareStatement(query);
+      st.executeUpdate();
+      System.out.println("deleted recipe ingredients");
 
-  // public void modifyMultipleIngredients(int recipe_id, ArrayList<String> ingredient_names, ArrayList<Integer> quantities){
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "deletion");
+    }
 
-  //   // remove ingredients with recipe_id from recipe_ingredient
-  //   try
-  //   {
-  //     Statement stmt = conn.createStatement();
-  //     ResultSet result = stmt.executeQuery("SELECT * FROM ingredient WHERE recipe_id = '" + );
-  //     while(result.next())
-  //     {
-  //       if (result.getString("ingredient_name").equals(ingredient_name)){
-  //         return result.getInt("ingredient_id");
-  //       }
-  //     }
-  //   } catch (Exception e) {
-  //     JOptionPane.showMessageDialog(null, "Error accessing Database");
-  //   }
+    // obtain ingredient_id using ingredient_name from arraylist of ingredient_names
+    ArrayList<Integer> ingredient_ids = new ArrayList<Integer>();
+    for(String cur_name: ingredient_names){
+      ingredient_ids.add(getIngredientId(cur_name));
+      System.out.println("ID: " + getIngredientId(cur_name));
+    }
+
+    // insert into table new ingredients with recipe id and quantity
+    for(int i = 0; i < quantities.size(); i++){
+      try
+      {
+        Statement stmt = conn.createStatement();
+        boolean result = stmt.execute("INSERT INTO recipe_ingredient VALUES('" + recipe_id +"', '" + ingredient_ids.get(i) + "', '" + quantities.get(i) + "');");
+        System.out.println("inserted");
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "insertion");
+      }
+    }
+
+  }
 
 
+  public int getToppingId(String topping_name){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM toppings;");
+      while(result.next())
+      {
+        if (result.getString("topping_name").equals(topping_name)){
+          return result.getInt("topping_id");
+        }
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+    return 0;
 
-  //   // obtain ingredient_id using ingredient_name from arraylist of ingredient_names
+  }
 
-  //   // insert into table new ingredients with recipe id and quantity
+  public void modifyMultipleToppings(int recipe_id, ArrayList<String> topping_names, ArrayList<Integer> quantities){
 
+      // remove toppings with recipe_id from recipe_toppings
+      try
+      {
+        Statement stmt = conn.createStatement();
+        String query = "DELETE FROM recipe_toppings WHERE recipe_id = '" + recipe_id + "';" ;
+        PreparedStatement st = conn.prepareStatement(query);
+        st.executeUpdate();
+        System.out.println("deleted recipe toppings");
 
-  // }
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "deletion");
+      }
+
+      // obtain topping_id using topping_name from arraylist of topping_names
+      ArrayList<Integer> topping_ids = new ArrayList<Integer>();
+      for(String cur_name: topping_names){
+        topping_ids.add(getToppingId(cur_name));
+        System.out.println("ID: " + getToppingId(cur_name));
+      }
+
+      // insert into table new toppings with toppings id and quantity
+      for(int i = 0; i < quantities.size(); i++){
+        try
+        {
+          Statement stmt = conn.createStatement();
+          boolean result = stmt.execute("INSERT INTO recipe_toppings VALUES('" + recipe_id +"', '" + topping_ids.get(i) + "', '" + quantities.get(i) + "');");
+          System.out.println("inserted");
+        } catch (Exception e) {
+          JOptionPane.showMessageDialog(null, "insertion");
+        }
+      }
+
+    }
+
 
   
 }

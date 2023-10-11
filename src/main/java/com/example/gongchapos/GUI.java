@@ -20,7 +20,7 @@ public class GUI extends JFrame {
     //stuff for the cashier frame
     private JPanel itemListPanel; // Panel to hold item labels
     private double subtotal;
-    private double tip;
+    private double tip = 0;
     private double total;
     private JLabel subtotalLabel;
     private JLabel tipLabel;
@@ -225,7 +225,13 @@ public class GUI extends JFrame {
             if (clickedButton == checkoutButton) {
                 //ask for tip
                 String tipString = JOptionPane.showInputDialog("Enter tip amount: ");
-                tip = Double.parseDouble(tipString);
+                //if Double.parseDouble(tipString) is empty, tip = 0 or if tip is negative, tip = 0
+                if (tipString.equals("") || tip < 0) {
+                    tip = 0;
+                }
+                else{
+                    tip = Double.parseDouble(tipString);
+                }
                 //update tip and total
                 total = subtotal + tip;
                 //update tip and total labels
@@ -233,19 +239,16 @@ public class GUI extends JFrame {
                 totalLabel.setText("Total: $" + total);
                 //display total in jdialog box and clear if yes is clicked
 
-                app.createNewOrder();
+                // app.createNewOrder();
                 for (_drink drink : drinks) {
-                    //create toppings used List<string>
-                    //create toppings quantity List<int>
                     List<String> toppingsUsed = new ArrayList<>();
                     List<Integer> toppingsQuantity = new ArrayList<>();
-                    for (_topping top : drink.toppings) {
-                        toppingsUsed.add(top.topping.getToppingName());
-                        toppingsQuantity.add(top.quantity);
-                    }
-                    //print contents of toppingsUsed and toppingsQuantity
-                    for(int i = 0; i < toppingsUsed.size(); i++) {
-                        System.out.println(toppingsUsed.get(i) + " " + toppingsQuantity.get(i));
+                    //if drink.toppings is not null, add toppings to toppingsUsed and toppingsQuantity
+                    if(!(drink.toppings == null)) {
+                        for (_topping top : drink.toppings) {
+                            toppingsUsed.add(top.topping.getToppingName());
+                            toppingsQuantity.add(top.quantity);
+                        }
                     }
                     app.addDrink(drink.recipe.getRecipeID(), "", drink.is_medium, drink.ice, drink.sugar, subtotal, toppingsUsed, toppingsQuantity);
 
@@ -265,7 +268,7 @@ public class GUI extends JFrame {
                     tipLabel.setText("Tip: $" + tip);
                     totalLabel.setText("Total: $" + total);
 
-                    app.setOrderStatus(true);
+                    // app.setOrderStatus(true);
                     
                     //repaint receipt panel
                     itemListPanel.revalidate();
@@ -1033,7 +1036,7 @@ public class GUI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         // Process the selected toppings and quantity
                         int quantity;
-                        int topping_price = 0;
+                        double topping_price = 0;
                         ArrayList<_topping> selectedToppings = new ArrayList<>();
                         //iterate over spinners and get quantity, if not 0, add to list of toppings
                         for (int i = 0; i < spinners.size(); i++) {
@@ -1046,12 +1049,14 @@ public class GUI extends JFrame {
                                 _topping newTopping = new _topping(topping_fr, topping, quantity);
                                 minitoppanel.add(new JLabel("    "+topping + ": " + quantity));
                                 
-                                topping_price += newTopping.topping.unit_price * quantity;
+                                topping_price = topping_fr.getUnitPrice() * quantity;
 
                                 selectedToppings.add(newTopping);
                                 selectedToppingsQuantity.add(quantity);
                             }
                         }
+
+                        //print out the toppings and quantities
                         //update the subtotal and total
                         subtotal += topping_price;
                         total = subtotal + tip;
@@ -1092,8 +1097,6 @@ public class GUI extends JFrame {
     // Update the running total
     subtotal += itemPrice;
     total = subtotal + tip;
-
-    app.addDrink(itemButton.getItemID(), "note", size, iceResult, sugarResult, subtotal, selectedToppings, selectedToppingsQuantity);
 
     // Update the labels in receiptPanel2
     subtotalLabel.setText("Subtotal: $" + subtotal);
