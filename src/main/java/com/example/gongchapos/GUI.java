@@ -363,11 +363,11 @@ public class GUI extends JFrame {
             if (s.equals("Change Ingredients")) {
                 String newIngredientsStr = ingredients2.getText();
                 String newIngredientsQuantitiesStr = ingredientsQuantity2.getText();
+                ArrayList<String> newIngredientsArr = new ArrayList<>();
+                ArrayList<Integer> newIngredientsQuantitiesArr = new ArrayList<>();
                 if (!newIngredientsQuantitiesStr.equals("")) {
                     String[] newIngredientsStrArr = newIngredientsStr.split(",");
                     String[] newIngredientsQuantitiesStrArr = newIngredientsQuantitiesStr.split(",");
-                    ArrayList<String> newIngredientsArr = new ArrayList<>();
-                    ArrayList<Integer> newIngredientsQuantitiesArr = new ArrayList<>();
                     for (String topping : newIngredientsStrArr) {
                         newIngredientsArr.add(topping);
                     }
@@ -375,26 +375,28 @@ public class GUI extends JFrame {
                         newIngredientsQuantitiesArr.add(Integer.parseInt(quantity));
                     }
                 }
-                // TODO: Change Ingredients
                 // Create SQL query to change the ingredients in the database using changeDrinkID and newIngredients
                 // Call it
+                app.modifyMultipleIngredients(changeDrinkID, newIngredientsArr, newIngredientsQuantitiesArr);
             }
             if (s.equals("Change Toppings")) {
                 String newToppingsStr = toppings2.getText();
-                if (!newToppingsStr.equals("")) {
+                String newToppingsQuantitiesStr = toppingsQuantity2.getText();
+                ArrayList<String> newToppingsArr = new ArrayList<>();
+                ArrayList<Integer> newToppingsQuantitiesArr = new ArrayList<>();
+                if (!newToppingsQuantitiesStr.equals("")) {
                     String[] newToppingsStrArr = newToppingsStr.split(",");
-                    ArrayList<String> newToppingsArr = new ArrayList<>();
+                    String[] newToppingsQuantitiesStrArr = newToppingsQuantitiesStr.split(",");
                     for (String topping : newToppingsStrArr) {
                         newToppingsArr.add(topping);
                     }
-                    int[] newToppings = new int[newToppingsStrArr.length];
-                    for (int i = 0; i < newToppingsStrArr.length; i++) {
-                        newToppings[i] = Integer.parseInt(newToppingsStrArr[i]);
+                    for (String quantity : newToppingsQuantitiesStrArr) {
+                        newToppingsQuantitiesArr.add(Integer.parseInt(quantity));
                     }
                 }
-                // TODO: Change Toppings
                 // Create SQL query to change the ingredients in the database using changeDrinkID and newToppings
                 // Call it
+                app.modifyMultipleToppings(changeDrinkID, newToppingsArr, newToppingsQuantitiesArr);
             }
             if (s.equals("Change Medium Price")) {
                 String priceStr = mediumPrice2.getText();
@@ -448,9 +450,9 @@ public class GUI extends JFrame {
                 if (!ingredientIDStr.equals("")) {
                     ingredientID = Integer.parseInt(ingredientIDStr);
                 }
-                // TODO: Change Ingredient Name
                 // Create SQL query to change ingredient name given int ID and String name
                 // Call query
+                app.updateIngredientName(ingredientID, ingredientNameStr);
                 // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
             }
             if (s.equals("Change Unit Price")) {
@@ -464,9 +466,9 @@ public class GUI extends JFrame {
                 if (!ingredientUnitPrice.equals("")) {
                     newUnitPrice = Double.parseDouble(ingredientUnitPrice);
                 }
-                // TODO: Change Unit Price
                 // Create SQL query to change unit price given int ID and double unit_price
                 // Call query
+                app.updateIngredientUnitPrice(ingredientID, newUnitPrice);
                 // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
             }
             if (s.equals("Change Stock")) {
