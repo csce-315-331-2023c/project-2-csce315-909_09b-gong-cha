@@ -103,6 +103,8 @@ public class GUI extends JFrame {
 
       JPanel changeDrinkPanel = new JPanel();
       JPanel addDrinkPanel = new JPanel();  
+      JPanel addIngredientPanel = new JPanel();
+      JPanel changeIngredientPanel = new JPanel();
 
 
       // These variables are declared so we can access their values, part of adding a new drink in manager
@@ -131,6 +133,17 @@ public class GUI extends JFrame {
       ButtonGroup slushieOptions2 = new ButtonGroup();
       JRadioButton isSlushy2 = new JRadioButton("Slushy");
       JRadioButton isNotSlushy2 = new JRadioButton("Not Slushy");
+
+      // Repeat to add to add ingredient panel
+      JTextField ingredientName = CreateNewTextField();
+      JTextField unitPrice = CreateNewTextField();
+      JTextField stock = CreateNewTextField();
+
+      // Repeat to add to modify ingredient panel
+      JTextField modifyIngredientID = CreateNewTextField();
+      JTextField modifyIngredientName = CreateNewTextField();
+      JTextField modifyUnitPrice = CreateNewTextField();
+      JTextField modifyStock = CreateNewTextField();
 
     JButton checkoutButton = new JButton("Checkout");
     JButton managerCheckoutButton = new JButton("Checkout");
@@ -292,17 +305,16 @@ public class GUI extends JFrame {
                         return;
                     }
                 }
-                // TODO:
                 // CREATE SQL QUERY TO ADD DRINK INFO TO DATABASE
                 app.createRecipe(newDrinkName, isSlush, Integer.parseInt(newMediumPrice), Integer.parseInt(newLargePrice), Integer.parseInt(newRecipePrice), ingredientsArray, ingredientsQuantityArray, toppingsArray, toppingsQuantityArray);
                 //reload buttons
                 ReloadButtons(this);
-                JOptionPane.showMessageDialog(null, "Drink added successfully, restart application to use button", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Drink added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
 
             if (s.equals("Change Name")) {
                 String changedName = drinkName2.getText();
-                // TODO:
+                // TODO: Change Name
                 // Create SQL query to change the name in the database using an ID and new name
                 // Call it
             }
@@ -315,7 +327,7 @@ public class GUI extends JFrame {
                         newIngredients[i] = Integer.parseInt(newIngredientsStrArr[i]);
                     }
                 }
-                // TODO:
+                // TODO: Change Ingredients
                 // Create SQL query to change the ingredients in the database using an ID and newIngredients
                 // Call it
             }
@@ -328,7 +340,7 @@ public class GUI extends JFrame {
                         newToppings[i] = Integer.parseInt(newToppingsStrArr[i]);
                     }
                 }
-                // TODO:
+                // TODO: Change Toppings
                 // Create SQL query to change the ingredients in the database using an ID and newToppings
                 // Call it
             }
@@ -361,9 +373,63 @@ public class GUI extends JFrame {
             }
             if (s.equals("Change Slushy")) {
                 boolean isASlushy = isSlushy2.isSelected();
-                // TODO:
+                // TODO: Change Slushy
                 // Create SQL query that can change bool is or isnt slushy
                 // Call it
+            }
+            if (s.equals("Add New Ingredient")) {
+                String ingredientNameStr = ingredientName.getText();
+                String ingredientUnitPrice = unitPrice.getText();
+                String ingredientStock = stock.getText();
+                if (!ingredientUnitPrice.equals("")) {
+                    double unitPriceDBL = Double.parseDouble(ingredientUnitPrice);
+                }
+                if (!ingredientStock.equals("")) {
+                    int stockINT = Integer.parseInt(ingredientStock);
+                }
+                // TODO: Add New Ingredient
+                // Create SQL query to add a new ingredient and call it using ingredient name, unitPriceDBL, and stockINT
+            }
+            if (s.equals("Change Ingredient Name")) {
+                String ingredientIDStr = modifyIngredientID.getText();
+                String ingredientNameStr = modifyIngredientName.getText();
+                int ingredientID = -1;
+                if (!ingredientIDStr.equals("")) {
+                    ingredientID = Integer.parseInt(ingredientIDStr);
+                }
+                // TODO: Change Ingredient Name
+                // Create SQL query to change ingredient name given int ID and String name
+                // Call query
+            }
+            if (s.equals("Change Unit Price")) {
+                String ingredientIDStr = modifyIngredientID.getText();
+                String ingredientUnitPrice = modifyUnitPrice.getText();
+                double newUnitPrice = -1;
+                int ingredientID = -1;
+                if (!ingredientIDStr.equals("")) {
+                    ingredientID = Integer.parseInt(ingredientIDStr);
+                }
+                if (!ingredientUnitPrice.equals("")) {
+                    newUnitPrice = Double.parseDouble(ingredientUnitPrice);
+                }
+                // TODO: Change Unit Price
+                // Create SQL query to change unit price given int ID and double unit_price
+                // Call query
+            }
+            if (s.equals("Change Stock")) {
+                String ingredientIDStr = modifyIngredientID.getText();
+                String ingredientStockStr = modifyStock.getText();
+                int ingredientStock = -1;
+                int ingredientID = -1;
+                if (!ingredientIDStr.equals("")) {
+                    ingredientID = Integer.parseInt(ingredientIDStr);
+                }
+                if (!ingredientStockStr.equals("")) {
+                    ingredientStock = Integer.parseInt(ingredientStockStr);
+                }
+                // TODO: Change Stock
+                // Create SQL query to change stock given int ID and int stock
+                // Call query
             }
         }        
       };
@@ -375,6 +441,10 @@ public class GUI extends JFrame {
       JButton changeLrgPrice = new JButton("Change Large Price");
       JButton changeRecipePrice = new JButton("Change Recipe Price");
       JButton changeSlushy = new JButton("Change Slushy");
+
+      JButton changeIngredientName = new JButton("Change Ingredient Name");
+      JButton changeUnitPrice = new JButton("Change Unit Price");
+      JButton changeStock = new JButton ("Change Stock");
 
       changeName.addActionListener(actionListener);
       changeIngredients.addActionListener(actionListener);
@@ -435,12 +505,24 @@ public class GUI extends JFrame {
       JScrollPane inventoryScrollPaneToppings = new JScrollPane(inventoryTable2);
       managerInventoryPanel.add(inventoryScrollPaneToppings);
 
+      // TODO: Finish implementation of table
+    //   String[] columnNamesDrinks = {};
+    //   // Make a JTable out of drink data returned from function in Application.java
+    //   Object[][] dataDrinks = app.getDrinks();
+    //   JTable drinkTable = new JTable(dataDrinks, columnNamesDrinks);
+    //   JScrollPane drinkScrollPane = new JScrollPane(drinkTable);
+    //   viewDrinksPanel.add(drinkScrollPane);
+
       //make manageractionspanel
       JPanel managerActionsPanel = new JPanel();
       addDrinkPanel.setLayout(new BoxLayout(addDrinkPanel, BoxLayout.Y_AXIS));
       addDrinkPanel.add(Box.createVerticalStrut(10));
       changeDrinkPanel.setLayout(new BoxLayout(changeDrinkPanel, BoxLayout.Y_AXIS));
-    //   changeDrinkPanel.add(Box.createVerticalStrut(47));
+    
+      // Do same thing for ingredients
+      addIngredientPanel.setLayout(new BoxLayout(addIngredientPanel, BoxLayout.Y_AXIS));
+      changeIngredientPanel.setLayout(new BoxLayout(changeIngredientPanel, BoxLayout.Y_AXIS));
+
       // declare necessary sections to add a drink
       JLabel addDrinkLabel = CreateNewLabel("ADD DRINK: ");
       JLabel nameLabel = CreateNewLabel("Drink name: ");
@@ -464,6 +546,18 @@ public class GUI extends JFrame {
       JLabel largeLabel2 = CreateNewLabel("Large Price: ");
       JLabel recipeLabel2 = CreateNewLabel("Recipe Price: ");
 
+      // declare necessary sections to add an ingredient
+      JLabel addIngredientLabel = CreateNewLabel("ADD INGREDIENT: ");
+      JLabel ingredientNameLabel = CreateNewLabel("Ingredient Name: ");
+      JLabel ingredientUnitPriceLabel = CreateNewLabel("Unit Price: ");
+      JLabel ingredientStockLabel = CreateNewLabel("Stock: ");
+
+      // declare necessary sections to modify an ingredient
+      JLabel modifyIngredientLabel = CreateNewLabel("MODIFY INGREDIENT: ");
+      JLabel ingredientIDLabel = CreateNewLabel("Ingredient ID (REQUIRED): ");
+      JLabel modifyNameLabel = CreateNewLabel("Ingredient Name: ");
+      JLabel modifyUnitPriceLabel = CreateNewLabel("Unit Price: ");
+      JLabel modifyStockLabel = CreateNewLabel("Stock: ");
 
       // Add Drink alignment
       isSlushy.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -530,13 +624,43 @@ public class GUI extends JFrame {
       changeDrinkPanel.add(recipePrice2);
       changeDrinkPanel.add(changeRecipePrice);
 
+      // For add ingredient
+      addIngredientPanel.add(addIngredientLabel);
+      addIngredientPanel.add(ingredientNameLabel);
+      addIngredientPanel.add(ingredientName);
+      addIngredientPanel.add(ingredientUnitPriceLabel);
+      addIngredientPanel.add(unitPrice);
+      addIngredientPanel.add(ingredientStockLabel);
+      addIngredientPanel.add(stock);
+
+      // For modify ingredient
+      changeIngredientPanel.add(modifyIngredientLabel);
+      changeIngredientPanel.add(ingredientIDLabel);
+      changeIngredientPanel.add(modifyIngredientID);
+      changeIngredientPanel.add(modifyNameLabel);
+      changeIngredientPanel.add(modifyIngredientName);
+      changeIngredientPanel.add(changeIngredientName);
+      changeIngredientPanel.add(modifyUnitPriceLabel);
+      changeIngredientPanel.add(modifyUnitPrice);
+      changeIngredientPanel.add(changeUnitPrice);
+      changeIngredientPanel.add(modifyStockLabel);
+      changeIngredientPanel.add(modifyStock);
+      changeIngredientPanel.add(changeStock);
+
       // Create the new drink button
       JButton newDrinkButton = new JButton("Add New Drink");
       newDrinkButton.addActionListener(actionListener);
       addDrinkPanel.add(newDrinkButton);
 
+      JButton newIngredientButton = new JButton("Add New Ingredient");
+      newIngredientButton.addActionListener(actionListener);
+      addIngredientPanel.add(newIngredientButton);
+
       managerActionsPanel.add(addDrinkPanel, BorderLayout.WEST);
       managerActionsPanel.add(changeDrinkPanel, BorderLayout.EAST);
+
+      changeInventoryPanel.add(addIngredientPanel, BorderLayout.WEST);
+      changeInventoryPanel.add(changeIngredientPanel, BorderLayout.EAST);
 
       managerTabbedPane.addTab("Inventory", null, managerInventoryPanel, "Does nothing");
       managerTabbedPane.addTab("Add/Update Inventory Items", null, changeInventoryPanel, "Does nothing");
