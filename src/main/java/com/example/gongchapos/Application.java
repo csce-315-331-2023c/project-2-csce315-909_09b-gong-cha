@@ -339,6 +339,16 @@ public class Application {
     }
   }  
 
+  public void updateToppingsName(int topping_id, String new_name){
+    try
+    {
+      Statement stmt = conn.createStatement();
+      stmt.execute("UPDATE toppings SET topping_name = '" + new_name + "' WHERE topping_id = " + topping_id + ";");
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  }  
+
   public void updateToppingsUnitPrice(int topping_id, double new_quantity){
     try
     {
