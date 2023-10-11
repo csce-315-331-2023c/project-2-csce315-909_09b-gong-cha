@@ -295,7 +295,7 @@ public class GUI extends JFrame {
 
             if (s.equals("Change Name")) {
                 String changedName = drinkName2.getText();
-                // TODO:
+                // TODO: Change Name
                 // Create SQL query to change the name in the database using an ID and new name
                 // Call it
             }
@@ -308,7 +308,7 @@ public class GUI extends JFrame {
                         newIngredients[i] = Integer.parseInt(newIngredientsStrArr[i]);
                     }
                 }
-                // TODO:
+                // TODO: Change Ingredients
                 // Create SQL query to change the ingredients in the database using an ID and newIngredients
                 // Call it
             }
@@ -321,7 +321,7 @@ public class GUI extends JFrame {
                         newToppings[i] = Integer.parseInt(newToppingsStrArr[i]);
                     }
                 }
-                // TODO:
+                // TODO: Change Toppings
                 // Create SQL query to change the ingredients in the database using an ID and newToppings
                 // Call it
             }
@@ -354,7 +354,7 @@ public class GUI extends JFrame {
             }
             if (s.equals("Change Slushy")) {
                 boolean isASlushy = isSlushy2.isSelected();
-                // TODO:
+                // TODO: Change Slushy
                 // Create SQL query that can change bool is or isnt slushy
                 // Call it
             }
@@ -368,7 +368,7 @@ public class GUI extends JFrame {
                 if (!ingredientStock.equals("")) {
                     int stockINT = Integer.parseInt(ingredientStock);
                 }
-                // TODO:
+                // TODO: Add New Ingredient
                 // Create SQL query to add a new ingredient and call it using ingredient name, unitPriceDBL, and stockINT
             }
             if (s.equals("Change Ingredient Name")) {
@@ -378,7 +378,7 @@ public class GUI extends JFrame {
                 if (!ingredientIDStr.equals("")) {
                     ingredientID = Integer.parseInt(ingredientIDStr);
                 }
-                // TODO:
+                // TODO: Change Ingredient Name
                 // Create SQL query to change ingredient name given int ID and String name
                 // Call query
             }
@@ -393,7 +393,7 @@ public class GUI extends JFrame {
                 if (!ingredientUnitPrice.equals("")) {
                     newUnitPrice = Double.parseDouble(ingredientUnitPrice);
                 }
-                // TODO:
+                // TODO: Change Unit Price
                 // Create SQL query to change unit price given int ID and double unit_price
                 // Call query
             }
@@ -408,7 +408,7 @@ public class GUI extends JFrame {
                 if (!ingredientStockStr.equals("")) {
                     ingredientStock = Integer.parseInt(ingredientStockStr);
                 }
-                // TODO:
+                // TODO: Change Stock
                 // Create SQL query to change stock given int ID and int stock
                 // Call query
             }
@@ -485,6 +485,14 @@ public class GUI extends JFrame {
       JTable inventoryTable2 = new JTable(dataToppings, columnNamesToppings);
       JScrollPane inventoryScrollPaneToppings = new JScrollPane(inventoryTable2);
       managerInventoryPanel.add(inventoryScrollPaneToppings);
+
+      // TODO: Finish implementation of table
+    //   String[] columnNamesDrinks = {};
+    //   // Make a JTable out of drink data returned from function in Application.java
+    //   Object[][] dataDrinks = app.getDrinks();
+    //   JTable drinkTable = new JTable(dataDrinks, columnNamesDrinks);
+    //   JScrollPane drinkScrollPane = new JScrollPane(drinkTable);
+    //   viewDrinksPanel.add(drinkScrollPane);
 
       //make manageractionspanel
       JPanel managerActionsPanel = new JPanel();
