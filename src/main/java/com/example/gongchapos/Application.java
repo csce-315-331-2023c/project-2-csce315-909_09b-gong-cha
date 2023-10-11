@@ -343,6 +343,7 @@ public class Application {
     if(ID != -1)
     {
       order.setOrderID(ID);
+      setOrderStatus(false);
     }
     
     return order;
