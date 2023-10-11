@@ -475,7 +475,6 @@ public class GUI extends JFrame {
                 if (!ingredientStockStr.equals("")) {
                     ingredientStock = Integer.parseInt(ingredientStockStr);
                 }
-                // TODO: Change Stock
                 // Create SQL query to change stock given int ID and int stock
                 app.updateIngredientStock(ingredientID, ingredientStock);
                 // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
