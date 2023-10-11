@@ -130,9 +130,6 @@ public class GUI extends JFrame {
       JTextField toppingsQuantity2 = CreateNewTextField();
       JTextField ingredients2 = CreateNewTextField();
       JTextField toppings2 = CreateNewTextField();
-      ButtonGroup slushieOptions2 = new ButtonGroup();
-      JRadioButton isSlushy2 = new JRadioButton("Slushy");
-      JRadioButton isNotSlushy2 = new JRadioButton("Not Slushy");
 
       // Repeat to add to add ingredient panel
       JTextField ingredientName = CreateNewTextField();
@@ -315,33 +312,41 @@ public class GUI extends JFrame {
             if (s.equals("Change Name")) {
                 String changedName = drinkName2.getText();
                 // TODO: Change Name
-                // Create SQL query to change the name in the database using an ID and new name
+                // Create SQL query to change the name in the database using changeDrinkID and new name
                 // Call it
             }
             if (s.equals("Change Ingredients")) {
                 String newIngredientsStr = ingredients2.getText();
                 if (!newIngredientsStr.equals("")) {
                     String[] newIngredientsStrArr = newIngredientsStr.split(",");
+                    ArrayList<String> newIngredientsArr = new ArrayList<>();
+                    for (String topping : newIngredientsStrArr) {
+                        newIngredientsArr.add(topping);
+                    }
                     int[] newIngredients = new int[newIngredientsStrArr.length];
                     for (int i = 0; i < newIngredientsStrArr.length; i++) {
                         newIngredients[i] = Integer.parseInt(newIngredientsStrArr[i]);
                     }
                 }
                 // TODO: Change Ingredients
-                // Create SQL query to change the ingredients in the database using an ID and newIngredients
+                // Create SQL query to change the ingredients in the database using changeDrinkID and newIngredients
                 // Call it
             }
             if (s.equals("Change Toppings")) {
                 String newToppingsStr = toppings2.getText();
                 if (!newToppingsStr.equals("")) {
                     String[] newToppingsStrArr = newToppingsStr.split(",");
+                    ArrayList<String> newToppingsArr = new ArrayList<>();
+                    for (String topping : newToppingsStrArr) {
+                        newToppingsArr.add(topping);
+                    }
                     int[] newToppings = new int[newToppingsStrArr.length];
                     for (int i = 0; i < newToppingsStrArr.length; i++) {
                         newToppings[i] = Integer.parseInt(newToppingsStrArr[i]);
                     }
                 }
                 // TODO: Change Toppings
-                // Create SQL query to change the ingredients in the database using an ID and newToppings
+                // Create SQL query to change the ingredients in the database using changeDrinkID and newToppings
                 // Call it
             }
             if (s.equals("Change Medium Price")) {
@@ -370,12 +375,6 @@ public class GUI extends JFrame {
                 }
                 // Call SQL query with ID and new price
                 app.updateRecipePrice(changeDrinkID, price);
-            }
-            if (s.equals("Change Slushy")) {
-                boolean isASlushy = isSlushy2.isSelected();
-                // TODO: Change Slushy
-                // Create SQL query that can change bool is or isnt slushy
-                // Call it
             }
             if (s.equals("Add New Ingredient")) {
                 String ingredientNameStr = ingredientName.getText();
@@ -562,10 +561,6 @@ public class GUI extends JFrame {
       // Add Drink alignment
       isSlushy.setAlignmentX(Component.LEFT_ALIGNMENT);
       isNotSlushy.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-      // Modify Drink alignment
-      isSlushy2.setAlignmentX(Component.LEFT_ALIGNMENT);
-      isNotSlushy2.setAlignmentX(Component.LEFT_ALIGNMENT);
       
       // Add the objects in the correct order
       //   managerActionsPanel.add(drinkIDLabel);
@@ -609,11 +604,6 @@ public class GUI extends JFrame {
       changeDrinkPanel.add(toppingsQuantityLabel2);
       changeDrinkPanel.add(toppingsQuantity2);
       changeDrinkPanel.add(changeToppings);
-      slushieOptions2.add(isSlushy2);
-      slushieOptions2.add(isNotSlushy2);
-      changeDrinkPanel.add(isSlushy2);
-      changeDrinkPanel.add(isNotSlushy2);
-      changeDrinkPanel.add(changeSlushy);
       changeDrinkPanel.add(mediumLabel2);
       changeDrinkPanel.add(mediumPrice2);
       changeDrinkPanel.add(changeMedPrice);
