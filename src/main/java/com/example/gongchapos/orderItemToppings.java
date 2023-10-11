@@ -1,11 +1,23 @@
 package com.example.gongchapos;
 
+/**
+* Represents an order item with associated toppings and quantities used
+* 
+* @author Fridge2016
+*/
 public class orderItemToppings {
     private
     int order_item_id;
     int topping_id;
     int quantity_used;
 
+    /**
+    * Constructor for OrderItemToppings.
+    *
+    * @param _order_item_id The ID of the order item.
+    * @param _topping_id The ID of the topping.
+    * @param _quantity_used The quantity of the topping used.
+    */
     public orderItemToppings(int _order_item_id, int _topping_id, int _quantity_used)
     {
         order_item_id = _order_item_id;
@@ -13,18 +25,32 @@ public class orderItemToppings {
         quantity_used = _quantity_used;
     }
 
-
+    /**
+    * Get the ID of the order item.
+    *
+    * @return The order item ID.
+    */
     public
     int getOrderItemID()
     {
         return order_item_id;
     }
 
+    /**
+    * Get the ID of the topping.
+    *
+    * @return The topping ID.
+    */
     int getToppingId()
     {
         return topping_id;
     }
 
+    /**
+    * Get the quantity of the topping used.
+    *
+    * @return The quantity used.
+    */
     int getQuantityUsed()
     {
         return quantity_used;
