@@ -600,7 +600,7 @@ public class Application {
     try
     {
       Statement stmt = conn.createStatement();
-      ResultSet result = stmt.executeQuery("SELECT * FROM ingredient;");
+      ResultSet result = stmt.executeQuery("SELECT * FROM ingredient ORDER BY ingredient_id ASC;");
       while(result.next())
       {
         ArrayList<String> cur_ingredient = new ArrayList<String>();
@@ -637,7 +637,7 @@ public class Application {
     try
     {
       Statement stmt = conn.createStatement();
-      ResultSet result = stmt.executeQuery("SELECT * FROM toppings;");
+      ResultSet result = stmt.executeQuery("SELECT * FROM toppings ORDER BY topping_id ASC;");
       while(result.next())
       {
         ArrayList<String> cur_ingredient = new ArrayList<String>();
@@ -683,7 +683,7 @@ public class Application {
     try
     {
       Statement stmt = conn.createStatement();
-      ResultSet result = stmt.executeQuery("SELECT * FROM recipe;");
+      ResultSet result = stmt.executeQuery("SELECT * FROM recipe ORDER BY recipe_id ASC;");
       while(result.next())
       {
         ArrayList<String> cur_recipe = new ArrayList<String>();
