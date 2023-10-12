@@ -20,64 +20,62 @@ public class Order extends Application{
         date = _date;
     }
     
-
-    public
-    int getOrderID()
+    public int getOrderID()
     {
         return order_id;
     }
 
-    void setOrderID(int id)
+    public void setOrderID(int id)
     {
         order_id = id;
     }
 
-    String getDate()
+    public String getDate()
     {
         return date;
     }
 
-    double getSubtotal()
+    public double getSubtotal()
     {
         return subtotal;
     }
 
-    void setSubtotal(double total)
+    public void setSubtotal(double total)
     { 
         subtotal = total;
     }
 
-    double getTip()
+    public double getTip()
     {
         return tip;
     }
 
-    void setTip(double _tip)
+    public void setTip(double _tip)
     {
         tip = _tip;
     }
 
-    void setCouponCode(String code)
+    public void setCouponCode(String code)
     {
         coupon_code = code;
     }
 
-    String getCouponCode()
+    public String getCouponCode()
     {
         return coupon_code;
     }
 
-    String getTime()
+    public String getTime()
     {
         return time;
     }
 
-    void setTime(String _time)
+    public void setTime(String _time)
     {
         time = _time;
     }
 
-    void addOrderItem(Drink drink)
+    public void addOrderItem(Drink drink)
     {
         drink.setOrderID(order_id);
         order_items.add(drink);

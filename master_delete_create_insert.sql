@@ -9,10 +9,10 @@ DROP TABLE IF EXISTS public.Order_Item_Toppings;
 DROP TABLE IF EXISTS public.Order_Item;
 DROP TABLE IF EXISTS public.Recipe_Ingredient;
 DROP TABLE IF EXISTS public.Order_;
-DROP TABLE IF EXISTS public.Recipe;
 DROP TABLE IF EXISTS public.Ingredient;
-DROP TABLE IF EXISTS public.Toppings; 
 Drop TABLE IF EXISTS public.Recipe_Toppings;
+DROP TABLE IF EXISTS public.Toppings; 
+DROP TABLE IF EXISTS public.Recipe;
 
 --Table: Order REQUIRES UNDERSCORE because of naming conventions in SQL
 CREATE TABLE IF NOT EXISTS public.Order_(
