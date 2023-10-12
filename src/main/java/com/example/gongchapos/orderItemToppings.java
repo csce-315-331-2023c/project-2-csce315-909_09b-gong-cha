@@ -6,10 +6,9 @@ package com.example.gongchapos;
 * @author Fridge2016
 */
 public class orderItemToppings {
-    private
-    int order_item_id;
-    int topping_id;
-    int quantity_used;
+    private int order_item_id;
+    private int topping_id;
+    private int quantity_used;
 
     /**
     * Constructor for OrderItemToppings.

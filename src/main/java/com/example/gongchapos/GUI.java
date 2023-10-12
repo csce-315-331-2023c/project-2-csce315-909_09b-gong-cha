@@ -1248,7 +1248,7 @@ class _drink{
         }
 
         for(_topping topping : toppings){
-            price += topping.quantity * topping.topping.unit_price; 
+            price += topping.quantity * topping.topping.getUnitPrice(); 
         }
     }
 }

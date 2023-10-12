@@ -7,9 +7,9 @@ package com.example.gongchapos;
  */
 public class Ingredient {
     private int ingredient_id;
-    String ingredient_name;
-    int stock;
-    double unit_price;
+    private String ingredient_name;
+    private int stock;
+    private double unit_price;
 
     /**
      * Constructor for Ingredient.

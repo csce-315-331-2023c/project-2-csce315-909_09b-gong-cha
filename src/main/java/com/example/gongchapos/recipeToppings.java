@@ -1,10 +1,9 @@
 package com.example.gongchapos;
 
 public class recipeToppings {
-
-    int recipe_id;
-    int topping_id;
-    int quantity_used;
+    private int recipe_id;
+    private int topping_id;
+    private int quantity_used;
 
     public recipeToppings(int _recipe_id, int _topping_id, int _quantity_used)
     {

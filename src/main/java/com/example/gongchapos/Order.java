@@ -4,16 +4,14 @@ import java.util.*;
 
 
 public class Order extends Application{
-    private
+    private String date;
+    private int order_id;
+    private double subtotal;
+    private double tip;
+    private String coupon_code;
+    private String time;
 
-    int order_id;
-    String date;
-    double subtotal;
-    double tip;
-    String coupon_code;
-    String time;
-
-    List<Drink> order_items = new ArrayList<Drink>();
+    private List<Drink> order_items = new ArrayList<Drink>();
 
     public Order(String _date)
     {
@@ -79,5 +77,10 @@ public class Order extends Application{
     {
         drink.setOrderID(order_id);
         order_items.add(drink);
+    }
+
+    public List<Drink> getOrderItems()
+    {
+        return order_items;
     }
 }
