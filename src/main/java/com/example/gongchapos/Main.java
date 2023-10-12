@@ -1,7 +1,9 @@
 package com.example.gongchapos;
 public class Main {
     
-
+    /**
+     * @author: Reid Jenkins
+     */
     public static void main(String[] args)
     {
         //Pass in NetID and Password as command line arguments
