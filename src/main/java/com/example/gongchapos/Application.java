@@ -5,7 +5,7 @@ import java.util.*;
 import javax.swing.JOptionPane;
 import java.time.*;
 
-/** 
+/**
  * Author: @author Anton Hugo
  * Author2: @author Reid Jenkins
  */
@@ -20,7 +20,7 @@ public class Application {
 
   private boolean isNewOrder = true;
 
-  /** 
+  /*
    * @return the order status
    */
   public boolean getOrderStatus()
@@ -28,7 +28,7 @@ public class Application {
     return isNewOrder;
   }
 
-  /**  
+  /*
    *  @param status - the status of the order
    *  @return void
    */
@@ -37,7 +37,7 @@ public class Application {
     isNewOrder = status;
   }
 
-  /** 
+  /*
    * @param netID - the netID of the user
    * @param password - the password of the user
    * @return void
@@ -50,11 +50,7 @@ public class Application {
     item_id = newItemID();
     gui = new GUI(this);
   }
-  /**
-   * create connection to database
-   * @param netID
-   * @param password
-   */
+
   protected void ConnectToDatabase(String netID, String password)
   {
     try {
@@ -400,7 +396,8 @@ public class Application {
     }
   }
 
-  /** update ingredient stock 
+  /*
+   * update ingredient stock 
    * @param ingredient_id - the id of the ingredient
    * @param new_quantity - the new quantity of the ingredient
    * @return void
