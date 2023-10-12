@@ -24,7 +24,7 @@ public class Topping {
 
     /**
      * Gets the topping id
-     * @return void
+     * @return int
      */
     public int getToppingId(){
         return this.topping_id;
@@ -32,7 +32,7 @@ public class Topping {
 
     /**
      * Gets the name of the topping
-     * @return
+     * @return String
      */
     public String getToppingName(){
         return this.topping_name;
@@ -40,7 +40,7 @@ public class Topping {
     
     /**
      * Gets the stock of a topping
-     * @return
+     * @return int
      */
     public int getStock(){
         return this.stock;
@@ -48,7 +48,7 @@ public class Topping {
 
     /**
      * Gets the unit price of a Topping
-     * @return
+     * @return double 
      */
     public double getUnitPrice(){
         return this.unit_price;
