@@ -5,8 +5,11 @@ import java.util.*;
 import javax.swing.JOptionPane;
 import java.time.*;
 
+/*
+ * Author: @author Anton Hugo
+ * Author2: @author Reid Jenkins
+ */
 public class Application {
-
   protected GUI gui;
   protected List<Recipe> recipes = new ArrayList<Recipe>();
   protected List<Topping> toppings = new ArrayList<Topping>();
@@ -17,17 +20,28 @@ public class Application {
 
   private boolean isNewOrder = true;
 
-
+  /*
+   * @return the order status
+   */
   public boolean getOrderStatus()
   {
     return isNewOrder;
   }
 
+  /*
+   *  @param status - the status of the order
+   *  @return void
+   */
   public void setOrderStatus(boolean status)
   {
     isNewOrder = status;
   }
 
+  /*
+   * @param netID - the netID of the user
+   * @param password - the password of the user
+   * @return void
+   */
   public void run(String netID, String password)
   {
     ConnectToDatabase(netID, password);
@@ -52,6 +66,11 @@ public class Application {
     }
   }
 
+  /*
+  * closes the connection to the database
+  * @param none
+  * @return void
+  */
   protected void closeDatabase()
   {
     //closing the connection
@@ -63,12 +82,22 @@ public class Application {
     }
   }
 
+  /*
+   * Populates the recipes and toppings lists with data from the database
+   * @param none
+   * @return void
+   */
   private void populate()
   {
     populateRecipes();
     populateToppings();
   }
 
+  /*
+   * Populates the recipes list with data from the database
+   * @param none
+   * @return void
+   */
   private void populateRecipes()
   {
     recipes.clear();
@@ -92,7 +121,11 @@ public class Application {
     }
   }
 
-
+  /*
+   * Populates the toppings list with data from the database
+   * @param none
+   * @return void
+   */
   private void populateToppings()
   {
     toppings.clear();
@@ -114,6 +147,10 @@ public class Application {
     }
   }
 
+  /*
+   * @return the next recipe_id
+   * @param none
+   */
   private int newRecipeID()
   {
     int recipe_id = -1;
@@ -132,7 +169,19 @@ public class Application {
       return recipe_id;
   }
 
-  // creates a new recipe and inserts it into the database
+  /*
+  * Creates a new recipe and adds it to the database
+  * @param recipe_name - the name of the recipe
+  * @param is_slush - whether or not the recipe is a slush
+  * @param med_price - the price of a medium drink
+  * @param large_price - the price of a large drink
+  * @param recipe_price - the price of the recipe
+  * @param ingredinets - the ingredients used in the recipe
+  * @param ingredients_quantity - the quantity of each ingredient used in the recipe
+  * @param toppings_array - the toppings used in the recipe
+  * @param toppings_quantity - the quantity of each topping used in the recipe
+  * @return void
+  */
   public void createRecipe(String recipe_name, boolean is_slush, double med_price, double large_price, double recipe_price, ArrayList<String> ingredinets, 
                            ArrayList<String> ingredients_quantity, ArrayList<String> toppings_array, ArrayList<String> toppings_quantity)
   {
@@ -190,7 +239,11 @@ public class Application {
     populate();
   }
 
-  // Retuns a recipe given a name, returns null if recipe not found
+  /* 
+  *  Returns a recipe given a name, returns null if recipe not found
+  *  @param name - the name of the recipe
+  *  @return Recipe
+  */ 
   public Recipe getRecipe(String name)
   {
     Recipe outRecipe = null;
@@ -206,7 +259,11 @@ public class Application {
     return outRecipe;
   }
 
-  // Retuns a recipe given a recipe_id, returns null if recipe not found
+  /* 
+  * Retuns a recipe given a recipe_id, returns null if recipe not found
+  * @param recipe_id - the id of the recipe
+  * @return Recipe
+  */
   public Recipe getRecipe(int recipe_id)
   {
     Recipe outRecipe = null;
@@ -222,6 +279,11 @@ public class Application {
     return outRecipe;
   }
 
+  /* 
+   * Returns a topping given a topping_name, returns null if topping not found
+   * @param topping_name - the name of the topping
+   * @return Topping
+  */
   public Topping getTopping(String topping_name)
   {
     Topping outTopping = null;
@@ -237,7 +299,12 @@ public class Application {
     return outTopping;
   }
   
-  // adds ingredients into recipe_ingredients
+  /*adds ingredients into recipe_ingredients 
+  * @param name - the name of the ingredient
+  * @param price - the price of the ingredient
+  * @param stock - the stock of the ingredient
+  * @return void
+  */ 
   public void addIngredients(String name, double price, int stock)
   {
     int ingredient_id = -1;
@@ -264,7 +331,12 @@ public class Application {
   }
 
 
-  // adds toppings into recipe_toppings
+  /* adds toppings into recipe_toppings
+  * @param name - the name of the topping
+  * @param price - the price of the topping
+  * @param stock - the stock of the topping
+  * @return void
+  */ 
   public void addToppings(String name, double price, int stock){
     int topping_id = -1;
     try
@@ -289,7 +361,11 @@ public class Application {
   }
 
 
-  // update recipe med_price
+  /* update recipe med_price
+  * @param recipe_id - the id of the recipe
+  * @param new_quantity - the new quantity of the recipe
+  * @return void
+  */ 
   public void updateMedPrice(int recipe_id, double new_quantity){
     try
     {
@@ -299,7 +375,12 @@ public class Application {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
   }
-  // updates recipe large_price
+  /*
+   * updates recipe large_price
+   * @param recipe_id - the id of the recipe
+   * @param new_quantity - the new quantity of the recipe
+   * @return void
+   */
   public void updateLargePrice(int recipe_id, double new_quantity){
     try
     {
@@ -310,7 +391,12 @@ public class Application {
     }
   }
 
-  // updates recipe recipe_price
+  /*
+   * updates recipe recipe_price
+   * @param recipe_id - the id of the recipe
+   * @param new_quantity - the new quantity of the recipe
+   * @return void
+   */
   public void updateRecipePrice(int recipe_id, double new_quantity){
     try
     {
@@ -321,6 +407,12 @@ public class Application {
     }
   }
 
+  /*
+   * update ingredient stock 
+   * @param ingredient_id - the id of the ingredient
+   * @param new_quantity - the new quantity of the ingredient
+   * @return void
+   */
   // update ingredient stock 
   public void updateIngredientStock(int ingredient_id, int new_quantity){
     try
