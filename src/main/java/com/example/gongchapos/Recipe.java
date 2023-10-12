@@ -7,11 +7,11 @@ package com.example.gongchapos;
  */
 public class Recipe {
     private int recipe_id;
-    String recipe_name;
-    boolean is_slush;
-    double med_price;
-    double large_price;
-    double recipe_price;
+    private String recipe_name;
+    private boolean is_slush;
+    private double med_price;
+    private double large_price;
+    private double recipe_price;
 
     /**
      * Constructor for Recipe.

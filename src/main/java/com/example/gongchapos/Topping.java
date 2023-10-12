@@ -1,11 +1,10 @@
 package com.example.gongchapos;
 
 public class Topping {
-    private
-    int topping_id;
-    String topping_name;
-    int stock;
-    double unit_price;
+    private int topping_id;
+    private String topping_name;
+    private int stock;
+    private double unit_price;
 
     public Topping(int _topping_id, String _topping_name, int _stock, double _unit_price)
     {

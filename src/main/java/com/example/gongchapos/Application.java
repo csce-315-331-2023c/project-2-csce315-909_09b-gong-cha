@@ -578,7 +578,7 @@ public class Application {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
 
-    for(Drink current_drink : order.order_items)
+    for(Drink current_drink : order.getOrderItems())
     {
       try
       {
