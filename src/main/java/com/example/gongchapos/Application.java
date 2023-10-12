@@ -20,16 +20,16 @@ public class Application {
 
   private boolean isNewOrder = true;
 
-  /*
-   * @return the order status
+  /**
+   *  @return the order status
    */
   public boolean getOrderStatus()
   {
     return isNewOrder;
   }
 
-  /*
-   *  @param status - the status of the order
+  /**  
+   * @param status - the status of the order
    *  @return void
    */
   public void setOrderStatus(boolean status)
@@ -37,7 +37,7 @@ public class Application {
     isNewOrder = status;
   }
 
-  /*
+  /** 
    * @param netID - the netID of the user
    * @param password - the password of the user
    * @return void
