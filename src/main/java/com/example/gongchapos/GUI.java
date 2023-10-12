@@ -9,7 +9,11 @@ import javax.swing.table.DefaultTableModel;
 
 //create class for the POS system cashier end
 
-
+/**
+ * Represents the construction and design of the POS GUI
+ * 
+ * @authors Ren Mai, Brenndan Croteau
+ */
 public class GUI extends JFrame {
     //make list of order items
 
@@ -40,6 +44,11 @@ public class GUI extends JFrame {
 
     protected Application app = null;
 
+    /**
+     * Constructor to initialize the GUI class taking into consideration an Application
+     * 
+     * @param _app
+     */
     public GUI(Application _app)
     {
       app = _app;
@@ -50,6 +59,12 @@ public class GUI extends JFrame {
      * This function handles the button creation for drinks so they all 
      * follow the same style. It takes in a String of the text it will 
      * contain, and formats it using html methods and Java swing commands.
+     */
+    /**
+     * This function creates a JButton with proper formatting to be a drink. Used to decrease code length
+     * 
+     * @param text The text that will be contained in the button
+     * @return The formatted JButton object
      */
     public static JButton createDrinkButton(String text) {
       JButton button = new JButton("<html><div style='text-align: center; vertical-align: middle;'>"+text+"</div></html>");
@@ -62,6 +77,11 @@ public class GUI extends JFrame {
       return button;
     }    
 
+    /**
+     * This function creates a JPanel with proper formatting to be the receipt section
+     * 
+     * @return The formatted JPanel object
+     */
     public static JPanel createReceiptPanel() {
         JPanel panel = new JPanel();
         panel.setPreferredSize(new Dimension(200, 768));
