@@ -21,15 +21,15 @@ public class Application {
   private boolean isNewOrder = true;
 
   /**
-   * @return the order status
+   *  @return the order status
    */
   public boolean getOrderStatus()
   {
     return isNewOrder;
   }
 
-  /**
-   *  @param status - the status of the order
+  /**  
+   * @param status - the status of the order
    *  @return void
    */
   public void setOrderStatus(boolean status)
@@ -37,7 +37,7 @@ public class Application {
     isNewOrder = status;
   }
 
-  /**
+  /** 
    * @param netID - the netID of the user
    * @param password - the password of the user
    * @return void
@@ -51,7 +51,6 @@ public class Application {
     gui = new GUI(this);
   }
 
- 
   protected void ConnectToDatabase(String netID, String password)
   {
     try {
@@ -67,8 +66,7 @@ public class Application {
     }
   }
 
-  /*
-  * closes the connection to the database
+  /** closes the connection to the database
   * @param none
   * @return void
   */
@@ -83,8 +81,7 @@ public class Application {
     }
   }
 
-  /*
-   * Populates the recipes and toppings lists with data from the database
+  /** Populates the recipes and toppings lists with data from the database
    * @param none
    * @return void
    */
@@ -94,8 +91,7 @@ public class Application {
     populateToppings();
   }
 
-  /*
-   * Populates the recipes list with data from the database
+  /** Populates the recipes list with data from the database
    * @param none
    * @return void
    */
@@ -122,8 +118,7 @@ public class Application {
     }
   }
 
-  /*
-   * Populates the toppings list with data from the database
+  /** Populates the toppings list with data from the database
    * @param none
    * @return void
    */
@@ -148,8 +143,7 @@ public class Application {
     }
   }
 
-  /*
-   * @return the next recipe_id
+  /** @return the next recipe_id
    * @param none
    */
   private int newRecipeID()
@@ -170,8 +164,7 @@ public class Application {
       return recipe_id;
   }
 
-  /*
-  * Creates a new recipe and adds it to the database
+  /** Creates a new recipe and adds it to the database
   * @param recipe_name - the name of the recipe
   * @param is_slush - whether or not the recipe is a slush
   * @param med_price - the price of a medium drink
@@ -240,8 +233,7 @@ public class Application {
     populate();
   }
 
-  /* 
-  *  Returns a recipe given a name, returns null if recipe not found
+  /**  Returns a recipe given a name, returns null if recipe not found
   *  @param name - the name of the recipe
   *  @return Recipe
   */ 
@@ -260,8 +252,7 @@ public class Application {
     return outRecipe;
   }
 
-  /* 
-  * Retuns a recipe given a recipe_id, returns null if recipe not found
+  /** Retuns a recipe given a recipe_id, returns null if recipe not found
   * @param recipe_id - the id of the recipe
   * @return Recipe
   */
@@ -280,8 +271,7 @@ public class Application {
     return outRecipe;
   }
 
-  /* 
-   * Returns a topping given a topping_name, returns null if topping not found
+  /** Returns a topping given a topping_name, returns null if topping not found
    * @param topping_name - the name of the topping
    * @return Topping
   */
@@ -300,7 +290,7 @@ public class Application {
     return outTopping;
   }
   
-  /*adds ingredients into recipe_ingredients 
+  /** adds ingredients into recipe_ingredients 
   * @param name - the name of the ingredient
   * @param price - the price of the ingredient
   * @param stock - the stock of the ingredient
@@ -332,7 +322,7 @@ public class Application {
   }
 
 
-  /* adds toppings into recipe_toppings
+  /** adds toppings into recipe_toppings
   * @param name - the name of the topping
   * @param price - the price of the topping
   * @param stock - the stock of the topping
@@ -362,7 +352,7 @@ public class Application {
   }
 
 
-  /* update recipe med_price
+  /** update recipe med_price
   * @param recipe_id - the id of the recipe
   * @param new_quantity - the new quantity of the recipe
   * @return void
@@ -376,8 +366,7 @@ public class Application {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
   }
-  /*
-   * updates recipe large_price
+  /** updates recipe large_price
    * @param recipe_id - the id of the recipe
    * @param new_quantity - the new quantity of the recipe
    * @return void
@@ -392,8 +381,7 @@ public class Application {
     }
   }
 
-  /*
-   * updates recipe recipe_price
+  /** updates recipe recipe_price
    * @param recipe_id - the id of the recipe
    * @param new_quantity - the new quantity of the recipe
    * @return void
@@ -408,13 +396,12 @@ public class Application {
     }
   }
 
-  /**
+  /*
    * update ingredient stock 
    * @param ingredient_id - the id of the ingredient
    * @param new_quantity - the new quantity of the ingredient
    * @return void
    */
-  // update ingredient stock 
   public void updateIngredientStock(int ingredient_id, int new_quantity){
     try
     {
@@ -425,6 +412,11 @@ public class Application {
     }
   }  
 
+  /**
+   * update ingredient name
+   * @param ingredient_id
+   * @param new_name
+   */
   public void updateIngredientName(int ingredient_id, String new_name){
     try
     {
@@ -435,6 +427,11 @@ public class Application {
     }
   }  
 
+  /**
+   * update ingredient unit price
+   * @param ingredient_id
+   * @param new_quantity
+   */
   public void updateIngredientUnitPrice(int ingredient_id, double new_quantity){
     try
     {
@@ -445,6 +442,12 @@ public class Application {
     }
   }  
 
+
+  /**
+   * update topping stock
+   * @param topping_id
+   * @param new_quantity
+   */
   public void updateToppingsStock(int topping_id, double new_quantity){
     try
     {
@@ -455,6 +458,11 @@ public class Application {
     }
   }  
 
+  /**
+   * update topping name
+   * @param topping_id
+   * @param new_name
+   */
   public void updateToppingsName(int topping_id, String new_name){
     try
     {
@@ -465,6 +473,11 @@ public class Application {
     }
   }  
 
+  /**
+   * update topping unit price
+   * @param topping_id
+   * @param new_quantity
+   */
   public void updateToppingsUnitPrice(int topping_id, double new_quantity){
     try
     {
@@ -475,6 +488,10 @@ public class Application {
     }
   }  
 
+  /**
+   * generate new order id
+   * @return int
+   */
   private int newOrderID()
   {
     int order_id = -1;
@@ -493,7 +510,12 @@ public class Application {
       return order_id;
     }
 
-    private int newItemID()
+  
+  /**
+   * generate new item id
+   * @return int
+   */
+  private int newItemID()
   {
     int order_id = -1;
     try
@@ -510,6 +532,11 @@ public class Application {
       return order_id;
     }
 
+  
+  /**
+   * create a new order function
+   * @return Order
+   */
   public Order createNewOrder()
   {
     LocalDate date = LocalDate.now();
@@ -526,11 +553,26 @@ public class Application {
     return order;
   }
 
+  /**
+   * get current order
+   * @return
+   */
   public Order getOrder()
   {
     return order;
   }
 
+  /**
+   * add drink into order
+   * @param recipe_ID
+   * @param notes
+   * @param is_medium
+   * @param ice
+   * @param sugar
+   * @param subtotal
+   * @param toppings_used
+   * @param toppings_used_quantity
+   */
   public void addDrink(int recipe_ID, String notes, boolean is_medium, int ice, int sugar, double subtotal, List<String> toppings_used, List<Integer> toppings_used_quantity)
   {
     Recipe recipe = getRecipe(recipe_ID);
@@ -563,6 +605,11 @@ public class Application {
     }
   }
 
+  /**
+   * place order including the tip and coupon
+   * @param tip
+   * @param coupon
+   */
   public void placeOrder(double tip, String coupon)
   {
     order.setTip(tip);
@@ -594,6 +641,10 @@ public class Application {
     setOrderStatus(true);
   }
 
+  /**
+   * 
+   * @return Object[][] of ingredients
+   */
   public Object[][] getIngredients(){
 
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
@@ -631,6 +682,11 @@ public class Application {
     return toReturn;  
   }
 
+  /**
+   * get toppings table from sql
+   * @return Object[][] of info of toppings
+   */
+
   public Object[][] getToppings(){
 
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
@@ -667,7 +723,11 @@ public class Application {
     }
     return toReturn;  
   }
-
+  /**
+   * update recipe_name of a recipe_id
+   * @param recipe_id
+   * @param new_name
+   */
   public void updateRecipeName(int recipe_id, String new_name){
     try
     {
@@ -678,6 +738,10 @@ public class Application {
     }
   }
 
+  /**
+   * get info of recipe table
+   * @return Object[][]
+   */
   public Object[][] getRecipes(){
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
 
@@ -718,6 +782,11 @@ public class Application {
     return toReturn;  
   }
 
+  /**
+   * get ingredient id of ingredient name
+   * @param ingredient_name
+   * @return int
+   */
   public int getIngredientId(String ingredient_name){
     try
     {
@@ -735,7 +804,12 @@ public class Application {
     return 0;
   }
 
-
+  /**
+   * remove all ingredients of recipe, adds all new ingredients
+   * @param recipe_id
+   * @param ingredient_names
+   * @param quantities
+   */
   public void modifyMultipleIngredients(int recipe_id, ArrayList<String> ingredient_names, ArrayList<Integer> quantities){
 
     // remove ingredients with recipe_id from recipe_ingredient
@@ -773,6 +847,11 @@ public class Application {
   }
 
 
+  /**
+   * get topping id of topping name
+   * @param topping_name
+   * @return
+   */
   public int getToppingId(String topping_name){
     try
     {
@@ -791,6 +870,12 @@ public class Application {
 
   }
 
+  /**
+   * removes all toppings of topping_id, adds all new toppings
+   * @param recipe_id
+   * @param topping_names
+   * @param quantities
+   */
   public void modifyMultipleToppings(int recipe_id, ArrayList<String> topping_names, ArrayList<Integer> quantities){
 
       // remove toppings with recipe_id from recipe_toppings
