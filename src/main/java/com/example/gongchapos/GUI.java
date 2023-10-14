@@ -94,6 +94,12 @@ public class GUI extends JFrame {
         return panel;
     }
 
+    /**
+     * This function adds formatting and Java Swing elements to our application,
+     * both the manager view and cashier view. It also dynamically loads buttons
+     * based on the drinks in our inventory, and calls functions from Application
+     * to allow it to interact with our database.
+     */
     public void launchGUI()
     {
       //initalize subtotal, tip, and total
@@ -105,9 +111,6 @@ public class GUI extends JFrame {
       loginFrame = new JFrame("Welcome to Gong Cha!");
       cashierFrame = new JFrame("Cashier");
       managerFrame = new JFrame("Manager");
-
-      // create a object
-      // GUI s = new GUI();
 
       // create a panel
       JPanel loginPanel = new JPanel();
@@ -837,7 +840,7 @@ public class GUI extends JFrame {
       JPanel receiptPanel = createReceiptPanel();
       JPanel managerReceiptPanel = createReceiptPanel();
 
-    ReloadButtons(actionListener);
+      ReloadButtons(actionListener);
       
       itemListPanel = new JPanel();
       itemListPanel.setLayout(new BoxLayout(itemListPanel, BoxLayout.Y_AXIS));
@@ -884,33 +887,40 @@ public class GUI extends JFrame {
       loginFrame.setVisible(true);
     }
 
-    public void RefreshIngredientTable(JTable table, String[] columnNames, JPanel panel) {
-        // TODO: refresh the table with new values
-        Object[][] newData = app.getIngredients();
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.setDataVector(newData, columnNames);
-        panel.revalidate();
-        panel.repaint();
-    }
+    // public void RefreshIngredientTable(JTable table, String[] columnNames, JPanel panel) {
+    //     // TODO: refresh the table with new values
+    //     Object[][] newData = app.getIngredients();
+    //     DefaultTableModel model = (DefaultTableModel) table.getModel();
+    //     model.setDataVector(newData, columnNames);
+    //     panel.revalidate();
+    //     panel.repaint();
+    // }
 
-    public void RefreshToppingTable(JTable table, String[] columnNames, JPanel panel) {
-        // TODO: refresh the table with new values
-        Object[][] newData = app.getToppings();
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.setDataVector(newData, columnNames);
-        panel.revalidate();
-        panel.repaint();
-    }
+    // public void RefreshToppingTable(JTable table, String[] columnNames, JPanel panel) {
+    //     // TODO: refresh the table with new values
+    //     Object[][] newData = app.getToppings();
+    //     DefaultTableModel model = (DefaultTableModel) table.getModel();
+    //     model.setDataVector(newData, columnNames);
+    //     panel.revalidate();
+    //     panel.repaint();
+    // }
 
-    public void RefreshDrinkTable(JTable table, String[] columnNames, JPanel panel) {
-        // TODO: refresh the table with new values
-        // Object[][] newData = app.getDrinks();
-        // DefaultTableModel model = (DefaultTableModel) table.getModel();
-        // model.setDataVector(newData, columnNames);
-        // panel.revalidate();
-        // panel.repaint();
-    }
+    // public void RefreshDrinkTable(JTable table, String[] columnNames, JPanel panel) {
+    //     // TODO: refresh the table with new values
+    //     Object[][] newData = app.getDrinks();
+    //     DefaultTableModel model = (DefaultTableModel) table.getModel();
+    //     model.setDataVector(newData, columnNames);
+    //     panel.revalidate();
+    //     panel.repaint();
+    // }
 
+
+    /**
+     * Adds an item to the receipt panel.
+     *
+     * @param itemButton The button representing the item.
+     * @param panel The panel where the item will be added.
+     */
     private void addItemToReceipt(ItemButton itemButton, JPanel panel) {
       // Get item details from the button
       //ask user if they want the medium price or large price
@@ -966,7 +976,6 @@ public class GUI extends JFrame {
             ice[0]
     );
 
-    //TODO: DRINK FUNCTIONALITY
     //create new drink object
       _drink newDrink = new _drink(itemButton.getRecipe(), size, iceResult, sugarResult);
       //add drink to array
@@ -1132,138 +1141,214 @@ public class GUI extends JFrame {
     itemListPanel.revalidate();
     itemListPanel.repaint();
   }
-  void ReloadButtons(ActionListener actionListener){
-    //first, clear out the old buttons in the panels
-    CashierMilkTeaPanel.removeAll();
-    CashierSlushiePanel.removeAll();
-    CashierCoffeePanel.removeAll();
-    CashierOtherPanel.removeAll();
 
-    ArrayList<ItemButton> buttons = new ArrayList<ItemButton>();
+    /**
+     * Reloads buttons in the Cashier interface based on the provided action listener.
+     *
+     * @param actionListener The action listener to be added to each button.
+     */
+    void ReloadButtons(ActionListener actionListener){
+        //first, clear out the old buttons in the panels
+        CashierMilkTeaPanel.removeAll();
+        CashierSlushiePanel.removeAll();
+        CashierCoffeePanel.removeAll();
+        CashierOtherPanel.removeAll();
 
-    for (Recipe recette : app.recipes) {
-        //then, create new buttons for each recipe
-        ItemButton button = new ItemButton(recette.getRecipeID(), this);
-        button.addActionListener(actionListener);
-        buttons.add(button);
-        //then, add the buttons to the panels, if item has slushie option, add to slushie panel
-        if (recette.isSlush()) {
-            CashierSlushiePanel.add(button);
+        ArrayList<ItemButton> buttons = new ArrayList<ItemButton>();
+
+        for (Recipe recette : app.recipes) {
+            //then, create new buttons for each recipe
+            ItemButton button = new ItemButton(recette.getRecipeID(), this);
+            button.addActionListener(actionListener);
+            buttons.add(button);
+            //then, add the buttons to the panels, if item has slushie option, add to slushie panel
+            if (recette.isSlush()) {
+                CashierSlushiePanel.add(button);
+            }
+            else if (recette.getRecipeName().contains("Coffee")) {
+                CashierCoffeePanel.add(button);
+            }
+            else if (recette.getRecipeName().contains("Milk")) {
+                CashierMilkTeaPanel.add(button);
+            }
+            else {
+                CashierOtherPanel.add(button);
+            }
         }
-        else if (recette.getRecipeName().contains("Coffee")) {
-            CashierCoffeePanel.add(button);
-        }
-        else if (recette.getRecipeName().contains("Milk")) {
-            CashierMilkTeaPanel.add(button);
-        }
-        else {
-            CashierOtherPanel.add(button);
-        }
+
+        //then, repaint the panels
+        CashierCoffeePanel.revalidate();
+        CashierCoffeePanel.repaint();
+        CashierMilkTeaPanel.revalidate();
+        CashierMilkTeaPanel.repaint();
+        CashierSlushiePanel.revalidate();
+        CashierSlushiePanel.repaint();
+        CashierOtherPanel.revalidate();
+        CashierOtherPanel.repaint();
+
     }
 
-    
-    //then, repaint the panels
-    CashierCoffeePanel.revalidate();
-    CashierCoffeePanel.repaint();
-    CashierMilkTeaPanel.revalidate();
-    CashierMilkTeaPanel.repaint();
-    CashierSlushiePanel.revalidate();
-    CashierSlushiePanel.repaint();
-    CashierOtherPanel.revalidate();
-    CashierOtherPanel.repaint();
+    /**
+     * Creates a new JLabel with the specified text and left alignment.
+     *
+     * @param text The text to be displayed on the label.
+     * @return A new JLabel with the specified text and left alignment.
+     */
+    JLabel CreateNewLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return label;
+    }
 
-
-    
-  }
-
-  JLabel CreateNewLabel(String text) {
-    JLabel label = new JLabel(text);
-    label.setAlignmentX(Component.LEFT_ALIGNMENT);
-    return label;
-  }
-
-  JTextField CreateNewTextField() {
-      JTextField textField = new JTextField();
-      textField.setAlignmentX(Component.LEFT_ALIGNMENT);
-      textField.setMinimumSize(new Dimension(200, 20));
-      return textField;
-  }
+    /**
+     * Creates a new JTextField with left alignment and a minimum size of 200x20 pixels.
+     *
+     * @return A new JTextField with left alignment and a minimum size of 200x20 pixels.
+     */
+    JTextField CreateNewTextField() {
+        JTextField textField = new JTextField();
+        textField.setAlignmentX(Component.LEFT_ALIGNMENT);
+        textField.setMinimumSize(new Dimension(200, 20));
+        return textField;
+    }
 }
 
+/**
+ * Custom JButton class representing an item button in the GUI.
+ * 
+ * @author Ren Mai
+ */
 class ItemButton extends JButton {
     private Recipe recipe;
 
+    /**
+     * Constructs a new ItemButton with the specified recipe ID and GUI.
+     *
+     * @param recipe_id The ID of the recipe associated with this button.
+     * @param gui The GUI object that contains the application.
+     */
     public ItemButton(int recipe_id, GUI gui) {
         super("<html>" + gui.app.getRecipe(recipe_id).getRecipeName() + "</html>");
         recipe = gui.app.getRecipe(recipe_id);
- 
+
         setPreferredSize(new Dimension(100, 100));
         setBackground(Color.GREEN);
         setHorizontalAlignment(SwingConstants.CENTER);
         setVerticalAlignment(SwingConstants.CENTER);
     }
 
+    /**
+     * Gets the ID of the associated item.
+     *
+     * @return The ID of the associated item.
+     */
     public int getItemID() {
         return recipe.getRecipeID();
     }
 
+    /**
+     * Gets the name of the associated item.
+     *
+     * @return The name of the associated item.
+     */
     public String getItemName() {
         return recipe.getRecipeName();
     }
 
+    /**
+     * Gets the price of the associated item in medium size.
+     *
+     * @return The price of the associated item in medium size.
+     */
     public double getMediumPrice() {
         return recipe.getMediumPrice();
     }
 
+    /**
+     * Gets the price of the associated item in large size.
+     *
+     * @return The price of the associated item in large size.
+     */
     public double getLargePrice() {
         return recipe.getLargePrice();
     }
 
+    /**
+     * Gets the Recipe object associated with this button.
+     *
+     * @return The Recipe object associated with this button.
+     */
     public Recipe getRecipe() {
         return recipe;
     }
 }
 
 //make a class for toppings
-class _topping{
-    String name;
-    Topping topping;
-    int quantity;
+/**
+ * Represents a topping associated with a drink.
+ * 
+ * @author Ren Mai
+ */
+class _topping {
+    String name;     // The name of the topping
+    Topping topping; // The Topping object
+    int quantity;    // The quantity of the topping
 
+    /**
+     * Constructs a new _topping instance.
+     *
+     * @param topping The Topping object associated with this topping.
+     * @param name The name of the topping.
+     * @param quantity The quantity of the topping.
+     */
     public _topping(Topping topping, String name, int quantity){
         this.topping = topping;
         this.name = name;
         this.quantity = quantity;
-
     }
 }
 
-class _drink{
-    Recipe recipe;
-    ArrayList<_topping> toppings;
-    boolean is_medium;
-    int ice;
-    int sugar;
-    double price; //price of drink is calculated using recipe price and topping prices
+/**
+ * Represents a drink item with associated toppings, size, ice level, sugar level, and price.
+ * 
+ * @author Ren Mai
+ */
+class _drink {
+    Recipe recipe;          // The Recipe associated with the drink
+    ArrayList<_topping> toppings; // The list of toppings on the drink
+    boolean is_medium;      // Indicates if the drink is of medium size
+    int ice;                // The level of ice in the drink
+    int sugar;              // The level of sugar in the drink
+    double price;           // The total price of the drink
 
-    public _drink(Recipe recipe, boolean is_medium,int ice, int sugar){
+    /**
+     * Constructs a new _drink instance.
+     *
+     * @param recipe The Recipe object associated with this drink.
+     * @param is_medium Indicates if the drink is of medium size.
+     * @param ice The level of ice in the drink.
+     * @param sugar The level of sugar in the drink.
+     */
+    public _drink(Recipe recipe, boolean is_medium, int ice, int sugar){
         this.recipe = recipe;
         this.is_medium = is_medium;
         this.ice = ice;
         this.sugar = sugar;
+
         if (is_medium) {
             price = recipe.getMediumPrice();
-        }
-        else{
+        } else {
             price = recipe.getLargePrice();
         }
     }
 
+    /**
+     * Updates the price of the drink based on the recipe, toppings, and size.
+     */
     public void updateprice(){
         if(is_medium){
             price = recipe.getMediumPrice();
-        }
-        else{
+        } else {
             price = recipe.getLargePrice();
         }
 
@@ -1272,5 +1357,3 @@ class _drink{
         }
     }
 }
-
-
