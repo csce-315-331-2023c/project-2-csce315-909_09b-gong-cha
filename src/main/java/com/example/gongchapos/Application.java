@@ -17,7 +17,6 @@ public class Application {
   protected List<Recipe> recipes = new ArrayList<Recipe>();
   protected List<Topping> toppings = new ArrayList<Topping>();
   protected Connection conn = null;
-  private int order_id = -1;
   private int item_id = -1;
   private Order order = null;
 
@@ -47,8 +46,7 @@ public class Application {
   {
     ConnectToDatabase(netID, password);
     populate();
-    order_id = newOrderID();
-    item_id = newItemID();
+    item_id = getLastItemID();
     gui = new GUI(this);
   }
 
@@ -512,7 +510,7 @@ public class Application {
    * generate new item id
    * @return int
    */
-  private int newItemID()
+  private int getLastItemID()
   {
     int order_id = -1;
     try
@@ -521,7 +519,7 @@ public class Application {
       ResultSet result = stmt.executeQuery("SELECT * FROM order_item ORDER BY order_item_id DESC LIMIT 1;");
       while(result.next())
       {
-        order_id = result.getInt("order_item_id") + 1;
+        order_id = result.getInt("order_item_id");
       }
       } catch (Exception e){
         JOptionPane.showMessageDialog(null,"Error accessing Database");
@@ -539,8 +537,7 @@ public class Application {
     LocalDate date = LocalDate.now();
 
     order = new Order(date.toString());
-    int ID = order_id;
-    order_id++;
+    int ID = newOrderID();
     if(ID != -1)
     {
       order.setOrderID(ID);
@@ -572,10 +569,16 @@ public class Application {
    */
   public void addDrink(int recipe_ID, String notes, boolean is_medium, int ice, int sugar, double subtotal, List<String> toppings_used, List<Integer> toppings_used_quantity)
   {
+     item_id += 1;
     Recipe recipe = getRecipe(recipe_ID);
 
     Drink drink = new Drink(recipe, notes, is_medium, ice, sugar);
-    drink.setOrderItemID(item_id);
+    int ID = item_id;
+    if(ID != -1)
+    {
+      drink.setOrderItemID(ID);
+    }
+    
 
     if(getOrderStatus())
     {
@@ -610,7 +613,8 @@ public class Application {
       Statement stmt = conn.createStatement();
       stmt.execute("INSERT INTO order_ VALUES ('" + order.getOrderID() + "','" + order.getDate() + "','" + order.getSubtotal() + "','" + order.getTip() + "','" + order.getCouponCode() + "','" + order.getTime() + "');");
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, "Error accessing Database");
+      System.out.println(e);
+      JOptionPane.showMessageDialog(null, "Error accessing Database 2");
     }
 
     for(Drink current_drink : order.getOrderItems())
@@ -620,7 +624,8 @@ public class Application {
         Statement stmt = conn.createStatement();
         stmt.execute("INSERT INTO order_item VALUES ('" + current_drink.getOrderItemID() + "','" + current_drink.getRecipeID() + "','" + order.getOrderID() + "','" + current_drink.getNotes() + "','" + current_drink.isMedium() + "','" + current_drink.getIce() + "','" + current_drink.getSugar() + "','" + current_drink.getItemPrice() + "');" );
       } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error accessing Database");
+        System.out.println(e);
+        JOptionPane.showMessageDialog(null, "Error accessing Database 1");
       }
 
       for(Map.Entry<Topping,Integer> current_entry : current_drink.getToppingsUsed().entrySet())
