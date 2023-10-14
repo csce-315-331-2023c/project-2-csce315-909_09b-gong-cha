@@ -2,7 +2,11 @@ package com.example.gongchapos;
 
 import java.util.*;
 
-
+/**
+ * Represents a singular order requested at the boba shop
+ * 
+ * @author Reid Jenkins
+ */
 public class Order extends Application{
     private String date;
     private int order_id;

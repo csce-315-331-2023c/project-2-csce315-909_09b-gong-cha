@@ -1,5 +1,11 @@
 package com.example.gongchapos;
 
+/**
+ * This represents a topping held in our inventory
+ * alone with the stock and unit_price
+ * 
+ * @author Reid Jenkins
+ */
 public class Topping {
     private int topping_id;
     private String topping_name;

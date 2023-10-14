@@ -3,7 +3,7 @@ package com.example.gongchapos;
 /**
 * Represents an order item with associated toppings and quantities used
 * 
-* @author Fridge2016
+* @author Reid Jenkins
 */
 public class orderItemToppings {
     private int order_item_id;

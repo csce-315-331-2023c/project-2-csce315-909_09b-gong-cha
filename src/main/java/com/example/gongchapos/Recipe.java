@@ -3,7 +3,7 @@ package com.example.gongchapos;
 /**
  * Represents a recipe with associated attributes like ID, name, slush status, medium and large prices, and recipe price.
  * 
- * @author Fridge2016
+ * @author Reid Jenkins
  */
 public class Recipe {
     private int recipe_id;

@@ -3,7 +3,7 @@ package com.example.gongchapos;
 /**
  * Represents an ingredient with associated attributes like ID, name, stock, and unit price.
  * 
- * @author Fridge2016
+ * @author Reid Jenkins
  */
 public class Ingredient {
     private int ingredient_id;

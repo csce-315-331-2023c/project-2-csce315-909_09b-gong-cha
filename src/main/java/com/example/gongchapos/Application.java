@@ -6,6 +6,9 @@ import javax.swing.JOptionPane;
 import java.time.*;
 
 /**
+ * This represents the opening of our application as well as the connection
+ * of the application to the database
+ * 
  * Author: @author Anton Hugo
  * Author2: @author Reid Jenkins
  */
@@ -401,7 +404,7 @@ public class Application {
     }
   }
 
-  /*
+  /**
    * update ingredient stock 
    * @param ingredient_id - the id of the ingredient
    * @param new_quantity - the new quantity of the ingredient

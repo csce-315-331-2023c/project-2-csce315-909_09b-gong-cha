@@ -2,6 +2,8 @@ package com.example.gongchapos;
 public class Main {
     
     /**
+     * This represents the main startup of our application
+     * 
      * @author: Reid Jenkins
      */
     public static void main(String[] args)
