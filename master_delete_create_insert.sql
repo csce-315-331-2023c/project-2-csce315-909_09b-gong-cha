@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS public.Ingredient(
 	Ingredient_Name varchar(128) NOT NULL,
 	Unit_Price Decimal(5,2) NOT NULL,
 	Stock numeric NOT NULL,
+	Minimum_Quantity numeric NOT NULL
 	PRIMARY KEY(Ingredient_ID)
 )
 
@@ -68,6 +69,7 @@ CREATE TABLE IF NOT EXISTS public.Toppings(
 	Topping_Name varchar(128) NOT NULL,
 	Unit_Price Decimal(5,2) NOT NULL,
 	Stock numeric NOT NULL,
+	Minimum_Quantity numeric NOT NULL
 	PRIMARY KEY(Topping_ID)
 )
 
@@ -134,7 +136,7 @@ ALTER TABLE IF EXISTS public.Order_Item_Toppings
 CREATE TABLE IF NOT EXISTS public.Recipe_Toppings(
 	Recipe_ID serial NOT NULL REFERENCES Recipe(Recipe_ID),
 	Topping_ID serial NOT NULL REFERENCES Toppings(Topping_ID),
-	Quantity_Used numeric NOT NULL
+	Quantity_Used numeric NOT NULL,
 	-- PRIMARY KEY(Recipe_ID, Topping_ID)
 )
 
