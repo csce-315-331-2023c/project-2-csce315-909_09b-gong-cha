@@ -51,6 +51,11 @@ public class Application {
     gui = new GUI(this);
   }
 
+  /**
+   * Connects to AWS database by taking in the according netID and password
+   * @param netID
+   * @param password
+   */
   protected void ConnectToDatabase(String netID, String password)
   {
     try {
