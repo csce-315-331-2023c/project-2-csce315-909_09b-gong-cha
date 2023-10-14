@@ -382,7 +382,6 @@ public class GUI extends JFrame {
                 // Create SQL query to change the name in the database using changeDrinkID and new name
                 // Call it
                 app.updateRecipeName(changeDrinkID, changedName);
-                // Call function to refresh drink table
             }
             if (s.equals("Change Ingredients")) {
                 String newIngredientsStr = ingredients2.getText();
@@ -430,7 +429,6 @@ public class GUI extends JFrame {
                 }
                 // Call SQL query with ID and new price
                 app.updateMedPrice(changeDrinkID, price);
-                // RefreshDrinkTable(drinksTable columnNamesDrinks, viewDrinksPanel);
             }
             if (s.equals("Change Large Price")) {
                 String priceStr = largePrice2.getText();
@@ -440,7 +438,6 @@ public class GUI extends JFrame {
                 }
                 // Call SQL query with ID and new price
                 app.updateLargePrice(changeDrinkID, price);
-                // RefreshDrinkTable(drinksTable columnNamesDrinks, viewDrinksPanel);
             }
             if (s.equals("Change Recipe Price")) {
                 String priceStr = recipePrice2.getText();
@@ -450,7 +447,6 @@ public class GUI extends JFrame {
                 }
                 // Call SQL query with ID and new price
                 app.updateRecipePrice(changeDrinkID, price);
-                // RefreshDrinkTable(drinksTable columnNamesDrinks, viewDrinksPanel);
             }
             if (s.equals("Add New Ingredient")) {
                 String ingredientNameStr = ingredientName.getText();
@@ -464,7 +460,6 @@ public class GUI extends JFrame {
                 }
                 
                 // Create SQL query to add a new ingredient and call it using ingredient name, unitPriceDBL, and stockINT
-                // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
                 app.addIngredients(ingredientNameStr, Double.parseDouble(ingredientUnitPrice), Integer.parseInt(ingredientStock));
             }
             if (s.equals("Change Ingredient Name")) {
@@ -477,7 +472,6 @@ public class GUI extends JFrame {
                 // Create SQL query to change ingredient name given int ID and String name
                 // Call query
                 app.updateIngredientName(ingredientID, ingredientNameStr);
-                // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
             }
             if (s.equals("Change Unit Price")) {
                 String ingredientIDStr = modifyIngredientID.getText();
@@ -493,7 +487,6 @@ public class GUI extends JFrame {
                 // Create SQL query to change unit price given int ID and double unit_price
                 // Call query
                 app.updateIngredientUnitPrice(ingredientID, newUnitPrice);
-                // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
             }
             if (s.equals("Change Stock")) {
                 String ingredientIDStr = modifyIngredientID.getText();
@@ -508,7 +501,6 @@ public class GUI extends JFrame {
                 }
                 // Create SQL query to change stock given int ID and int stock
                 app.updateIngredientStock(ingredientID, ingredientStock);
-                // RefreshIngredientTable(inventoryTable, columnNames, managerInventoryPanel);
             }
             if(s.equals("Add New Topping")) {
                 String toppingNameStr = toppingName.getText();
@@ -522,10 +514,8 @@ public class GUI extends JFrame {
                 if (!toppingStockStr.equals("")) {
                     stockINT = Integer.parseInt(toppingStockStr);
                 }
-                // TODO: Add New Topping
                 // Create SQL query to add a new topping and call it using topping name, unitPriceDBL, and stockINT
                 app.addToppings(toppingNameStr, unitPriceDBL, stockINT);
-                // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
             }
             if(s.equals("Change Topping Name")) {
                 String toppingIDStr = modifyToppingID.getText();
@@ -537,7 +527,6 @@ public class GUI extends JFrame {
                 // Create SQL query to change topping name given int ID and String name
                 // Call query
                 app.updateToppingsName(toppingID, toppingNameStr);
-                // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
             }
             if(s.equals("Change Topping Unit Price")) {
                 String toppingIDStr = modifyToppingID.getText();
@@ -553,7 +542,6 @@ public class GUI extends JFrame {
                 // Create SQL query to change unit price given int ID and double unit_price
                 // Call query
                 app.updateToppingsUnitPrice(toppingID, newUnitPrice);
-                // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
             }
             if(s.equals("Change Topping Stock")) {
                 String toppingIDStr = modifyToppingID.getText();
@@ -569,7 +557,6 @@ public class GUI extends JFrame {
                 // Create SQL query to change stock given int ID and int stock
                 // Call query
                 app.updateToppingsStock(toppingID, toppingStock);
-                // RefreshToppingTable(inventoryTable2, columnNamesToppings, managerInventoryPanel);
             }
         }        
       };
@@ -887,34 +874,6 @@ public class GUI extends JFrame {
 
       loginFrame.setVisible(true);
     }
-
-    // public void RefreshIngredientTable(JTable table, String[] columnNames, JPanel panel) {
-    //     // TODO: refresh the table with new values
-    //     Object[][] newData = app.getIngredients();
-    //     DefaultTableModel model = (DefaultTableModel) table.getModel();
-    //     model.setDataVector(newData, columnNames);
-    //     panel.revalidate();
-    //     panel.repaint();
-    // }
-
-    // public void RefreshToppingTable(JTable table, String[] columnNames, JPanel panel) {
-    //     // TODO: refresh the table with new values
-    //     Object[][] newData = app.getToppings();
-    //     DefaultTableModel model = (DefaultTableModel) table.getModel();
-    //     model.setDataVector(newData, columnNames);
-    //     panel.revalidate();
-    //     panel.repaint();
-    // }
-
-    // public void RefreshDrinkTable(JTable table, String[] columnNames, JPanel panel) {
-    //     // TODO: refresh the table with new values
-    //     Object[][] newData = app.getDrinks();
-    //     DefaultTableModel model = (DefaultTableModel) table.getModel();
-    //     model.setDataVector(newData, columnNames);
-    //     panel.revalidate();
-    //     panel.repaint();
-    // }
-
 
     /**
      * Adds an item to the receipt panel.
