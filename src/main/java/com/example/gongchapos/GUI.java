@@ -188,6 +188,7 @@ public class GUI extends JFrame {
       JPanel changeInventoryPanel = new JPanel();
       JPanel viewDrinksPanel = new JPanel();
       JPanel managerInventoryPanel = new JPanel();
+      JPanel recommendedRestock = new JPanel()
       
       String[] columnNames = {"Ingredient_ID", "Ingredient_Name", "Unit_Price", "Stock"};
       // Make a JTable out of the data returned from function in Application.java
@@ -209,6 +210,13 @@ public class GUI extends JFrame {
       JTable drinksTable = new JTable(dataDrinks, columnNamesDrinks);
       JScrollPane drinkScrollPane = new JScrollPane(drinksTable);
       viewDrinksPanel.add(drinkScrollPane);
+
+      String[] columnNamesInventory = {"Recipe_ID", "Recipe_Name", "isSlush", "Med_Price", "Large_Price", "Recipe_Price"};
+      // Make a JTable out of drink data returned from function in Application.java
+      Object[][] dataInventory = app.getRecipes();
+      JTable inventoryTable3 = new JTable(dataInventory, columnNamesInventory);
+      JScrollPane inventoryScrollPaneRecommended = new JScrollPane(inventoryTable3);
+      recommendedPurchases.add(inventoryScrollPaneRecommended);
 
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
@@ -812,6 +820,7 @@ public class GUI extends JFrame {
       managerTabbedPane.addTab("Add/Update Inventory Items", null, changeInventoryPanel, "Does nothing");
       managerTabbedPane.addTab("Drinks", null, viewDrinksPanel, "Does nothing");
       managerTabbedPane.addTab("Add/Modify Drink", null, managerActionsPanel, "Does nothing");
+      managerTabbedPane.addTab("Recommended Restock", null, recommendedPurchases, "Does nothing");
 
       cashierTabbedPane.addTab("Milk Tea", null, CashierMilkTeaPanel, "Does nothing");
       cashierTabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
