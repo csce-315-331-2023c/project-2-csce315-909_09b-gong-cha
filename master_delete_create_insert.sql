@@ -5,14 +5,13 @@ CREATE TYPE ice_type AS ENUM ('light', 'regular', 'none');
 CREATE TYPE sugar_type AS ENUM ('100%', '70%', '50%', '30%', '0%');
 
 --Clear out all old tables 
+Drop TABLE IF EXISTS public.Recipe_Toppings;
 DROP TABLE IF EXISTS public.Order_Item_Toppings;
 DROP TABLE IF EXISTS public.Order_Item;
 DROP TABLE IF EXISTS public.Recipe_Ingredient;
 DROP TABLE IF EXISTS public.Order_;
 DROP TABLE IF EXISTS public.Ingredient;
-Drop TABLE IF EXISTS public.Recipe_Toppings;
 DROP TABLE IF EXISTS public.Toppings; 
-DROP TABLE IF EXISTS public.Recipe;
 
 --Table: Order REQUIRES UNDERSCORE because of naming conventions in SQL
 CREATE TABLE IF NOT EXISTS public.Order_(
@@ -54,7 +53,7 @@ CREATE TABLE IF NOT EXISTS public.Ingredient(
 	Ingredient_Name varchar(128) NOT NULL,
 	Unit_Price Decimal(5,2) NOT NULL,
 	Stock numeric NOT NULL,
-	Minimum_Quantity numeric NOT NULL
+	Minimum_Quantity numeric NOT NULL,
 	PRIMARY KEY(Ingredient_ID)
 )
 
@@ -69,7 +68,7 @@ CREATE TABLE IF NOT EXISTS public.Toppings(
 	Topping_Name varchar(128) NOT NULL,
 	Unit_Price Decimal(5,2) NOT NULL,
 	Stock numeric NOT NULL,
-	Minimum_Quantity numeric NOT NULL
+	Minimum_Quantity numeric NOT NULL,
 	PRIMARY KEY(Topping_ID)
 )
 
@@ -136,7 +135,7 @@ ALTER TABLE IF EXISTS public.Order_Item_Toppings
 CREATE TABLE IF NOT EXISTS public.Recipe_Toppings(
 	Recipe_ID serial NOT NULL REFERENCES Recipe(Recipe_ID),
 	Topping_ID serial NOT NULL REFERENCES Toppings(Topping_ID),
-	Quantity_Used numeric NOT NULL,
+	Quantity_Used numeric NOT NULL
 	-- PRIMARY KEY(Recipe_ID, Topping_ID)
 )
 
