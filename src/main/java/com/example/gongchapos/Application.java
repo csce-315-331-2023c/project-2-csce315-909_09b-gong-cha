@@ -576,13 +576,12 @@ public class Application {
 
     Drink drink = new Drink(recipe, notes, is_medium, ice, sugar);
     drink.setOrderItemID(item_id);
-    item_id++;
+
     if(getOrderStatus())
     {
         setOrderStatus(false);
         order = createNewOrder();
     }
-    System.out.println("Order ID: " + order.getOrderID());
     
     order.setSubtotal(subtotal);
     order.addOrderItem(drink);
@@ -590,15 +589,7 @@ public class Application {
     for(int i = 0; i < toppings_used.size(); i++)
     {
       Topping topping = getTopping(toppings_used.get(i));
-      orderItemToppings orderItemTopping = new orderItemToppings(drink.getOrderItemID(), topping.getToppingId(), toppings_used_quantity.get(i));
-
-       try
-        {
-          Statement stmt = conn.createStatement();
-          stmt.execute("INSERT INTO order_item_toppings VALUES('" + orderItemTopping.getOrderItemID() + "','" + orderItemTopping.getToppingId() + "','" + orderItemTopping.getQuantityUsed() + "');");
-        } catch (Exception e) {
-          JOptionPane.showMessageDialog(null, "Error accessing Database");
-        }
+      drink.insertTopping(topping, toppings_used_quantity.get(i));
     }
   }
 
@@ -630,6 +621,20 @@ public class Application {
         stmt.execute("INSERT INTO order_item VALUES ('" + current_drink.getOrderItemID() + "','" + current_drink.getRecipeID() + "','" + order.getOrderID() + "','" + current_drink.getNotes() + "','" + current_drink.isMedium() + "','" + current_drink.getIce() + "','" + current_drink.getSugar() + "','" + current_drink.getItemPrice() + "');" );
       } catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Error accessing Database");
+      }
+
+      for(Map.Entry<Topping,Integer> current_entry : current_drink.getToppingsUsed().entrySet())
+      {
+        orderItemToppings orderItemTopping = new orderItemToppings(current_drink.getOrderItemID(), current_entry.getKey().getToppingId(), current_entry.getValue());
+
+       try
+        {
+          Statement stmt = conn.createStatement();
+          stmt.execute("INSERT INTO order_item_toppings VALUES('" + orderItemTopping.getOrderItemID() + "','" + orderItemTopping.getToppingId() + "','" + orderItemTopping.getQuantityUsed() + "');");
+        } catch (Exception e) {
+          System.out.println(e);
+          JOptionPane.showMessageDialog(null, "Error accessing Database 0");
+        }
       }
 
       
