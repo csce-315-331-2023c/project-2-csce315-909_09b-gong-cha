@@ -507,7 +507,7 @@ public class Application {
 
   
   /**
-   * generate new item id
+   * gets last item id in database
    * @return int
    */
   private int getLastItemID()

@@ -1,17 +1,24 @@
 package com.example.gongchapos;
 
+import java.sql.*;
+import java.util.*;
+
+import javax.swing.JOptionPane;
+
 /**
  * Represents a recipe with associated attributes like ID, name, slush status, medium and large prices, and recipe price.
  * 
  * @author Reid Jenkins
  */
-public class Recipe {
+public class Recipe extends Application{
     private int recipe_id;
     private String recipe_name;
     private boolean is_slush;
     private double med_price;
     private double large_price;
     private double recipe_price;
+
+    private Map<Ingredient, Integer> ingredients = new HashMap<Ingredient, Integer>();
 
     /**
      * Constructor for Recipe.
@@ -31,6 +38,23 @@ public class Recipe {
         med_price = _med_price;
         large_price = _large_price;
         recipe_price = _recipe_price;
+
+        try 
+        {
+            Statement stmt = conn.createStatement();
+            ResultSet result = stmt.executeQuery("SELECT Ingredient_Name, Ingredient_id, stock, Recipe_Ingredient.Quantity_Used FROM Recipe " +
+                                                 "NATURAL JOIN Recipe_Ingredient NATURAL JOIN Ingredient WHERE Recipe_id = " + recipe_id +";"); 
+            
+            while(result.next())
+            {
+                Ingredient ingredient = new Ingredient(result.getInt("Ingredient_id"), result.getString("Ingredient_Name"), result.getInt("stock"));
+
+                ingredients.put(ingredient, result.getInt("Quantity_Used"));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Error accessing Database 0");
+        }
     }
 
     /**
