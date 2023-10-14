@@ -12,7 +12,8 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Represents the construction and design of the POS GUI
  * 
- * @authors Ren Mai, Brenndan Croteau
+ * @author Ren Mai
+ * @author Brenndan Croteau
  */
 public class GUI extends JFrame {
     //make list of order items
@@ -47,7 +48,7 @@ public class GUI extends JFrame {
     /**
      * Constructor to initialize the GUI class taking into consideration an Application
      * 
-     * @param _app
+     * @param _app - Application object used to open our GUI
      */
     public GUI(Application _app)
     {

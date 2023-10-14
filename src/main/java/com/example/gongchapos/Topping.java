@@ -14,11 +14,10 @@ public class Topping {
 
     /**
      * Constructs a Topping object
-     * @param _topping_id
-     * @param _topping_name
-     * @param _stock
-     * @param _unit_price
-     * @return Topping
+     * @param _topping_id - the id of the topping
+     * @param _topping_name - the name of the topping
+     * @param _stock - the stock of the topping
+     * @param _unit_price - the unit price to order the topping
      */
     public Topping(int _topping_id, String _topping_name, int _stock, double _unit_price)
     {

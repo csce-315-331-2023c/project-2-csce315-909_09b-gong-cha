@@ -4,7 +4,8 @@ public class Main {
     /**
      * This represents the main startup of our application
      * 
-     * @author: Reid Jenkins
+     * @author Reid Jenkins
+     * @param args - The args given for main
      */
     public static void main(String[] args)
     {

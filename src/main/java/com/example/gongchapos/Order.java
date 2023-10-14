@@ -19,7 +19,7 @@ public class Order extends Application{
 
     /**
      * Constructor for Order
-     * @param _date
+     * @param _date - the date the order was taken
      */
     public Order(String _date)
     {
@@ -37,7 +37,7 @@ public class Order extends Application{
 
     /**
      * Set the Order ID of the Order
-     * @param id
+     * @param id - the ID of the order
      */
     public void setOrderID(int id)
     {
@@ -64,7 +64,7 @@ public class Order extends Application{
 
     /**
      * Set the subtotal of the Order
-     * @param total
+     * @param total - the subtotal of the order
      */
     public void setSubtotal(double total)
     { 
@@ -82,7 +82,7 @@ public class Order extends Application{
 
     /**
      * Set the tip of the Order
-     * @param _tip
+     * @param _tip - The tip provided
      */
     public void setTip(double _tip)
     {
@@ -91,7 +91,7 @@ public class Order extends Application{
 
     /**
      * Set the coupon code of the Order
-     * @param code
+     * @param code - The coupon code provided
      */
     public void setCouponCode(String code)
     {
@@ -118,7 +118,7 @@ public class Order extends Application{
 
     /**
      * Set the time of the Order
-     * @param _time
+     * @param _time - The time the order was taken
      */
     public void setTime(String _time)
     {
@@ -127,7 +127,7 @@ public class Order extends Application{
 
     /**
      * Add a Drink to the Order
-     * @param drink
+     * @param drink - A drink object being added to the order
      */
     public void addOrderItem(Drink drink)
     {
@@ -137,7 +137,7 @@ public class Order extends Application{
 
     /**
      * Get the List of Drinks in the Order
-     * @return List<Drink>
+     * @return A list of Drink objects which are the order items
      */
     public List<Drink> getOrderItems()
     {
