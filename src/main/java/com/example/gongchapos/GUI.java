@@ -1032,6 +1032,17 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Create a dialog to select toppings and quantities
+                //clear toppings arraylist
+                if (newDrink.toppings != null){
+                    newDrink.toppings.clear();
+                }
+                //if the toppings panel is not empty, clear it
+                if (minitoppanel.getComponentCount() != 0){
+                    minitoppanel.removeAll();
+                }
+                //clear toppings quantity arraylist
+                selectedToppingsQuantity.clear();
+
                 JDialog dialog = new JDialog();
                 dialog.setTitle("Edit Toppings");
                 dialog.setLayout(new BorderLayout());
@@ -1040,9 +1051,6 @@ public class GUI extends JFrame {
                 toppingsPanel.setLayout(new BoxLayout(toppingsPanel, BoxLayout.Y_AXIS));
 
                 // Sample toppings (you can replace this with your actual toppings)
-                //TODO: query database for toppings and topping prices
-                //create string of available toppings based on database toppings.
-                //vector of toppings
                 Vector<String> availableToppings = new Vector<String>();
 
                 for (Topping top : app.toppings) {
@@ -1071,7 +1079,7 @@ public class GUI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         // Process the selected toppings and quantity
                         int quantity;
-                        double topping_price = 0;
+                        // double topping_price = 0;
                         ArrayList<_topping> selectedToppings = new ArrayList<>();
                         //iterate over spinners and get quantity, if not 0, add to list of toppings
                         for (int i = 0; i < spinners.size(); i++) {
@@ -1084,25 +1092,32 @@ public class GUI extends JFrame {
                                 _topping newTopping = new _topping(topping_fr, topping, quantity);
                                 minitoppanel.add(new JLabel("    "+topping + ": " + quantity));
                                 
-                                topping_price = topping_fr.getUnitPrice() * quantity;
+                                // topping_price = topping_fr.getUnitPrice() * quantity;
 
                                 selectedToppings.add(newTopping);
                                 selectedToppingsQuantity.add(quantity);
                             }
                         }
 
-                        //print out the toppings and quantities
-                        //update the subtotal and total
-                        subtotal += topping_price;
-                        total = subtotal + tip;
-                        //update subtotal and total labels
-                        subtotalLabel.setText("Subtotal: $" + subtotal);
-                        totalLabel.setText("Total: $" + total);
+
 
                         itemListPanel.revalidate();
                         itemListPanel.repaint();
                         // Close the dialog
+                        subtotal -= newDrink.price;
+
                         newDrink.toppings = selectedToppings;
+                        newDrink.updateprice();
+
+                        //print out the toppings and quantities
+                        //update the subtotal and total
+                        subtotal += newDrink.price;
+                        total = subtotal + tip;
+                    
+                        //update subtotal and total labels
+                        subtotalLabel.setText("Subtotal: $" + subtotal);
+                        totalLabel.setText("Total: $" + total);
+
                         dialog.dispose();
                         minitoppanel.revalidate();
                         minitoppanel.repaint();
@@ -1354,7 +1369,8 @@ class _drink {
         }
 
         for(_topping topping : toppings){
-            price += topping.quantity * topping.topping.getUnitPrice(); 
+            price += topping.topping.getUnitPrice() * topping.quantity;
+            // price += topping.quantity * topping.topping.getUnitPrice(); 
         }
     }
 }
