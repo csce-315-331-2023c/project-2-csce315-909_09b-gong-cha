@@ -5,7 +5,7 @@ import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 
 //create class for the POS system cashier end
 
@@ -77,6 +77,20 @@ public class GUI extends JFrame {
 
       return button;
     }    
+
+    public void refreshIngredientTable(Object[][] data, JTable table) {
+        Object[][] getUpdatedIngredients = app.getIngredients();
+        if (getUpdatedIngredients.length > data.length || getUpdatedIngredients[0].length > data[0].length) {
+            data = new Object[getUpdatedIngredients.length][getUpdatedIngredients[0].length];
+        }
+        for (int i = 0; i < getUpdatedIngredients.length; i++) {
+            for (int j = 0; j < getUpdatedIngredients[0].length; j++) {
+                data[i][j] = getUpdatedIngredients[i][j];
+            }
+        }
+
+        ((AbstractTableModel) table.getModel()).fireTableDataChanged();
+    }
 
     /**
      * This function creates a JPanel with proper formatting to be the receipt section
@@ -484,6 +498,7 @@ public class GUI extends JFrame {
                 // Create SQL query to change the ingredients in the database using changeDrinkID and newIngredients
                 // Call it
                 app.modifyMultipleIngredients(changeDrinkID, newIngredientsArr, newIngredientsQuantitiesArr);
+                refreshIngredientTable(data, inventoryTable);
             }
             if (s.equals("Change Toppings")) {
                 String newToppingsStr = toppings2.getText();
@@ -544,6 +559,7 @@ public class GUI extends JFrame {
                 
                 // Create SQL query to add a new ingredient and call it using ingredient name, unitPriceDBL, and stockINT
                 app.addIngredients(ingredientNameStr, Double.parseDouble(ingredientUnitPrice), Integer.parseInt(ingredientStock));
+                refreshIngredientTable(data, inventoryTable);
             }
             if (s.equals("Change Ingredient Name")) {
                 String ingredientIDStr = modifyIngredientID.getText();
@@ -555,6 +571,7 @@ public class GUI extends JFrame {
                 // Create SQL query to change ingredient name given int ID and String name
                 // Call query
                 app.updateIngredientName(ingredientID, ingredientNameStr);
+                refreshIngredientTable(data, inventoryTable);
             }
             if (s.equals("Change Unit Price")) {
                 String ingredientIDStr = modifyIngredientID.getText();
@@ -570,6 +587,7 @@ public class GUI extends JFrame {
                 // Create SQL query to change unit price given int ID and double unit_price
                 // Call query
                 app.updateIngredientUnitPrice(ingredientID, newUnitPrice);
+                refreshIngredientTable(data, inventoryTable);
             }
             if (s.equals("Change Stock")) {
                 String ingredientIDStr = modifyIngredientID.getText();
@@ -584,6 +602,7 @@ public class GUI extends JFrame {
                 }
                 // Create SQL query to change stock given int ID and int stock
                 app.updateIngredientStock(ingredientID, ingredientStock);
+                refreshIngredientTable(data, inventoryTable);
             }
             if(s.equals("Add New Topping")) {
                 String toppingNameStr = toppingName.getText();
