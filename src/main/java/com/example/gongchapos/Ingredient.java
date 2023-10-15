@@ -3,7 +3,7 @@ package com.example.gongchapos;
 /**
  * Represents an ingredient with associated attributes like ID, name, stock, and unit price.
  * 
- * @author Reid Jenkins
+ * @author Reid Jenkins, Anton Ramirez
  */
 public class Ingredient {
     private int ingredient_id;
@@ -26,6 +26,14 @@ public class Ingredient {
         ingredient_name = _ingredient_name;
         stock = _stock;
         unit_price = _unit_price;
+    }
+
+    public Ingredient(int _ingredient_id, String _ingredient_name, int _stock)
+    {
+        // Initialize the ingredient attributes
+        ingredient_id = _ingredient_id;
+        ingredient_name = _ingredient_name;
+        stock = _stock;
     }
     
     /**
@@ -62,5 +70,13 @@ public class Ingredient {
      */
     public double getUnitPrice(){
         return this.unit_price;
+    }
+
+    /**
+     * Sets the unit price
+     * @param price the unit price
+     */
+    public void setUnitPrice(double price){
+        unit_price = price;
     }
 }
