@@ -662,11 +662,13 @@ public class Application {
         String ingredient_name = result.getString("ingredient_name");
         String unit_price = String.valueOf(result.getDouble("unit_price"));
         String stock = String.valueOf(result.getDouble("stock"));
+        String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
 
         cur_ingredient.add(ingredient_id);
         cur_ingredient.add(ingredient_name);
         cur_ingredient.add(unit_price);
         cur_ingredient.add(stock);
+        cur_ingredient.add(min_quantity);
         tempContainer.add(cur_ingredient);
 
       }
@@ -674,10 +676,10 @@ public class Application {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
   
-    Object[][] toReturn = new Object[tempContainer.size()][4];
+    Object[][] toReturn = new Object[tempContainer.size()][5];
     for(int i = 0; i < tempContainer.size(); i++){
       ArrayList<String> cur_arr = tempContainer.get(i);
-      Object[] cur = new Object[4];
+      Object[] cur = new Object[5];
       cur = cur_arr.toArray();
       toReturn[i] = cur; // error here
     }
@@ -704,11 +706,13 @@ public class Application {
         String topping_name = result.getString("topping_name");
         String unit_price = String.valueOf(result.getDouble("unit_price"));
         String stock = String.valueOf(result.getDouble("stock"));
+        String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
 
         cur_ingredient.add(topping_id);
         cur_ingredient.add(topping_name);
         cur_ingredient.add(unit_price);
         cur_ingredient.add(stock);
+        cur_ingredient.add(min_quantity);
         tempContainer.add(cur_ingredient);
 
       }
@@ -716,10 +720,10 @@ public class Application {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
   
-    Object[][] toReturn = new Object[tempContainer.size()][4];
+    Object[][] toReturn = new Object[tempContainer.size()][5];
     for(int i = 0; i < tempContainer.size(); i++){
       ArrayList<String> cur_arr = tempContainer.get(i);
-      Object[] cur = new Object[4];
+      Object[] cur = new Object[5];
       cur = cur_arr.toArray();
       toReturn[i] = cur; // error here
     }
@@ -929,7 +933,7 @@ public class Application {
         String ingredient_name = result.getString("ingredient_name");
         String unit_price = String.valueOf(result.getDouble("unit_price"));
         String stock = String.valueOf(result.getDouble("stock"));
-        String min_quantity = String.valueOf(result.getDouble("minimum_quantity"));
+        String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
 
         cur_ingredient.add(ingredient_id);
         cur_ingredient.add(ingredient_name);
@@ -964,14 +968,14 @@ public class Application {
       while(result.next())
       {
         ArrayList<String> cur_topping = new ArrayList<String>();
-        String ingredient_id = String.valueOf(result.getInt("ingredient_id"));
-        String ingredient_name = result.getString("ingredient_name");
+        String topping_id = String.valueOf(result.getInt("topping_id"));
+        String topping_name = result.getString("topping_name");
         String unit_price = String.valueOf(result.getDouble("unit_price"));
         String stock = String.valueOf(result.getDouble("stock"));
-        String min_quantity = String.valueOf(result.getDouble("minimum_quantity"));
+        String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
 
-        cur_topping.add(ingredient_id);
-        cur_topping.add(ingredient_name);
+        cur_topping.add(topping_id);
+        cur_topping.add(topping_name);
         cur_topping.add(unit_price);
         cur_topping.add(stock);
         cur_topping.add(min_quantity);

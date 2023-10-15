@@ -188,20 +188,22 @@ public class GUI extends JFrame {
       JPanel changeInventoryPanel = new JPanel();
       JPanel viewDrinksPanel = new JPanel();
       JPanel managerInventoryPanel = new JPanel();
-      JPanel recommendedRestock = new JPanel()
+      JPanel recommendedPurchases = new JPanel();
       
-      String[] columnNames = {"Ingredient_ID", "Ingredient_Name", "Unit_Price", "Stock"};
+      String[] columnNames = {"Ingredient_ID", "Ingredient_Name", "Unit_Price", "Stock", "Minimum_Quantity"};
       // Make a JTable out of the data returned from function in Application.java
       Object[][] data = app.getIngredients();
       JTable inventoryTable = new JTable(data, columnNames);
       JScrollPane inventoryScrollPane = new JScrollPane(inventoryTable);
+      inventoryScrollPane.setPreferredSize(new Dimension(800, 500));
       managerInventoryPanel.add(inventoryScrollPane);
 
-      String[] columnNamesToppings = {"Topping_ID", "Topping_Name", "Unit_Price", "Stock"};
+      String[] columnNamesToppings = {"Topping_ID", "Topping_Name", "Unit_Price", "Stock", "Minimum_Quantity"};
       // Make a JTable out of the data returned from function in Application.java
       Object[][] dataToppings = app.getToppings();
       JTable inventoryTable2 = new JTable(dataToppings, columnNamesToppings);
       JScrollPane inventoryScrollPaneToppings = new JScrollPane(inventoryTable2);
+      inventoryScrollPaneToppings.setPreferredSize(new Dimension(800, 150));
       managerInventoryPanel.add(inventoryScrollPaneToppings);
 
       String[] columnNamesDrinks = {"Recipe_ID", "Recipe_Name", "isSlush", "Med_Price", "Large_Price", "Recipe_Price"};
@@ -209,14 +211,28 @@ public class GUI extends JFrame {
       Object[][] dataDrinks = app.getRecipes();
       JTable drinksTable = new JTable(dataDrinks, columnNamesDrinks);
       JScrollPane drinkScrollPane = new JScrollPane(drinksTable);
+      drinkScrollPane.setPreferredSize(new Dimension(800, 650));
       viewDrinksPanel.add(drinkScrollPane);
 
-      String[] columnNamesInventory = {"Recipe_ID", "Recipe_Name", "isSlush", "Med_Price", "Large_Price", "Recipe_Price"};
+      String[] columnNamesInventory = {"Ingredient_ID", "Ingredient_Name", "Unit_Price", "Stock", "Minimum_Quantity"};
       // Make a JTable out of drink data returned from function in Application.java
-      Object[][] dataInventory = app.getRecipes();
+      Object[][] dataInventory = app.restockReportIngredients();
       JTable inventoryTable3 = new JTable(dataInventory, columnNamesInventory);
       JScrollPane inventoryScrollPaneRecommended = new JScrollPane(inventoryTable3);
+      inventoryScrollPaneRecommended.setPreferredSize(new Dimension(800, 150));
+      JLabel recommendedIngredientsLabel = new JLabel("The table below shows all ingredients where the stock is below the minimum recommended amount.");
+      recommendedPurchases.add(recommendedIngredientsLabel);
       recommendedPurchases.add(inventoryScrollPaneRecommended);
+
+      String[] columnNamesInventoryToppings = {"Topping_ID", "Topping_Name", "Unit_Price", "Stock", "Minimum_Quantity"};
+      // Make a JTable out of drink data returned from function in Application.java
+      Object[][] dataInventoryToppings = app.restockReportToppings();
+      JTable inventoryTable4 = new JTable(dataInventoryToppings, columnNamesInventoryToppings);
+      JScrollPane inventoryScrollPaneRecommendedToppings = new JScrollPane(inventoryTable4);
+      inventoryScrollPaneRecommendedToppings.setPreferredSize(new Dimension(800, 150));
+      JLabel recommendedToppingsLabel = new JLabel("The table below shows all toppings where the stock is below the minimum recommended amount.");
+      recommendedPurchases.add(recommendedToppingsLabel);
+      recommendedPurchases.add(inventoryScrollPaneRecommendedToppings);
 
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
