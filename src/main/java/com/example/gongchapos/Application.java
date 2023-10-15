@@ -661,7 +661,7 @@ public class Application {
         String ingredient_id = String.valueOf(result.getInt("ingredient_id"));
         String ingredient_name = result.getString("ingredient_name");
         String unit_price = String.valueOf(result.getDouble("unit_price"));
-        String stock = String.valueOf(result.getDouble("stock"));
+        String stock = String.valueOf(result.getInt("stock"));
         String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
 
         cur_ingredient.add(ingredient_id);
@@ -705,7 +705,7 @@ public class Application {
         String topping_id = String.valueOf(result.getInt("topping_id"));
         String topping_name = result.getString("topping_name");
         String unit_price = String.valueOf(result.getDouble("unit_price"));
-        String stock = String.valueOf(result.getDouble("stock"));
+        String stock = String.valueOf(result.getInt("stock"));
         String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
 
         cur_ingredient.add(topping_id);
@@ -936,7 +936,7 @@ public class Application {
         String ingredient_id = String.valueOf(result.getInt("ingredient_id"));
         String ingredient_name = result.getString("ingredient_name");
         String unit_price = String.valueOf(result.getDouble("unit_price"));
-        String stock = String.valueOf(result.getDouble("stock"));
+        String stock = String.valueOf(result.getInt("stock"));
         String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
 
         cur_ingredient.add(ingredient_id);
@@ -979,7 +979,7 @@ public class Application {
         String topping_id = String.valueOf(result.getInt("topping_id"));
         String topping_name = result.getString("topping_name");
         String unit_price = String.valueOf(result.getDouble("unit_price"));
-        String stock = String.valueOf(result.getDouble("stock"));
+        String stock = String.valueOf(result.getInt("stock"));
         String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
 
         cur_topping.add(topping_id);
