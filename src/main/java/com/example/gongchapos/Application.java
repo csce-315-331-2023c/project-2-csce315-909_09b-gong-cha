@@ -648,13 +648,16 @@ public class Application {
         JOptionPane.showMessageDialog(null, "Error accessing Database 1");
       }
       Recipe current_recipe = getRecipe(current_drink.getRecipeID());
+      populateIngredients(current_recipe);
       for(Map.Entry<Ingredient, Integer> current_ingredient : current_recipe.ingredients.entrySet())
       {
+
+        recipeIngredient recipeIngredient = new recipeIngredient(current_recipe.getRecipeID(), current_ingredient.getKey().getID(), current_ingredient.getValue());
         int current_stock = -1;
         try
         {
           Statement stmt = conn.createStatement();
-          ResultSet result = stmt.executeQuery("SELECT stock FROM ingredient WHERE ingredient_name = " + current_ingredient.getKey().getName() + ";");
+          ResultSet result = stmt.executeQuery("SELECT stock FROM ingredient WHERE ingredient_id = " + recipeIngredient.getIngredientID() + ";");
           while(result.next())
           {
             current_stock = result.getInt("stock");
@@ -663,8 +666,7 @@ public class Application {
           System.out.println(e);
           JOptionPane.showMessageDialog(null, "Error accessing Database 2");
         }
-
-        updateIngredientStock(current_ingredient.getKey().getID(), current_stock - current_ingredient.getValue());
+        updateIngredientStock(recipeIngredient.getIngredientID(), current_stock - recipeIngredient.getQuantityUsed());
       }
 
       for(Map.Entry<Topping,Integer> current_entry : current_drink.getToppingsUsed().entrySet())
@@ -679,10 +681,23 @@ public class Application {
           System.out.println(e);
           JOptionPane.showMessageDialog(null, "Error accessing Database 0");
         }
+
+        int current_stock = -1;
+        try
+        {
+          Statement stmt = conn.createStatement();
+          ResultSet result = stmt.executeQuery("SELECT stock FROM toppings WHERE topping_id = " + orderItemTopping.getToppingId() + ";");
+          while(result.next())
+          {
+            current_stock = result.getInt("stock");
+          }
+        } catch (Exception e) {
+          System.out.println(e);
+          JOptionPane.showMessageDialog(null, "Error accessing Database 2");
+        }
+
+        updateToppingsStock(orderItemTopping.getToppingId(), current_stock - orderItemTopping.getQuantityUsed());
       }
-
-      
-
     }
     setOrderStatus(true);
   }
