@@ -189,6 +189,7 @@ public class GUI extends JFrame {
       JPanel viewDrinksPanel = new JPanel();
       JPanel managerInventoryPanel = new JPanel();
       JPanel recommendedPurchases = new JPanel();
+      JPanel excessReport = new JPanel();
       
       String[] columnNames = {"Ingredient_ID", "Ingredient_Name", "Unit_Price", "Stock", "Minimum_Quantity"};
       // Make a JTable out of the data returned from function in Application.java
@@ -230,10 +231,68 @@ public class GUI extends JFrame {
       JTable inventoryTable4 = new JTable(dataInventoryToppings, columnNamesInventoryToppings);
       JScrollPane inventoryScrollPaneRecommendedToppings = new JScrollPane(inventoryTable4);
       inventoryScrollPaneRecommendedToppings.setPreferredSize(new Dimension(800, 150));
-      JLabel recommendedToppingsLabel = new JLabel("The table below shows all toppings where the stock is below the minimum recommended amount.");
+      JLabel recommendedToppingsLabel = new JLabel("The table below shows all toppings where the stock is below the minimum recommended amount. Format dates as YYYY-MM-DD.");
       recommendedPurchases.add(recommendedToppingsLabel);
       recommendedPurchases.add(inventoryScrollPaneRecommendedToppings);
 
+    /*TODO: EXCESS REPORT HERE */
+    String[] columnNamesIngredientsexcess = {"Ingredient_Name", "Total_Used", "Ten_Percent_Stock"};
+    //have user input start and end date on the page in text field
+    JTextField startDateField = new JTextField(10);
+    JTextField endDateField = new JTextField(10);
+    
+    JLabel startDateLabel = new JLabel("Start Date (YYYY-MM-DD): ");
+    JLabel endDateLabel = new JLabel("End Date (YYYY-MM-DD): ");
+    excessReport.add(startDateLabel);
+    excessReport.add(startDateField);
+    excessReport.add(endDateLabel);
+    excessReport.add(endDateField);
+    JButton excessReportButton = new JButton("Generate Excess Report");
+    //create something to store the excess report after the button is clicked so we can clear it later
+    JPanel excessReportPanel = new JPanel();
+    excessReportPanel.setPreferredSize(new Dimension(800, 500));
+    excessReportButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            //if one field is empty, show error message
+            excessReportPanel.removeAll();
+            if (startDateField.getText().equals("") || endDateField.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Please enter a start and end date.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String startDate = startDateField.getText();
+            String endDate = endDateField.getText();
+            Object[][] dataIngredientsexcess = app.excessReportIngredients(startDate, endDate);
+            JTable inventoryTable5 = new JTable(dataIngredientsexcess, columnNamesIngredientsexcess);
+            JScrollPane inventoryScrollPaneexcess = new JScrollPane(inventoryTable5);
+            inventoryScrollPaneexcess.setPreferredSize(new Dimension(800, 100));
+            JLabel excessIngredientsLabel = new JLabel("The table below shows all ingredients where the total used is greater than 10% of the stock.");
+            excessReportPanel.add(excessIngredientsLabel);
+            excessReportPanel.add(inventoryScrollPaneexcess);
+            // excessReport.add(excessIngredientsLabel);
+            // excessReport.add(inventoryScrollPaneexcess);
+
+            //do the same for toppings
+            String[] columnNamesToppingsexcess = {"Topping_Name", "Total_Used", "Ten_Percent_Stock"};
+            Object[][] dataToppingsexcess = app.excessReportToppings(startDate, endDate);
+            JTable inventoryTable6 = new JTable(dataToppingsexcess, columnNamesToppingsexcess);
+            JScrollPane inventoryScrollPaneexcessToppings = new JScrollPane(inventoryTable6);
+            inventoryScrollPaneexcessToppings.setPreferredSize(new Dimension(800, 100));
+            JLabel excessToppingsLabel = new JLabel("The table below shows all toppings where the total used is greater than 10% of the stock.");
+            excessReportPanel.add(excessToppingsLabel);
+            excessReportPanel.add(inventoryScrollPaneexcessToppings);
+
+            //repaint and revalidate
+            excessReportPanel.revalidate();
+            excessReportPanel.repaint();
+        }
+    });
+    
+    excessReport.add(excessReportButton);
+    JLabel details = new JLabel("If the tables are empty, then there are no ingredients/toppings that meet the criteria.");
+    excessReport.add(details);    
+    excessReport.add(excessReportPanel);
+    
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
         public void actionPerformed(ActionEvent e)
@@ -837,6 +896,7 @@ public class GUI extends JFrame {
       managerTabbedPane.addTab("Drinks", null, viewDrinksPanel, "Does nothing");
       managerTabbedPane.addTab("Add/Modify Drink", null, managerActionsPanel, "Does nothing");
       managerTabbedPane.addTab("Recommended Restock", null, recommendedPurchases, "Does nothing");
+      managerTabbedPane.addTab("Excess Report", null, excessReport, "Does nothing");
 
       cashierTabbedPane.addTab("Milk Tea", null, CashierMilkTeaPanel, "Does nothing");
       cashierTabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
@@ -1016,6 +1076,17 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Create a dialog to select toppings and quantities
+                //clear toppings arraylist
+                if (newDrink.toppings != null){
+                    newDrink.toppings.clear();
+                }
+                //if the toppings panel is not empty, clear it
+                if (minitoppanel.getComponentCount() != 0){
+                    minitoppanel.removeAll();
+                }
+                //clear toppings quantity arraylist
+                selectedToppingsQuantity.clear();
+
                 JDialog dialog = new JDialog();
                 dialog.setTitle("Edit Toppings");
                 dialog.setLayout(new BorderLayout());
@@ -1024,9 +1095,6 @@ public class GUI extends JFrame {
                 toppingsPanel.setLayout(new BoxLayout(toppingsPanel, BoxLayout.Y_AXIS));
 
                 // Sample toppings (you can replace this with your actual toppings)
-                //TODO: query database for toppings and topping prices
-                //create string of available toppings based on database toppings.
-                //vector of toppings
                 Vector<String> availableToppings = new Vector<String>();
 
                 for (Topping top : app.toppings) {
@@ -1055,7 +1123,7 @@ public class GUI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         // Process the selected toppings and quantity
                         int quantity;
-                        double topping_price = 0;
+                        // double topping_price = 0;
                         ArrayList<_topping> selectedToppings = new ArrayList<>();
                         //iterate over spinners and get quantity, if not 0, add to list of toppings
                         for (int i = 0; i < spinners.size(); i++) {
@@ -1068,25 +1136,32 @@ public class GUI extends JFrame {
                                 _topping newTopping = new _topping(topping_fr, topping, quantity);
                                 minitoppanel.add(new JLabel("    "+topping + ": " + quantity));
                                 
-                                topping_price = topping_fr.getUnitPrice() * quantity;
+                                // topping_price = topping_fr.getUnitPrice() * quantity;
 
                                 selectedToppings.add(newTopping);
                                 selectedToppingsQuantity.add(quantity);
                             }
                         }
 
-                        //print out the toppings and quantities
-                        //update the subtotal and total
-                        subtotal += topping_price;
-                        total = subtotal + tip;
-                        //update subtotal and total labels
-                        subtotalLabel.setText("Subtotal: $" + subtotal);
-                        totalLabel.setText("Total: $" + total);
+
 
                         itemListPanel.revalidate();
                         itemListPanel.repaint();
                         // Close the dialog
+                        subtotal -= newDrink.price;
+
                         newDrink.toppings = selectedToppings;
+                        newDrink.updateprice();
+
+                        //print out the toppings and quantities
+                        //update the subtotal and total
+                        subtotal += newDrink.price;
+                        total = subtotal + tip;
+                    
+                        //update subtotal and total labels
+                        subtotalLabel.setText("Subtotal: $" + subtotal);
+                        totalLabel.setText("Total: $" + total);
+
                         dialog.dispose();
                         minitoppanel.revalidate();
                         minitoppanel.repaint();
@@ -1338,7 +1413,8 @@ class _drink {
         }
 
         for(_topping topping : toppings){
-            price += topping.quantity * topping.topping.getUnitPrice(); 
+            price += topping.topping.getUnitPrice() * topping.quantity;
+            // price += topping.quantity * topping.topping.getUnitPrice(); 
         }
     }
 }
