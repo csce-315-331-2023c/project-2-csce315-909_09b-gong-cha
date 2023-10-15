@@ -240,6 +240,7 @@ public class GUI extends JFrame {
     //have user input start and end date on the page in text field
     JTextField startDateField = new JTextField(10);
     JTextField endDateField = new JTextField(10);
+    
     JLabel startDateLabel = new JLabel("Start Date (YYYY-MM-DD): ");
     JLabel endDateLabel = new JLabel("End Date (YYYY-MM-DD): ");
     excessReport.add(startDateLabel);
@@ -247,13 +248,18 @@ public class GUI extends JFrame {
     excessReport.add(endDateLabel);
     excessReport.add(endDateField);
     JButton excessReportButton = new JButton("Generate Excess Report");
+    //create something to store the excess report after the button is clicked so we can clear it later
+    JPanel excessReportPanel = new JPanel();
+    excessReportPanel.setPreferredSize(new Dimension(800, 500));
     excessReportButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             //if one field is empty, show error message
+            excessReportPanel.removeAll();
             if (startDateField.getText().equals("") || endDateField.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Please enter a start and end date.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+
             String startDate = startDateField.getText();
             String endDate = endDateField.getText();
             Object[][] dataIngredientsexcess = app.excessReportIngredients(startDate, endDate);
@@ -261,29 +267,32 @@ public class GUI extends JFrame {
             JScrollPane inventoryScrollPaneexcess = new JScrollPane(inventoryTable5);
             inventoryScrollPaneexcess.setPreferredSize(new Dimension(800, 100));
             JLabel excessIngredientsLabel = new JLabel("The table below shows all ingredients where the total used is greater than 10% of the stock.");
-            //have excessingredientslabel wrap
-            excessReport.add(excessIngredientsLabel);
-            excessReport.add(inventoryScrollPaneexcess);
+            excessReportPanel.add(excessIngredientsLabel);
+            excessReportPanel.add(inventoryScrollPaneexcess);
+            // excessReport.add(excessIngredientsLabel);
+            // excessReport.add(inventoryScrollPaneexcess);
 
             //do the same for toppings
             String[] columnNamesToppingsexcess = {"Topping_Name", "Total_Used", "Ten_Percent_Stock"};
             Object[][] dataToppingsexcess = app.excessReportToppings(startDate, endDate);
             JTable inventoryTable6 = new JTable(dataToppingsexcess, columnNamesToppingsexcess);
             JScrollPane inventoryScrollPaneexcessToppings = new JScrollPane(inventoryTable6);
+            inventoryScrollPaneexcessToppings.setPreferredSize(new Dimension(800, 100));
             JLabel excessToppingsLabel = new JLabel("The table below shows all toppings where the total used is greater than 10% of the stock.");
-            excessToppingsLabel.setPreferredSize(new Dimension(800, 100));
-            excessReport.add(excessToppingsLabel);
-            excessReport.add(inventoryScrollPaneexcessToppings);
+            excessReportPanel.add(excessToppingsLabel);
+            excessReportPanel.add(inventoryScrollPaneexcessToppings);
 
             //repaint and revalidate
-            excessReport.revalidate();
-            excessReport.repaint();
+            excessReportPanel.revalidate();
+            excessReportPanel.repaint();
         }
     });
     
     excessReport.add(excessReportButton);
     JLabel details = new JLabel("If the tables are empty, then there are no ingredients/toppings that meet the criteria.");
     excessReport.add(details);    
+    excessReport.add(excessReportPanel);
+    
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
         public void actionPerformed(ActionEvent e)
