@@ -1008,33 +1008,85 @@ public class Application {
    * Given a timestamp, display the list of inventory items that only sold less than 
    * 10% of their inventory between the timestamp and the current time, assuming no restocks 
    * have happened during the window.
+   * @param start_date - the start date of the time frame
+   * @param end_date - the end date of the time frame
    * @return Object[][] of excess ingredients (i.e. the ones that have been used 10%)
    */
   
-   /*
-    Use the below query to get the ingredients that have been used in the timeframe;
-    
-    SELECT Ingredient.Ingredient_Name, Subquery.Total_Used
-    FROM (
-        Select Ingredient_Name, SUM(Quantity_Used) AS Total_Used
-        FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item
-        WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
-        GROUP BY Ingredient_Name
-        ORDER BY Ingredient_Name
-    ) AS Subquery, Ingredient
-    WHERE Subquery.Total_Used < Ingredient.Stock * .1 AND Ingredient.Ingredient_Name = Subquery.Ingredient_Name
-    ORDER BY Total_Used;
 
-    */
-   public Object[][] excess_report(){
+   public Object[][] excess_report_ingredients(String start_date, String end_date){
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+    //query the above and get the result:
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT Ingredient.Ingredient_Name, Subquery.Total_Used FROM (Select Ingredient_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Ingredient_Name ORDER BY Ingredient_Name) AS Subquery, Ingredient WHERE Subquery.Total_Used < Ingredient.Stock * .1 AND Ingredient.Ingredient_Name = Subquery.Ingredient_Name ORDER BY Total_Used;");
+      while(result.next())
+      {
+        ArrayList<String> cur_ingredient = new ArrayList<String>();
+        String ingredient_name = result.getString("Ingredient_Name");
+        String total_used = String.valueOf(result.getInt("Total_Used"));
 
-    //first, query the database for the stock of inventory items.
+        cur_ingredient.add(ingredient_name);
+        cur_ingredient.add(total_used);
+        tempContainer.add(cur_ingredient);
 
-    //second, query the database for the total amount of inventory items that have been used in the timeframe
-    //third, compare the two values and return the ones that have been used less than 10% of their stock
-    //format the output into a 2d array and return it
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
     
-    return null;
+    //get the result into a 2d array
+    Object[][] toReturn = new Object[tempContainer.size()][2];
+    for(int i = 0; i < tempContainer.size(); i++){
+      ArrayList<String> cur_arr = tempContainer.get(i);
+      Object[] cur = new Object[2];
+      cur = cur_arr.toArray();
+      toReturn[i] = cur; // error here
+    }
+    return toReturn;
    }
+
+    /**
+     * Given a timestamp, display the list of toppings that only sold less than
+     * 10% of their inventory between the timestamp and the current time, assuming no restocks
+     * have happened during the window.
+     * @param start_date
+     * @param end_date
+     * @return
+     */
+    public Object[][] excess_report_toppings(String start_date, String end_date){
+    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+      //if string not formatted in yyyy-mm-dd, return null and show error message
+      
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT Topping_Name, SUM(Total_Used) AS Combined_Total_Used FROM (SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Topping_Name UNION SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Order_Item_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Topping_Name) AS subquery GROUP BY Topping_Name;");
+      while(result.next())
+      {
+        ArrayList<String> cur_topping = new ArrayList<String>();
+        String topping_name = result.getString("Topping_Name");
+        String total_used = String.valueOf(result.getInt("Combined_Total_Used"));
+
+        cur_topping.add(topping_name);
+        cur_topping.add(total_used);
+        tempContainer.add(cur_topping);
+
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+    
+    //get the result into a 2d array
+    Object[][] toReturn = new Object[tempContainer.size()][2];
+    for(int i = 0; i < tempContainer.size(); i++){
+      ArrayList<String> cur_arr = tempContainer.get(i);
+      Object[] cur = new Object[2];
+      cur = cur_arr.toArray();
+      toReturn[i] = cur; // error here
+    }
+    return toReturn;
+   }
+
 }

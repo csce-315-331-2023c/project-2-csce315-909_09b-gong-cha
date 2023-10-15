@@ -169,5 +169,36 @@ FROM (
 WHERE Subquery.Total_Used < Ingredient.Stock * .1 AND Ingredient.Ingredient_Name = Subquery.Ingredient_Name
 ORDER BY Total_Used;
 
--- HAVING SUM(Quantity_Used) < (SELECT Stock FROM Ingredient WHERE Ingredient.Ingredient_ID = Recipe_Ingredient.Ingredient_ID) * 0.1
+--toppings version
+SELECT Toppings.Topping_Name, Subquery.Total_Used
+FROM (
+    SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used
+    FROM Recipe_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item
+    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
+    GROUP BY Toppings.Topping_Name;
+) AS Subquery, Toppings
+WHERE Subquery.Total_Used < Toppings.Stock * .1 AND Toppings.Topping_Name = Subquery.Topping_Name
+ORDER BY Total_Used;
 
+--get sum of all toppings used in a recipe, from the recipe to extra toppings
+SELECT Topping_Name, SUM(Total_Used) AS Combined_Total_Used
+FROM (
+    SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used
+    FROM Recipe_Toppings
+    NATURAL JOIN Toppings
+    NATURAL JOIN Order_
+    NATURAL JOIN Order_Item
+    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
+    GROUP BY Topping_Name
+
+    UNION
+
+    SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used
+    FROM Order_Item_Toppings
+    NATURAL JOIN Toppings
+    NATURAL JOIN Order_
+    NATURAL JOIN Order_Item
+    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
+    GROUP BY Topping_Name
+) AS subquery
+GROUP BY Topping_Name;
