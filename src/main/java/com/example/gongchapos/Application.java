@@ -596,6 +596,26 @@ public class Application {
     }
   }
 
+  private void populateIngredients(Recipe recipe)
+  {
+    try 
+    {
+        Statement stmt = conn.createStatement();
+        ResultSet result = stmt.executeQuery("SELECT Ingredient_Name, Ingredient_id, stock, Recipe_Ingredient.Quantity_Used FROM Recipe " +
+                                             "NATURAL JOIN Recipe_Ingredient NATURAL JOIN Ingredient WHERE Recipe_id = " + recipe.getRecipeID() +";"); 
+        
+        while(result.next())
+        {
+            Ingredient ingredient = new Ingredient(result.getInt("Ingredient_id"), result.getString("Ingredient_Name"), result.getInt("stock"));
+
+            recipe.ingredients.put(ingredient, result.getInt("Quantity_Used"));
+        }
+    } catch (Exception e) {
+        System.out.println(e);
+        JOptionPane.showMessageDialog(null, "Error accessing Database 0");
+    }
+  }
+
   /**
    * place order including the tip and coupon
    * @param tip - tip for the order
@@ -626,6 +646,25 @@ public class Application {
       } catch (Exception e) {
         System.out.println(e);
         JOptionPane.showMessageDialog(null, "Error accessing Database 1");
+      }
+      Recipe current_recipe = getRecipe(current_drink.getRecipeID());
+      for(Map.Entry<Ingredient, Integer> current_ingredient : current_recipe.ingredients.entrySet())
+      {
+        int current_stock = -1;
+        try
+        {
+          Statement stmt = conn.createStatement();
+          ResultSet result = stmt.executeQuery("SELECT stock FROM ingredient WHERE ingredient_name = " + current_ingredient.getKey().getName() + ";");
+          while(result.next())
+          {
+            current_stock = result.getInt("stock");
+          }
+        } catch (Exception e) {
+          System.out.println(e);
+          JOptionPane.showMessageDialog(null, "Error accessing Database 2");
+        }
+
+        updateIngredientStock(current_ingredient.getKey().getID(), current_stock - current_ingredient.getValue());
       }
 
       for(Map.Entry<Topping,Integer> current_entry : current_drink.getToppingsUsed().entrySet())
@@ -1008,4 +1047,4 @@ public class Application {
     }
     return toReturn;  
   }
-}
+ }
