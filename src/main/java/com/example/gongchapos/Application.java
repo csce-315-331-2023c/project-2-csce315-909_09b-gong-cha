@@ -918,6 +918,10 @@ public class Application {
 
     }
 
+  /**
+   * report of all ingredients in which the current stock is lower than the minimum recommended amount
+   * @return Object[][] of info of ingredients where stock < minimum_quantity
+   */
   public Object[][] restockReportIngredients(){
 
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
@@ -957,6 +961,10 @@ public class Application {
     return toReturn;  
   }
 
+  /**
+   * report of all toppings in which the current stock is lower than the minimum recommended amount
+   * @return Object[][] of info of toppings where stock < minimum_quantity
+   */
   public Object[][] restockReportToppings(){
 
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
