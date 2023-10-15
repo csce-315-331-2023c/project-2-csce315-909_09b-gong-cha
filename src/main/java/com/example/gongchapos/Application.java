@@ -1003,4 +1003,94 @@ public class Application {
     }
     return toReturn;  
   }
+
+  /**
+   * Given a timestamp, display the list of inventory items that only sold less than 
+   * 10% of their inventory between the timestamp and the current time, assuming no restocks 
+   * have happened during the window.
+   * @param start_date - the start date of the time frame
+   * @param end_date - the end date of the time frame
+   * @return Object[][] of excess ingredients (i.e. the ones that have been used 10%)
+   */
+
+   public Object[][] excessReportIngredients(String start_date, String end_date){
+    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+    //query the above and get the result:
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT Ingredient.Ingredient_Name, Subquery.Total_Used, CEILING(Ingredient.Stock * .1) AS Ten_Percent_Stock FROM (Select Ingredient_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Ingredient_Name ORDER BY Ingredient_Name) AS Subquery, Ingredient WHERE Subquery.Total_Used < CEILING(Ingredient.Stock * .1) AND Ingredient.Ingredient_Name = Subquery.Ingredient_Name ORDER BY Total_Used;");
+      while(result.next())
+      {
+        ArrayList<String> cur_ingredient = new ArrayList<String>();
+        String ingredient_name = result.getString("Ingredient_Name");
+        String total_used = String.valueOf(result.getInt("Total_Used"));
+        String ten_percent_stock = String.valueOf(result.getInt("Ten_Percent_Stock"));
+
+        cur_ingredient.add(ingredient_name);
+        cur_ingredient.add(total_used);
+        cur_ingredient.add(ten_percent_stock);
+
+        tempContainer.add(cur_ingredient);
+
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+
+    //get the result into a 2d array
+    Object[][] toReturn = new Object[tempContainer.size()][2];
+    for(int i = 0; i < tempContainer.size(); i++){
+      ArrayList<String> cur_arr = tempContainer.get(i);
+      Object[] cur = new Object[2];
+      cur = cur_arr.toArray();
+      toReturn[i] = cur; // error here
+    }
+
+    return toReturn;
+   }
+
+    /**
+     * Given a timestamp, display the list of toppings that only sold less than
+     * 10% of their inventory between the timestamp and the current time, assuming no restocks
+     * have happened during the window.
+     * @param start_date
+     * @param end_date
+     * @return
+     */
+    public Object[][] excessReportToppings(String start_date, String end_date){
+    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT subquery.Topping_Name, SUM(Total_Used) AS Combined_Total_Used, CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1) AS Ten_Percent_Stock FROM (SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Topping_Name UNION SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Order_Item_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Topping_Name) AS subquery GROUP BY subquery.Topping_Name HAVING SUM(Total_Used) < CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1);");
+      while(result.next())
+      {
+        ArrayList<String> cur_topping = new ArrayList<String>();
+        String topping_name = result.getString("Topping_Name");
+        String total_used = String.valueOf(result.getInt("Combined_Total_Used"));
+        String ten_percent_stock = String.valueOf(result.getInt("Ten_Percent_Stock"));
+
+        cur_topping.add(topping_name);
+        cur_topping.add(total_used);
+        cur_topping.add(ten_percent_stock);
+        tempContainer.add(cur_topping);
+
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+    
+    //get the result into a 2d array
+    Object[][] toReturn = new Object[tempContainer.size()][2];
+    for(int i = 0; i < tempContainer.size(); i++){
+      ArrayList<String> cur_arr = tempContainer.get(i);
+      Object[] cur = new Object[2];
+      cur = cur_arr.toArray();
+      toReturn[i] = cur; // error here
+    }
+    return toReturn;
+   }
+
 }
