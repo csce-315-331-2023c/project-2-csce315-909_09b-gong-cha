@@ -666,12 +666,14 @@ public class Application {
         String ingredient_id = String.valueOf(result.getInt("ingredient_id"));
         String ingredient_name = result.getString("ingredient_name");
         String unit_price = String.valueOf(result.getDouble("unit_price"));
-        String stock = String.valueOf(result.getDouble("stock"));
+        String stock = String.valueOf(result.getInt("stock"));
+        String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
 
         cur_ingredient.add(ingredient_id);
         cur_ingredient.add(ingredient_name);
         cur_ingredient.add(unit_price);
         cur_ingredient.add(stock);
+        cur_ingredient.add(min_quantity);
         tempContainer.add(cur_ingredient);
 
       }
@@ -679,10 +681,10 @@ public class Application {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
   
-    Object[][] toReturn = new Object[tempContainer.size()][4];
+    Object[][] toReturn = new Object[tempContainer.size()][5];
     for(int i = 0; i < tempContainer.size(); i++){
       ArrayList<String> cur_arr = tempContainer.get(i);
-      Object[] cur = new Object[4];
+      Object[] cur = new Object[5];
       cur = cur_arr.toArray();
       toReturn[i] = cur; // error here
     }
@@ -708,12 +710,14 @@ public class Application {
         String topping_id = String.valueOf(result.getInt("topping_id"));
         String topping_name = result.getString("topping_name");
         String unit_price = String.valueOf(result.getDouble("unit_price"));
-        String stock = String.valueOf(result.getDouble("stock"));
+        String stock = String.valueOf(result.getInt("stock"));
+        String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
 
         cur_ingredient.add(topping_id);
         cur_ingredient.add(topping_name);
         cur_ingredient.add(unit_price);
         cur_ingredient.add(stock);
+        cur_ingredient.add(min_quantity);
         tempContainer.add(cur_ingredient);
 
       }
@@ -721,10 +725,10 @@ public class Application {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
   
-    Object[][] toReturn = new Object[tempContainer.size()][4];
+    Object[][] toReturn = new Object[tempContainer.size()][5];
     for(int i = 0; i < tempContainer.size(); i++){
       ArrayList<String> cur_arr = tempContainer.get(i);
-      Object[] cur = new Object[4];
+      Object[] cur = new Object[5];
       cur = cur_arr.toArray();
       toReturn[i] = cur; // error here
     }
@@ -918,4 +922,90 @@ public class Application {
       }
 
     }
+
+  /**
+   * report of all ingredients in which the current stock is lower than the minimum recommended amount
+   * @return Object[][] of info of ingredients where stock < minimum_quantity
+   */
+  public Object[][] restockReportIngredients(){
+
+    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM ingredient WHERE stock < minimum_quantity;");
+      while(result.next())
+      {
+        ArrayList<String> cur_ingredient = new ArrayList<String>();
+        String ingredient_id = String.valueOf(result.getInt("ingredient_id"));
+        String ingredient_name = result.getString("ingredient_name");
+        String unit_price = String.valueOf(result.getDouble("unit_price"));
+        String stock = String.valueOf(result.getInt("stock"));
+        String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
+
+        cur_ingredient.add(ingredient_id);
+        cur_ingredient.add(ingredient_name);
+        cur_ingredient.add(unit_price);
+        cur_ingredient.add(stock);
+        cur_ingredient.add(min_quantity);
+        tempContainer.add(cur_ingredient);
+
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  
+    Object[][] toReturn = new Object[tempContainer.size()][5];
+    for(int i = 0; i < tempContainer.size(); i++){
+      ArrayList<String> cur_arr = tempContainer.get(i);
+      Object[] cur = new Object[5];
+      cur = cur_arr.toArray();
+      toReturn[i] = cur; // error here
+    }
+    return toReturn;  
+  }
+
+  /**
+   * report of all toppings in which the current stock is lower than the minimum recommended amount
+   * @return Object[][] of info of toppings where stock < minimum_quantity
+   */
+  public Object[][] restockReportToppings(){
+
+    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM toppings WHERE stock < minimum_quantity;");
+      while(result.next())
+      {
+        ArrayList<String> cur_topping = new ArrayList<String>();
+        String topping_id = String.valueOf(result.getInt("topping_id"));
+        String topping_name = result.getString("topping_name");
+        String unit_price = String.valueOf(result.getDouble("unit_price"));
+        String stock = String.valueOf(result.getInt("stock"));
+        String min_quantity = String.valueOf(result.getInt("minimum_quantity"));
+
+        cur_topping.add(topping_id);
+        cur_topping.add(topping_name);
+        cur_topping.add(unit_price);
+        cur_topping.add(stock);
+        cur_topping.add(min_quantity);
+        tempContainer.add(cur_topping);
+
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+  
+    Object[][] toReturn = new Object[tempContainer.size()][5];
+    for(int i = 0; i < tempContainer.size(); i++){
+      ArrayList<String> cur_arr = tempContainer.get(i);
+      Object[] cur = new Object[5];
+      cur = cur_arr.toArray();
+      toReturn[i] = cur; // error here
+    }
+    return toReturn;  
+  }
 }
