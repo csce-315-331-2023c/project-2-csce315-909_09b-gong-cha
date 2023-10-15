@@ -131,3 +131,43 @@ SELECT * FROM Order_Item_Toppings;
 
 
 Select SUM(Subtotal + Tip) FROM Order_;
+
+--return all ingredients used where SUM(Quantity_Used) < Ingredient.Stock * .1
+
+SELECT Ingredient_Name, SUM(Quantity_Used) AS Total_Used 
+FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ 
+WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-30'
+GROUP BY Ingredient_Name
+ORDER BY Total_Used;
+
+
+--use the above query to return the ingredients where the sum of the quantity used is less than 10% of the stock
+Select Ingredient_Name, SUM(Quantity_Used) AS Total_Used
+FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_
+WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
+GROUP BY Ingredient_Name
+HAVING SUM(Quantity_Used) < Ingredient.Stock * .1
+ORDER BY Total_Used;
+
+
+SELECT Ingredient_Name, SUM(Quantity_Used) AS Total_Used
+FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item
+WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-2'
+GROUP BY Ingredient_Name
+ORDER BY Total_Used;
+
+--return all ingredients used where SUM(Quantity_Used) < Ingredient.Stock * .1
+--use above query as a subquery, so we can access Total_Used
+SELECT Ingredient.Ingredient_Name, Subquery.Total_Used
+FROM (
+    Select Ingredient_Name, SUM(Quantity_Used) AS Total_Used
+    FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item
+    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
+    GROUP BY Ingredient_Name
+    ORDER BY Ingredient_Name
+) AS Subquery, Ingredient
+WHERE Subquery.Total_Used < Ingredient.Stock * .1 AND Ingredient.Ingredient_Name = Subquery.Ingredient_Name
+ORDER BY Total_Used;
+
+-- HAVING SUM(Quantity_Used) < (SELECT Stock FROM Ingredient WHERE Ingredient.Ingredient_ID = Recipe_Ingredient.Ingredient_ID) * 0.1
+

@@ -1003,4 +1003,38 @@ public class Application {
     }
     return toReturn;  
   }
+
+  /**
+   * Given a timestamp, display the list of inventory items that only sold less than 
+   * 10% of their inventory between the timestamp and the current time, assuming no restocks 
+   * have happened during the window.
+   * @return Object[][] of excess ingredients (i.e. the ones that have been used 10%)
+   */
+  
+   /*
+    Use the below query to get the ingredients that have been used in the timeframe;
+    
+    SELECT Ingredient.Ingredient_Name, Subquery.Total_Used
+    FROM (
+        Select Ingredient_Name, SUM(Quantity_Used) AS Total_Used
+        FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item
+        WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
+        GROUP BY Ingredient_Name
+        ORDER BY Ingredient_Name
+    ) AS Subquery, Ingredient
+    WHERE Subquery.Total_Used < Ingredient.Stock * .1 AND Ingredient.Ingredient_Name = Subquery.Ingredient_Name
+    ORDER BY Total_Used;
+
+    */
+   public Object[][] excess_report(){
+    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+
+    //first, query the database for the stock of inventory items.
+
+    //second, query the database for the total amount of inventory items that have been used in the timeframe
+    //third, compare the two values and return the ones that have been used less than 10% of their stock
+    //format the output into a 2d array and return it
+    
+    return null;
+   }
 }
