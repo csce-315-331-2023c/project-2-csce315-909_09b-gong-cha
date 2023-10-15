@@ -189,6 +189,7 @@ public class GUI extends JFrame {
       JPanel viewDrinksPanel = new JPanel();
       JPanel managerInventoryPanel = new JPanel();
       JPanel recommendedPurchases = new JPanel();
+      JPanel excessReport = new JPanel();
       
       String[] columnNames = {"Ingredient_ID", "Ingredient_Name", "Unit_Price", "Stock", "Minimum_Quantity"};
       // Make a JTable out of the data returned from function in Application.java
@@ -230,10 +231,59 @@ public class GUI extends JFrame {
       JTable inventoryTable4 = new JTable(dataInventoryToppings, columnNamesInventoryToppings);
       JScrollPane inventoryScrollPaneRecommendedToppings = new JScrollPane(inventoryTable4);
       inventoryScrollPaneRecommendedToppings.setPreferredSize(new Dimension(800, 150));
-      JLabel recommendedToppingsLabel = new JLabel("The table below shows all toppings where the stock is below the minimum recommended amount.");
+      JLabel recommendedToppingsLabel = new JLabel("The table below shows all toppings where the stock is below the minimum recommended amount. Format dates as YYYY-MM-DD.");
       recommendedPurchases.add(recommendedToppingsLabel);
       recommendedPurchases.add(inventoryScrollPaneRecommendedToppings);
 
+    /*TODO: EXCESS REPORT HERE */
+    String[] columnNamesIngredientsexcess = {"Ingredient_Name", "Total_Used", "Ten_Percent_Stock"};
+    //have user input start and end date on the page in text field
+    JTextField startDateField = new JTextField(10);
+    JTextField endDateField = new JTextField(10);
+    JLabel startDateLabel = new JLabel("Start Date (YYYY-MM-DD): ");
+    JLabel endDateLabel = new JLabel("End Date (YYYY-MM-DD): ");
+    excessReport.add(startDateLabel);
+    excessReport.add(startDateField);
+    excessReport.add(endDateLabel);
+    excessReport.add(endDateField);
+    JButton excessReportButton = new JButton("Generate Excess Report");
+    excessReportButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            //if one field is empty, show error message
+            if (startDateField.getText().equals("") || endDateField.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Please enter a start and end date.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String startDate = startDateField.getText();
+            String endDate = endDateField.getText();
+            Object[][] dataIngredientsexcess = app.excessReportIngredients(startDate, endDate);
+            JTable inventoryTable5 = new JTable(dataIngredientsexcess, columnNamesIngredientsexcess);
+            JScrollPane inventoryScrollPaneexcess = new JScrollPane(inventoryTable5);
+            inventoryScrollPaneexcess.setPreferredSize(new Dimension(800, 100));
+            JLabel excessIngredientsLabel = new JLabel("The table below shows all ingredients where the total used is greater than 10% of the stock.");
+            //have excessingredientslabel wrap
+            excessReport.add(excessIngredientsLabel);
+            excessReport.add(inventoryScrollPaneexcess);
+
+            //do the same for toppings
+            String[] columnNamesToppingsexcess = {"Topping_Name", "Total_Used", "Ten_Percent_Stock"};
+            Object[][] dataToppingsexcess = app.excessReportToppings(startDate, endDate);
+            JTable inventoryTable6 = new JTable(dataToppingsexcess, columnNamesToppingsexcess);
+            JScrollPane inventoryScrollPaneexcessToppings = new JScrollPane(inventoryTable6);
+            JLabel excessToppingsLabel = new JLabel("The table below shows all toppings where the total used is greater than 10% of the stock.");
+            excessToppingsLabel.setPreferredSize(new Dimension(800, 100));
+            excessReport.add(excessToppingsLabel);
+            excessReport.add(inventoryScrollPaneexcessToppings);
+
+            //repaint and revalidate
+            excessReport.revalidate();
+            excessReport.repaint();
+        }
+    });
+    
+    excessReport.add(excessReportButton);
+    JLabel details = new JLabel("If the tables are empty, then there are no ingredients/toppings that meet the criteria.");
+    excessReport.add(details);    
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
         public void actionPerformed(ActionEvent e)
@@ -837,6 +887,7 @@ public class GUI extends JFrame {
       managerTabbedPane.addTab("Drinks", null, viewDrinksPanel, "Does nothing");
       managerTabbedPane.addTab("Add/Modify Drink", null, managerActionsPanel, "Does nothing");
       managerTabbedPane.addTab("Recommended Restock", null, recommendedPurchases, "Does nothing");
+      managerTabbedPane.addTab("Excess Report", null, excessReport, "Does nothing");
 
       cashierTabbedPane.addTab("Milk Tea", null, CashierMilkTeaPanel, "Does nothing");
       cashierTabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
