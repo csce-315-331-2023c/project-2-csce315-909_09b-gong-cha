@@ -110,7 +110,9 @@ public class GUI extends JFrame {
         for (int i = 0; i < getUpdatedToppings.length; i++) {
             for (int j = 0; j < getUpdatedToppings[0].length; j++) {
                 data[i][j] = getUpdatedToppings[i][j];
+                System.out.print(data[i][j] + " ");
             }
+            System.out.println();
         }
 
         ((AbstractTableModel) table.getModel()).fireTableDataChanged();
@@ -513,8 +515,8 @@ public class GUI extends JFrame {
                 // CREATE SQL QUERY TO ADD DRINK INFO TO DATABASE
                 app.createRecipe(newDrinkName, isSlush, Integer.parseInt(newMediumPrice), Integer.parseInt(newLargePrice), Integer.parseInt(newRecipePrice), ingredientsArray, ingredientsQuantityArray, toppingsArray, toppingsQuantityArray);
                 //reload buttons
-                ReloadButtons(this);
                 refreshDrinkTable(dataDrinks, drinksTable);
+                ReloadButtons(this);
                 JOptionPane.showMessageDialog(null, "Drink added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
 
