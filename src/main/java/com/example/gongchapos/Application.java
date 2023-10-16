@@ -1164,8 +1164,13 @@ public class Application {
    * @param menu_item
    * @return object[][] 
    */
-  public Object[][] getSalesReport(String init_time, String final_time, String menu_item){
+  public Object[][] getSalesReport(String init_date, String final_date, String init_time, String final_time, String menu_item){
 
+
+    if(init_time.equals("") && final_time.equals("")){
+      init_time = "00:00:00";
+      final_time = "23:59:59";
+    }
     ArrayList<String> order_ids = new ArrayList<String>();
 
 
@@ -1185,7 +1190,6 @@ public class Application {
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
-    System.out.println("main recipe id" +main_recipe_id);
 
 
     // obtain list of order_id in between time frame
@@ -1195,7 +1199,7 @@ public class Application {
 
     try{
       Statement stmt = conn.createStatement();
-      ResultSet result = stmt.executeQuery("SELECT * FROM order_ WHERE date_ BETWEEN '"+ init_time + "' AND '" + final_time + "';");
+      ResultSet result = stmt.executeQuery("SELECT * FROM order_ WHERE (date_ BETWEEN '"+ init_date + "' AND '" + final_date + "') AND (time_ BETWEEN '"+ init_time + "' AND '" + final_time + "');");
       while(result.next())
       {
         String temp_id = String.valueOf(result.getInt("order_id"));
@@ -1241,13 +1245,7 @@ public class Application {
       cur = cur_arr.toArray();
       toReturn[i] = cur;
     }
-    // for(int i = 0; i  < tempContainer.size(); i++){
-    //   ArrayList<String> cur_arr = tempContainer.get(i);
-    //   for(int j = 0; j < cur_arr.size(); j++){
-    //     System.out.print(cur_arr.get(j)+ ", ");
-    //   }
-    //   System.out.println();
-    // }
+
 
     return toReturn;  
   }
