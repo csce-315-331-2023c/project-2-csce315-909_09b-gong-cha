@@ -303,6 +303,7 @@ public class Application {
   public void addIngredients(String name, double price, int stock)
   {
     int ingredient_id = -1;
+    int min_quantity = 100;
     try
     {
       Statement stmt = conn.createStatement();
@@ -318,7 +319,7 @@ public class Application {
     try
     {
       Statement stmt = conn.createStatement();
-      stmt.execute("INSERT INTO ingredient VALUES ('" + ingredient_id + "','" + name + "','" + price + "','" + stock + "');" );
+      stmt.execute("INSERT INTO ingredient VALUES ('" + ingredient_id + "','" + name + "','" + price + "','" + stock + "', '" + min_quantity + "');" );
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
@@ -333,6 +334,7 @@ public class Application {
   */ 
   public void addToppings(String name, double price, int stock){
     int topping_id = -1;
+    int min_quantity = 100;
     try
     {
       Statement stmt = conn.createStatement();
@@ -348,7 +350,7 @@ public class Application {
     try
     {
       Statement stmt = conn.createStatement();
-      stmt.execute("INSERT INTO toppings VALUES ('" + topping_id + "','" + name + "','" + price + "','" + stock + "');" );
+      stmt.execute("INSERT INTO toppings VALUES ('" + topping_id + "','" + name + "','" + price + "','" + stock + "', '" + min_quantity + "');" );
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
@@ -1255,4 +1257,4 @@ public class Application {
 
 
 
-}
+};
