@@ -36,6 +36,8 @@ Then, run the script using the following command:
 **NOTE: MAKE SURE THAT YOU HAVE NAVIGATED TO THE project-2-csce315-909_09b-gong-cha FOLDER**
 Format: *\copy table_name from 'path/to/file/table_name.csv' delimiter ',' csv header;*
 
+\i master_delete_create_insert.sql
+
 \copy toppings from 'csv_files/Toppings.csv' CSV HEADER
 
 \copy recipe from 'csv_files/Recipes_Full.csv' CSV HEADER

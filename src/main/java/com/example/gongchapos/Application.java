@@ -1072,13 +1072,13 @@ public class Application {
    * @return Object[][] of excess ingredients (i.e. the ones that have been used 10%)
    */
 
-   public Object[][] excessReportIngredients(String start_date, String end_date){
+   public Object[][] excessReportIngredients(String start_date, String end_date, String start_time, String end_time){
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
     //query the above and get the result:
     try
     {
       Statement stmt = conn.createStatement();
-      ResultSet result = stmt.executeQuery("SELECT Ingredient.Ingredient_Name, Subquery.Total_Used, CEILING(Ingredient.Stock * .1) AS Ten_Percent_Stock FROM (Select Ingredient_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Ingredient_Name ORDER BY Ingredient_Name) AS Subquery, Ingredient WHERE Subquery.Total_Used < CEILING(Ingredient.Stock * .1) AND Ingredient.Ingredient_Name = Subquery.Ingredient_Name ORDER BY Total_Used;");
+      ResultSet result = stmt.executeQuery("SELECT Ingredient.Ingredient_Name, Subquery.Total_Used, CEILING(Ingredient.Stock * .1) AS Ten_Percent_Stock FROM (Select Ingredient_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' AND Time_ BETWEEN '" + start_time + "' AND '" + end_time + "' GROUP BY Ingredient_Name ORDER BY Ingredient_Name) AS Subquery, Ingredient WHERE Subquery.Total_Used < CEILING(Ingredient.Stock * .1) AND Ingredient.Ingredient_Name = Subquery.Ingredient_Name ORDER BY Total_Used;");
       while(result.next())
       {
         ArrayList<String> cur_ingredient = new ArrayList<String>();
@@ -1117,13 +1117,14 @@ public class Application {
      * @param end_date
      * @return
      */
-    public Object[][] excessReportToppings(String start_date, String end_date){
+    public Object[][] excessReportToppings(String start_date, String end_date, String start_time, String end_time){
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
 
     try
     {
       Statement stmt = conn.createStatement();
-      ResultSet result = stmt.executeQuery("SELECT subquery.Topping_Name, SUM(Total_Used) AS Combined_Total_Used, CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1) AS Ten_Percent_Stock FROM (SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Topping_Name UNION SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Order_Item_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Topping_Name) AS subquery GROUP BY subquery.Topping_Name HAVING SUM(Total_Used) < CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1);");
+
+      ResultSet result = stmt.executeQuery("SELECT subquery.Topping_Name, SUM(Total_Used) AS Combined_Total_Used, CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1) AS Ten_Percent_Stock FROM (SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "'  AND Time_ BETWEEN '" + start_time + "' AND '" + end_time + "' GROUP BY Topping_Name UNION SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Order_Item_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "'  AND Time_ BETWEEN '" + start_time + "' AND '" + end_time + "'GROUP BY Topping_Name) AS subquery GROUP BY subquery.Topping_Name HAVING SUM(Total_Used) < CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1);");
       while(result.next())
       {
         ArrayList<String> cur_topping = new ArrayList<String>();
@@ -1151,5 +1152,104 @@ public class Application {
     }
     return toReturn;
    }
+
+
+
+
+  // given 2 dates and a menu item, show all orders that inlcude that menu item between those 2 dates
+  /**
+   * returns object[][] of order_item_id, order_id, notes, is_medium, ice, sugar, price
+   * @param init_time
+   * @param final_time
+   * @param menu_item
+   * @return object[][] 
+   */
+  public Object[][] getSalesReport(String init_date, String final_date, String init_time, String final_time, String menu_item){
+
+
+    if(init_time.equals("") && final_time.equals("")){
+      init_time = "00:00:00";
+      final_time = "23:59:59";
+    }
+    ArrayList<String> order_ids = new ArrayList<String>();
+
+
+    int main_recipe_id = 0;
+
+
+    try
+    {
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM recipe;");
+      while(result.next())
+      {
+        if (result.getString("recipe_name").equals(menu_item)){
+          main_recipe_id = result.getInt("recipe_id");
+        }
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+
+
+    // obtain list of order_id in between time frame
+    // iterate through each order_id, and select from order_item (using order_id) where recipe_id = recipe_id of menu_item
+    // sql: SELECT * FROM order_ WHERE date_ BETWEEN '2022-10-03' AND '2022-10-04' AND time_ BETWEEN '14:00' AND '15:00';
+    // add onto object[][] array
+
+    try{
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery("SELECT * FROM order_ WHERE (date_ BETWEEN '"+ init_date + "' AND '" + final_date + "') AND (time_ BETWEEN '"+ init_time + "' AND '" + final_time + "');");
+      while(result.next())
+      {
+        String temp_id = String.valueOf(result.getInt("order_id"));
+        order_ids.add(temp_id);
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error accessing Database");
+    }
+
+    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+    for (String order_id: order_ids){
+      try{
+        Statement stmt = conn.createStatement();
+        ResultSet result = stmt.executeQuery("SELECT * FROM order_item where order_id = '"+ order_id + "' and recipe_id = '" + main_recipe_id + "';");
+        if(result.isBeforeFirst())
+        {
+          result.next();
+          ArrayList<String> cur_drink = new ArrayList<String>();
+          String order_item_id = String.valueOf(result.getInt("order_item_id"));
+          String notes = result.getString("notes");
+          String is_medium = String.valueOf(result.getBoolean("is_medium"));
+          String ice = result.getString("ice");
+          String sugar = result.getString("sugar");
+          String price = String.valueOf(result.getDouble("item_price"));
+          cur_drink.add(order_item_id);
+          cur_drink.add(order_id);
+          cur_drink.add(notes);
+          cur_drink.add(is_medium);
+          cur_drink.add(ice);
+          cur_drink.add(sugar);
+          cur_drink.add(price);
+          tempContainer.add(cur_drink);
+        }
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error accessing Database");
+      }
+    
+    }
+    Object[][] toReturn = new Object[tempContainer.size()][7];
+    for(int i = 0; i < tempContainer.size(); i++){
+      ArrayList<String> cur_arr = tempContainer.get(i);
+      Object[] cur = new Object[6];
+      cur = cur_arr.toArray();
+      toReturn[i] = cur;
+    }
+
+
+    return toReturn;  
+  }
+
+
 
 }

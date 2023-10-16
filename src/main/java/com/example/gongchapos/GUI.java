@@ -240,13 +240,25 @@ public class GUI extends JFrame {
     //have user input start and end date on the page in text field
     JTextField startDateField = new JTextField(10);
     JTextField endDateField = new JTextField(10);
+    //field for times
+    JTextField startTimeField = new JTextField(10);
+    JTextField endTimeField = new JTextField(10);
+
     
     JLabel startDateLabel = new JLabel("Start Date (YYYY-MM-DD): ");
     JLabel endDateLabel = new JLabel("End Date (YYYY-MM-DD): ");
+    //format time in HH:MM::SS
+    JLabel startTimeLabel = new JLabel("Start Time (HH:MM:SS): ");
+    JLabel endTimeLabel = new JLabel("End Time (HH:MM:SS): ");
     excessReport.add(startDateLabel);
     excessReport.add(startDateField);
     excessReport.add(endDateLabel);
     excessReport.add(endDateField);
+    excessReport.add(startTimeLabel);
+    excessReport.add(startTimeField);
+    excessReport.add(endTimeLabel);
+    excessReport.add(endTimeField);
+
     JButton excessReportButton = new JButton("Generate Excess Report");
     //create something to store the excess report after the button is clicked so we can clear it later
     JPanel excessReportPanel = new JPanel();
@@ -262,7 +274,10 @@ public class GUI extends JFrame {
 
             String startDate = startDateField.getText();
             String endDate = endDateField.getText();
-            Object[][] dataIngredientsexcess = app.excessReportIngredients(startDate, endDate);
+            String startTime = startTimeField.getText();
+            String endTime = endTimeField.getText();
+
+            Object[][] dataIngredientsexcess = app.excessReportIngredients(startDate, endDate, startTime, endTime);
             JTable inventoryTable5 = new JTable(dataIngredientsexcess, columnNamesIngredientsexcess);
             JScrollPane inventoryScrollPaneexcess = new JScrollPane(inventoryTable5);
             inventoryScrollPaneexcess.setPreferredSize(new Dimension(800, 100));
@@ -274,7 +289,7 @@ public class GUI extends JFrame {
 
             //do the same for toppings
             String[] columnNamesToppingsexcess = {"Topping_Name", "Total_Used", "Ten_Percent_Stock"};
-            Object[][] dataToppingsexcess = app.excessReportToppings(startDate, endDate);
+            Object[][] dataToppingsexcess = app.excessReportToppings(startDate, endDate, startTime, endTime);
             JTable inventoryTable6 = new JTable(dataToppingsexcess, columnNamesToppingsexcess);
             JScrollPane inventoryScrollPaneexcessToppings = new JScrollPane(inventoryTable6);
             inventoryScrollPaneexcessToppings.setPreferredSize(new Dimension(800, 100));
@@ -292,6 +307,66 @@ public class GUI extends JFrame {
     JLabel details = new JLabel("If the tables are empty, then there are no ingredients/toppings that meet the criteria.");
     excessReport.add(details);    
     excessReport.add(excessReportPanel);
+    /* sales report here 🤪🤪🤪 */
+    JPanel salesReport = new JPanel();	
+    JTextField startDateField_dupe = new JTextField(10);
+    JTextField endDateField_dupe = new JTextField(10);
+    JButton salesReportButton = new JButton("Generate Sales Report");
+    JLabel startDateLabel_dupe = new JLabel("Start Date (YYYY-MM-DD): ");
+    JLabel endDateLabel_dupe = new JLabel("End Date (YYYY-MM-DD): ");
+    JTextField drinkNameSales = new JTextField(10);
+    JLabel drinkName_label = new JLabel("Enter Name of Drink");
+    //field for times
+    JTextField startTimeField_dupe = new JTextField(10);
+    JTextField endTimeField_dupe = new JTextField(10);
+    JLabel startTimeLabel_dupe = new JLabel("Start Time (HH:MM:SS): ");
+    JLabel endTimeLabel_dupe = new JLabel("End Time (HH:MM:SS): ");
+    salesReport.add(startDateLabel_dupe);
+    salesReport.add(startDateField_dupe);
+    salesReport.add(endDateLabel_dupe);
+    salesReport.add(endDateField_dupe);
+    salesReport.add(startTimeLabel_dupe);
+    salesReport.add(startTimeField_dupe);
+    salesReport.add(endTimeLabel_dupe);
+    salesReport.add(endTimeField_dupe);
+    salesReport.add(drinkName_label);
+    salesReport.add(drinkNameSales);
+    String[] salesReportColumns = {"Order Item ID", "Order ID", "Notes", "Is Medium", "Ice Level", "Sugar Level", "Price"};
+
+    
+    JPanel salesReportPanel = new JPanel();
+    salesReportPanel.setPreferredSize(new Dimension(800, 500));
+    salesReportButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            //if one field is empty, show error message
+            salesReportPanel.removeAll();
+            if (startDateField_dupe.getText().equals("") || endDateField_dupe.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Please enter a start and end date.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String startDate = startDateField_dupe.getText();
+            String endDate = endDateField_dupe.getText();
+            String startTime = startTimeField_dupe.getText();
+            String endTime = endTimeField_dupe.getText();
+            String menu_item = drinkNameSales.getText();
+            Object[][] salesReportObject = app.getSalesReport(startDate, endDate, startTime, endTime, menu_item);
+            JTable salesReportTable = new JTable(salesReportObject, salesReportColumns);
+            JScrollPane salesScrollPane = new JScrollPane(salesReportTable);
+            salesScrollPane.setPreferredSize(new Dimension(800, 800));
+            JLabel salesLabel = new JLabel("The table below shows the sales of recipe_id.");
+            salesReportPanel.add(salesLabel);
+            salesReportPanel.add(salesScrollPane);
+        
+
+
+            // //repaint and revalidate
+            salesReportPanel.revalidate();
+            salesReportPanel.repaint();
+        }
+    });
+    salesReport.add(salesReportButton);
+    salesReport.add(salesReportPanel);
     
       ActionListener actionListener = new ActionListener() {
         // if button is pressed
@@ -897,7 +972,7 @@ public class GUI extends JFrame {
       managerTabbedPane.addTab("Add/Modify Drink", null, managerActionsPanel, "Does nothing");
       managerTabbedPane.addTab("Recommended Restock", null, recommendedPurchases, "Does nothing");
       managerTabbedPane.addTab("Excess Report", null, excessReport, "Does nothing");
-
+      managerTabbedPane.addTab("Sales report", null, salesReport, "Does Nothing");
       cashierTabbedPane.addTab("Milk Tea", null, CashierMilkTeaPanel, "Does nothing");
       cashierTabbedPane.addTab("Slushie", null, CashierSlushiePanel, "Does nothing");
       cashierTabbedPane.addTab("Coffee", null, CashierCoffeePanel, "Does nothing");
