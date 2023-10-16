@@ -240,13 +240,25 @@ public class GUI extends JFrame {
     //have user input start and end date on the page in text field
     JTextField startDateField = new JTextField(10);
     JTextField endDateField = new JTextField(10);
+    //field for times
+    JTextField startTimeField = new JTextField(10);
+    JTextField endTimeField = new JTextField(10);
+
     
     JLabel startDateLabel = new JLabel("Start Date (YYYY-MM-DD): ");
     JLabel endDateLabel = new JLabel("End Date (YYYY-MM-DD): ");
+    //format time in HH:MM::SS
+    JLabel startTimeLabel = new JLabel("Start Time (HH:MM:SS): ");
+    JLabel endTimeLabel = new JLabel("End Time (HH:MM:SS): ");
     excessReport.add(startDateLabel);
     excessReport.add(startDateField);
     excessReport.add(endDateLabel);
     excessReport.add(endDateField);
+    excessReport.add(startTimeLabel);
+    excessReport.add(startTimeField);
+    excessReport.add(endTimeLabel);
+    excessReport.add(endTimeField);
+
     JButton excessReportButton = new JButton("Generate Excess Report");
     //create something to store the excess report after the button is clicked so we can clear it later
     JPanel excessReportPanel = new JPanel();
@@ -262,7 +274,10 @@ public class GUI extends JFrame {
 
             String startDate = startDateField.getText();
             String endDate = endDateField.getText();
-            Object[][] dataIngredientsexcess = app.excessReportIngredients(startDate, endDate);
+            String startTime = startTimeField.getText();
+            String endTime = endTimeField.getText();
+
+            Object[][] dataIngredientsexcess = app.excessReportIngredients(startDate, endDate, startTime, endTime);
             JTable inventoryTable5 = new JTable(dataIngredientsexcess, columnNamesIngredientsexcess);
             JScrollPane inventoryScrollPaneexcess = new JScrollPane(inventoryTable5);
             inventoryScrollPaneexcess.setPreferredSize(new Dimension(800, 100));
@@ -274,7 +289,7 @@ public class GUI extends JFrame {
 
             //do the same for toppings
             String[] columnNamesToppingsexcess = {"Topping_Name", "Total_Used", "Ten_Percent_Stock"};
-            Object[][] dataToppingsexcess = app.excessReportToppings(startDate, endDate);
+            Object[][] dataToppingsexcess = app.excessReportToppings(startDate, endDate, startTime, endTime);
             JTable inventoryTable6 = new JTable(dataToppingsexcess, columnNamesToppingsexcess);
             JScrollPane inventoryScrollPaneexcessToppings = new JScrollPane(inventoryTable6);
             inventoryScrollPaneexcessToppings.setPreferredSize(new Dimension(800, 100));
