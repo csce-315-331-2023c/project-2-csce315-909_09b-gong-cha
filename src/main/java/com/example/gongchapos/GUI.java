@@ -435,6 +435,8 @@ public class GUI extends JFrame {
                     totalLabel.setText("Total: $" + total);
 
                     // app.setOrderStatus(true);
+                    refreshIngredientTable(data, inventoryTable);
+                    refreshToppingTable(dataToppings, inventoryTable2);
                     
                     //repaint receipt panel
                     itemListPanel.revalidate();
@@ -667,7 +669,6 @@ public class GUI extends JFrame {
                 }
                 // Create SQL query to add a new topping and call it using topping name, unitPriceDBL, and stockINT
                 app.addToppings(toppingNameStr, unitPriceDBL, stockINT);
-                refreshToppingTable(dataToppings, inventoryTable2);
             }
             if(s.equals("Change Topping Name")) {
                 String toppingIDStr = modifyToppingID.getText();
