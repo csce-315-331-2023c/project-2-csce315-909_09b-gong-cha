@@ -1013,13 +1013,13 @@ public class Application {
    * @return Object[][] of excess ingredients (i.e. the ones that have been used 10%)
    */
 
-   public Object[][] excessReportIngredients(String start_date, String end_date){
+   public Object[][] excessReportIngredients(String start_date, String end_date, String start_time, String end_time){
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
     //query the above and get the result:
     try
     {
       Statement stmt = conn.createStatement();
-      ResultSet result = stmt.executeQuery("SELECT Ingredient.Ingredient_Name, Subquery.Total_Used, CEILING(Ingredient.Stock * .1) AS Ten_Percent_Stock FROM (Select Ingredient_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Ingredient_Name ORDER BY Ingredient_Name) AS Subquery, Ingredient WHERE Subquery.Total_Used < CEILING(Ingredient.Stock * .1) AND Ingredient.Ingredient_Name = Subquery.Ingredient_Name ORDER BY Total_Used;");
+      ResultSet result = stmt.executeQuery("SELECT Ingredient.Ingredient_Name, Subquery.Total_Used, CEILING(Ingredient.Stock * .1) AS Ten_Percent_Stock FROM (Select Ingredient_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' AND Time_ BETWEEN '" + start_time + "' AND '" + end_time + "' GROUP BY Ingredient_Name ORDER BY Ingredient_Name) AS Subquery, Ingredient WHERE Subquery.Total_Used < CEILING(Ingredient.Stock * .1) AND Ingredient.Ingredient_Name = Subquery.Ingredient_Name ORDER BY Total_Used;");
       while(result.next())
       {
         ArrayList<String> cur_ingredient = new ArrayList<String>();
@@ -1058,13 +1058,14 @@ public class Application {
      * @param end_date
      * @return
      */
-    public Object[][] excessReportToppings(String start_date, String end_date){
+    public Object[][] excessReportToppings(String start_date, String end_date, String start_time, String end_time){
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
 
     try
     {
       Statement stmt = conn.createStatement();
-      ResultSet result = stmt.executeQuery("SELECT subquery.Topping_Name, SUM(Total_Used) AS Combined_Total_Used, CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1) AS Ten_Percent_Stock FROM (SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Topping_Name UNION SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Order_Item_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "' GROUP BY Topping_Name) AS subquery GROUP BY subquery.Topping_Name HAVING SUM(Total_Used) < CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1);");
+
+      ResultSet result = stmt.executeQuery("SELECT subquery.Topping_Name, SUM(Total_Used) AS Combined_Total_Used, CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1) AS Ten_Percent_Stock FROM (SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Recipe_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "'  AND Time_ BETWEEN '" + start_time + "' AND '" + end_time + "' GROUP BY Topping_Name UNION SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used FROM Order_Item_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item WHERE Date_ BETWEEN '" + start_date + "' AND '" + end_date + "'  AND Time_ BETWEEN '" + start_time + "' AND '" + end_time + "'GROUP BY Topping_Name) AS subquery GROUP BY subquery.Topping_Name HAVING SUM(Total_Used) < CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1);");
       while(result.next())
       {
         ArrayList<String> cur_topping = new ArrayList<String>();

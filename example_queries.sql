@@ -162,7 +162,7 @@ SELECT Ingredient.Ingredient_Name, Subquery.Total_Used, CEILING(Ingredient.Stock
 FROM (
     Select Ingredient_Name, SUM(Quantity_Used) AS Total_Used
     FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item
-    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
+    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02' AND Time_ BETWEEN '00:00:00' AND '23:59:59'
     GROUP BY Ingredient_Name
     ORDER BY Ingredient_Name
 ) AS Subquery, Ingredient
@@ -188,7 +188,7 @@ FROM (
     NATURAL JOIN Toppings
     NATURAL JOIN Order_
     NATURAL JOIN Order_Item
-    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
+    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02' AND Time_ BETWEEN '00:00:00' AND '23:59:59'
     GROUP BY Topping_Name
 
     UNION
@@ -198,32 +198,34 @@ FROM (
     NATURAL JOIN Toppings
     NATURAL JOIN Order_
     NATURAL JOIN Order_Item
-    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
+    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02' AND Time_ BETWEEN '00:00:00' AND '23:59:59'
     GROUP BY Topping_Name
 ) AS subquery
 GROUP BY subquery.Topping_Name;
 
---now take the above and only select the toppings where the combined total used is less than 10% of the stock
+--FINAL QUERY 1
 
-SELECT subquery.Topping_Name, SUM(Total_Used) AS Combined_Total_Used, CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1) AS Ten_Percent_Stock
+SELECT Ingredient.Ingredient_Name, Subquery.Total_Used, CEILING(Ingredient.Stock * .1) AS Ten_Percent_Stock 
 FROM (
-    SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used
-    FROM Recipe_Toppings
-    NATURAL JOIN Toppings
-    NATURAL JOIN Order_
-    NATURAL JOIN Order_Item
-    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
-    GROUP BY Topping_Name
+    SELECT Ingredient_Name, SUM(Quantity_Used) AS Total_Used 
+    FROM Recipe_Ingredient NATURAL JOIN Ingredient NATURAL JOIN Order_ NATURAL JOIN Order_Item 
+    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02' AND Time_ BETWEEN '11:00:00' AND '17:59:59'
+    GROUP BY Ingredient_Name ORDER BY Ingredient_Name) AS Subquery, Ingredient 
+WHERE Subquery.Total_Used < CEILING(Ingredient.Stock * .1) AND Ingredient.Ingredient_Name = Subquery.Ingredient_Name ORDER BY Total_Used;
 
-    UNION
+--FINAL QUERY 2
+SELECT subquery.Topping_Name, SUM(Total_Used) AS Combined_Total_Used, CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1) AS Ten_Percent_Stock 
+FROM (
+    SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used 
+    FROM Recipe_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item 
+    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02' AND Time_ BETWEEN '11:00:00' AND '17:59:59'
+    GROUP BY Topping_Name 
+    
+    UNION 
 
-    SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used
-    FROM Order_Item_Toppings
-    NATURAL JOIN Toppings
-    NATURAL JOIN Order_
-    NATURAL JOIN Order_Item
-    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02'
-    GROUP BY Topping_Name
-) AS subquery
-GROUP BY subquery.Topping_Name
+    SELECT Topping_Name, SUM(Quantity_Used) AS Total_Used 
+    FROM Order_Item_Toppings NATURAL JOIN Toppings NATURAL JOIN Order_ NATURAL JOIN Order_Item 
+    WHERE Date_ BETWEEN '2022-11-01' AND '2022-11-02' AND Time_ BETWEEN '11:00:00' AND '17:59:59'
+    GROUP BY Topping_Name) AS subquery 
+GROUP BY subquery.Topping_Name 
 HAVING SUM(Total_Used) < CEILING((SELECT Stock FROM Toppings WHERE Toppings.Topping_Name = subquery.Topping_Name) * 0.1);
