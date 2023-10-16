@@ -92,6 +92,10 @@ public class Application {
   {
     populateRecipes();
     populateToppings();
+    for(Recipe current_recipe : recipes)
+    {
+      populateIngredients(current_recipe);
+    }
   }
 
   /**
@@ -648,7 +652,6 @@ public class Application {
         JOptionPane.showMessageDialog(null, "Error accessing Database 1");
       }
       Recipe current_recipe = getRecipe(current_drink.getRecipeID());
-      populateIngredients(current_recipe);
       for(Map.Entry<Ingredient, Integer> current_ingredient : current_recipe.ingredients.entrySet())
       {
 
