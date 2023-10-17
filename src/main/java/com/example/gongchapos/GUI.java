@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
 //create class for the POS system cashier end
 
@@ -94,7 +95,11 @@ public class GUI extends JFrame {
             }
         }
 
-        ((AbstractTableModel) table.getModel()).fireTableDataChanged();
+        String[] columns = {"Ingredient_ID", "Ingredient_Name", "Unit_Price", "Stock", "Minimum_Quantity"};
+
+        DefaultTableModel newModel = new DefaultTableModel(data, columns);
+
+        table.setModel(newModel);
     }
 
     /**
@@ -110,12 +115,14 @@ public class GUI extends JFrame {
         for (int i = 0; i < getUpdatedToppings.length; i++) {
             for (int j = 0; j < getUpdatedToppings[0].length; j++) {
                 data[i][j] = getUpdatedToppings[i][j];
-                System.out.print(data[i][j] + " ");
             }
-            System.out.println();
         }
 
-        ((AbstractTableModel) table.getModel()).fireTableDataChanged();
+        String[] columns = {"Topping_ID", "Topping_Name", "Unit_Price", "Stock", "Minimum_Quantity"};
+
+        DefaultTableModel newModel = new DefaultTableModel(data, columns);
+
+        table.setModel(newModel);
     }
 
     /**
@@ -134,7 +141,11 @@ public class GUI extends JFrame {
             }
         }
 
-        ((AbstractTableModel) table.getModel()).fireTableDataChanged();
+        String[] columns = {"Recipe_ID", "Recipe_Name", "isSlush", "Med_Price", "Large_Price", "Recipe_Price"};
+
+        DefaultTableModel newModel = new DefaultTableModel(data, columns);
+
+        table.setModel(newModel);
     }
 
     /**
@@ -290,7 +301,7 @@ public class GUI extends JFrame {
       JTable inventoryTable4 = new JTable(dataInventoryToppings, columnNamesInventoryToppings);
       JScrollPane inventoryScrollPaneRecommendedToppings = new JScrollPane(inventoryTable4);
       inventoryScrollPaneRecommendedToppings.setPreferredSize(new Dimension(800, 150));
-      JLabel recommendedToppingsLabel = new JLabel("The table below shows all toppings where the stock is below the minimum recommended amount. Format dates as YYYY-MM-DD.");
+      JLabel recommendedToppingsLabel = new JLabel("The table below shows all toppings where the stock is below the minimum recommended amount.");
       recommendedPurchases.add(recommendedToppingsLabel);
       recommendedPurchases.add(inventoryScrollPaneRecommendedToppings);
 
@@ -744,6 +755,7 @@ public class GUI extends JFrame {
                 }
                 // Create SQL query to add a new topping and call it using topping name, unitPriceDBL, and stockINT
                 app.addToppings(toppingNameStr, unitPriceDBL, stockINT);
+                refreshToppingTable(dataToppings, inventoryTable2);
             }
             if(s.equals("Change Topping Name")) {
                 String toppingIDStr = modifyToppingID.getText();
@@ -880,7 +892,7 @@ public class GUI extends JFrame {
 
       // declare necessary sections to modify a drink
       JLabel modifyDrinkLabel = CreateNewLabel("MODIFY DRINK: ");
-      JLabel drinkIDLabel = CreateNewLabel("ID of drink to modify: ");
+      JLabel drinkIDLabel = CreateNewLabel("ID of drink to modify (REQUIRED): ");
       JLabel nameLabel2 = CreateNewLabel("Drink name: ");
       JLabel ingredientsLabel2 = CreateNewLabel("Ingredients (separated by ','): ");
       JLabel ingredientsQuantityLabel2 = CreateNewLabel("Quantity of Ingredients (in same order, separated by ','): ");
