@@ -25,7 +25,7 @@ public class Application {
   /**
    *  @return the order status
    */
-  public boolean getOrderStatus()
+  public boolean isNewOrder()
   {
     return isNewOrder;
   }
@@ -33,7 +33,7 @@ public class Application {
   /**  
    * @param status - the status of the order
    */
-  public void setOrderStatus(boolean status)
+  public void setIsNewOrder(boolean status)
   {
     isNewOrder = status;
   }
@@ -547,9 +547,10 @@ public class Application {
     if(ID != -1)
     {
       order.setOrderID(ID);
-      setOrderStatus(false);
+      setIsNewOrder(true);
     }
-    
+
+    order.clearOrderItems();
     return order;
   }
 
@@ -573,33 +574,23 @@ public class Application {
    * @param toppings_used - any topping used in the drink
    * @param toppings_used_quantity - how much of each topping was used
    */
-  public void addDrink(int recipe_ID, String notes, boolean is_medium, int ice, int sugar, double subtotal, List<String> toppings_used, List<Integer> toppings_used_quantity)
+  public void addDrink(Drink drink, double subtotal)
   {
      item_id += 1;
-    Recipe recipe = getRecipe(recipe_ID);
-
-    Drink drink = new Drink(recipe, notes, is_medium, ice, sugar);
     int ID = item_id;
-    if(ID != -1)
+    if(ID != 0)
     {
       drink.setOrderItemID(ID);
     }
     
-
-    if(getOrderStatus())
+    if(isNewOrder())
     {
-        setOrderStatus(false);
+        setIsNewOrder(false);
         order = createNewOrder();
     }
     
     order.setSubtotal(subtotal);
     order.addOrderItem(drink);
-
-    for(int i = 0; i < toppings_used.size(); i++)
-    {
-      Topping topping = getTopping(toppings_used.get(i));
-      drink.insertTopping(topping, toppings_used_quantity.get(i));
-    }
   }
 
   private void populateIngredients(Recipe recipe)
@@ -704,7 +695,7 @@ public class Application {
         updateToppingsStock(orderItemTopping.getToppingId(), current_stock - orderItemTopping.getQuantityUsed());
       }
     }
-    setOrderStatus(true);
+    setIsNewOrder(true);
   }
 
   /**

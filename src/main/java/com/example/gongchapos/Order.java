@@ -143,4 +143,9 @@ public class Order extends Application{
     {
         return order_items;
     }
+
+    public void clearOrderItems()
+    {
+        order_items.clear();
+    }
 }
