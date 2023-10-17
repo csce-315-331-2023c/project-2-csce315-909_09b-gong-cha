@@ -144,6 +144,10 @@ public class Order extends Application{
         return order_items;
     }
 
+
+     /**
+      * Clears list of drinks in a order;
+      */
     public void clearOrderItems()
     {
         order_items.clear();
