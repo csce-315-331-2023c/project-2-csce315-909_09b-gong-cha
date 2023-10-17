@@ -401,7 +401,7 @@ public class GUI extends JFrame {
     salesReport.add(endTimeField_dupe);
     salesReport.add(drinkName_label);
     salesReport.add(drinkNameSales);
-    String[] salesReportColumns = {"Order Item ID", "Order ID", "Notes", "Is Medium", "Ice Level", "Sugar Level", "Price"};
+    String[] salesReportColumns = {"Order ID", "Order Item ID", "Notes", "Is Medium", "Ice Level", "Sugar Level", "Price"};
 
     
     JPanel salesReportPanel = new JPanel();
