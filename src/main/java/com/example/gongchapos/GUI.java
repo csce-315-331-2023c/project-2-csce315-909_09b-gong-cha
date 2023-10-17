@@ -5,7 +5,6 @@ import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
 //create class for the POS system cashier end
@@ -42,7 +41,7 @@ public class GUI extends JFrame {
     JPanel managerChartPanel;
 
     //list of drinks
-    ArrayList<_drink> drinks = new ArrayList<>();
+    ArrayList<Drink> drinks = new ArrayList<>();
 
     protected Application app = null;
 
@@ -186,7 +185,6 @@ public class GUI extends JFrame {
       // create a panel
       JPanel loginPanel = new JPanel();
       JPanel cashierPanel = new JPanel();
-      // JPanel cashierDrinkPanel = new JPanel();
       JPanel managerPanel = new JPanel();
 
       JButton exitButton = new JButton("Exit");
@@ -354,8 +352,6 @@ public class GUI extends JFrame {
             JLabel excessIngredientsLabel = new JLabel("The table below shows all ingredients where the total used is greater than 10% of the stock.");
             excessReportPanel.add(excessIngredientsLabel);
             excessReportPanel.add(inventoryScrollPaneexcess);
-            // excessReport.add(excessIngredientsLabel);
-            // excessReport.add(inventoryScrollPaneexcess);
 
             //do the same for toppings
             String[] columnNamesToppingsexcess = {"Topping_Name", "Total_Used", "Ten_Percent_Stock"};
@@ -491,22 +487,13 @@ public class GUI extends JFrame {
                 totalLabel.setText("Total: $" + total);
                 //display total in jdialog box and clear if yes is clicked
 
-                // app.createNewOrder();
-                for (_drink drink : drinks) {
-                    List<String> toppingsUsed = new ArrayList<>();
-                    List<Integer> toppingsQuantity = new ArrayList<>();
-                    //if drink.toppings is not null, add toppings to toppingsUsed and toppingsQuantity
-                    if(!(drink.toppings == null)) {
-                        for (_topping top : drink.toppings) {
-                            toppingsUsed.add(top.topping.getToppingName());
-                            toppingsQuantity.add(top.quantity);
-                        }
-                    }
-                    app.addDrink(drink.recipe.getRecipeID(), "", drink.is_medium, drink.ice, drink.sugar, subtotal, toppingsUsed, toppingsQuantity);
-
+                for (Drink drink : drinks) {
+                    app.addDrink(drink, subtotal);
+                    
                 }
                 app.placeOrder(tip, "");
-
+                drinks.clear();
+                
                 int result = JOptionPane.showConfirmDialog(null, "Total: $" + total + "\n" + "Clear receipt?", "Checkout", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) { 
                     //clear receipt
@@ -520,7 +507,6 @@ public class GUI extends JFrame {
                     tipLabel.setText("Tip: $" + tip);
                     totalLabel.setText("Total: $" + total);
 
-                    // app.setOrderStatus(true);
                     refreshIngredientTable(data, inventoryTable);
                     refreshToppingTable(dataToppings, inventoryTable2);
                     
@@ -531,7 +517,6 @@ public class GUI extends JFrame {
             }
 
             if (s.equals("Add New Drink")) {
-                // String newDrinkID = drinkID.getText();
                 String newDrinkName = drinkName.getText();
                 String requestedIngredients = ingredients.getText();
                 String requestedIngredientsQuantity = ingredientsQuantity.getText();
@@ -933,8 +918,6 @@ public class GUI extends JFrame {
       isNotSlushy.setAlignmentX(Component.LEFT_ALIGNMENT);
       
       // Add the objects in the correct order
-      //   managerActionsPanel.add(drinkIDLabel);
-      //   managerActionsPanel.add(drinkID);
       addDrinkPanel.add(addDrinkLabel);
       addDrinkPanel.add(nameLabel);
       addDrinkPanel.add(drinkName);
@@ -1133,8 +1116,7 @@ public class GUI extends JFrame {
       String itemName = itemButton.getItemName();
       double itemPrice;
 
-      List<String> selectedToppings = new ArrayList<String>();
-            List<Integer> selectedToppingsQuantity = new ArrayList<>();
+      Map<Topping, Integer> used_toppings = new HashMap<Topping, Integer>();
 
       Object[] options = {"Medium", "Large"};
       int result = JOptionPane.showOptionDialog(
@@ -1182,7 +1164,7 @@ public class GUI extends JFrame {
     );
 
     //create new drink object
-      _drink newDrink = new _drink(itemButton.getRecipe(), size, iceResult, sugarResult);
+      Drink newDrink = new Drink(itemButton.getRecipe(), size, iceResult, sugarResult);
       //add drink to array
       drinks.add(newDrink);
 
@@ -1215,9 +1197,8 @@ public class GUI extends JFrame {
                 itemListPanel.remove(minitoppanel);
                 //remove drink from drinks
                 //subtract from subtotal the price of the item
-                //TODO: query database for price of toppings too.
 
-                subtotal -= newDrink.price;
+                subtotal -= newDrink.getItemPrice();
                 drinks.remove(newDrink);
 
                 //update subtotal and total labels
@@ -1245,7 +1226,7 @@ public class GUI extends JFrame {
                     minitoppanel.removeAll();
                 }
                 //clear toppings quantity arraylist
-                selectedToppingsQuantity.clear();
+                used_toppings.clear();
 
                 JDialog dialog = new JDialog();
                 dialog.setTitle("Edit Toppings");
@@ -1283,8 +1264,6 @@ public class GUI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         // Process the selected toppings and quantity
                         int quantity;
-                        // double topping_price = 0;
-                        ArrayList<_topping> selectedToppings = new ArrayList<>();
                         //iterate over spinners and get quantity, if not 0, add to list of toppings
                         for (int i = 0; i < spinners.size(); i++) {
                             JSpinner spinner = spinners.get(i);
@@ -1293,13 +1272,8 @@ public class GUI extends JFrame {
                             quantity = (int) spinner.getValue();
                             if (quantity != 0) {
                                 //add topping to list of toppings
-                                _topping newTopping = new _topping(topping_fr, topping, quantity);
                                 minitoppanel.add(new JLabel("    "+topping + ": " + quantity));
-                                
-                                // topping_price = topping_fr.getUnitPrice() * quantity;
-
-                                selectedToppings.add(newTopping);
-                                selectedToppingsQuantity.add(quantity);
+                                used_toppings.put(topping_fr, quantity);
                             }
                         }
 
@@ -1308,14 +1282,14 @@ public class GUI extends JFrame {
                         itemListPanel.revalidate();
                         itemListPanel.repaint();
                         // Close the dialog
-                        subtotal -= newDrink.price;
+                        subtotal -= newDrink.getItemPrice();
 
-                        newDrink.toppings = selectedToppings;
-                        newDrink.updateprice();
+                        newDrink.insertToppings(used_toppings);
+                        newDrink.updatePrice();
 
                         //print out the toppings and quantities
                         //update the subtotal and total
-                        subtotal += newDrink.price;
+                        subtotal += newDrink.getItemPrice();
                         total = subtotal + tip;
                     
                         //update subtotal and total labels
@@ -1503,78 +1477,3 @@ class ItemButton extends JButton {
     }
 }
 
-//make a class for toppings
-/**
- * Represents a topping associated with a drink.
- * 
- * @author Ren Mai
- */
-class _topping {
-    String name;     // The name of the topping
-    Topping topping; // The Topping object
-    int quantity;    // The quantity of the topping
-
-    /**
-     * Constructs a new _topping instance.
-     *
-     * @param topping The Topping object associated with this topping.
-     * @param name The name of the topping.
-     * @param quantity The quantity of the topping.
-     */
-    public _topping(Topping topping, String name, int quantity){
-        this.topping = topping;
-        this.name = name;
-        this.quantity = quantity;
-    }
-}
-
-/**
- * Represents a drink item with associated toppings, size, ice level, sugar level, and price.
- * 
- * @author Ren Mai
- */
-class _drink {
-    Recipe recipe;          // The Recipe associated with the drink
-    ArrayList<_topping> toppings; // The list of toppings on the drink
-    boolean is_medium;      // Indicates if the drink is of medium size
-    int ice;                // The level of ice in the drink
-    int sugar;              // The level of sugar in the drink
-    double price;           // The total price of the drink
-
-    /**
-     * Constructs a new _drink instance.
-     *
-     * @param recipe The Recipe object associated with this drink.
-     * @param is_medium Indicates if the drink is of medium size.
-     * @param ice The level of ice in the drink.
-     * @param sugar The level of sugar in the drink.
-     */
-    public _drink(Recipe recipe, boolean is_medium, int ice, int sugar){
-        this.recipe = recipe;
-        this.is_medium = is_medium;
-        this.ice = ice;
-        this.sugar = sugar;
-
-        if (is_medium) {
-            price = recipe.getMediumPrice();
-        } else {
-            price = recipe.getLargePrice();
-        }
-    }
-
-    /**
-     * Updates the price of the drink based on the recipe, toppings, and size.
-     */
-    public void updateprice(){
-        if(is_medium){
-            price = recipe.getMediumPrice();
-        } else {
-            price = recipe.getLargePrice();
-        }
-
-        for(_topping topping : toppings){
-            price += topping.topping.getUnitPrice() * topping.quantity;
-            // price += topping.quantity * topping.topping.getUnitPrice(); 
-        }
-    }
-}

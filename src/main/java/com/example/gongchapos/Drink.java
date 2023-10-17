@@ -31,11 +31,11 @@ public class Drink extends Application{
      * @param _ice Index representing the type of ice.
      * @param _sugar Index representing the sugar level.
      */
-    public Drink(Recipe _recipe, String _notes, boolean _is_medium, int _ice, int _sugar)
+    public Drink(Recipe _recipe, boolean _is_medium, int _ice, int _sugar)
     {
         recipe = _recipe;
         recipe_id = _recipe.getRecipeID();
-        Notes = _notes;
+        Notes = "";
         is_medium = _is_medium;
         ice = ice_values[_ice];
         sugar = sugar_values[_sugar];
@@ -141,14 +141,20 @@ public class Drink extends Application{
     }
 
     /**
-     * Inserts a topping into the drink.
-     * @param topping The topping to insert.
-     * @param quantity The quantity of the topping.
+     * Inserts toppings into the drink.
+     * @param toppings a map of the toppings and quantities used
      */
-    public void insertTopping(Topping topping, int quantity)
+    public void insertToppings(Map<Topping, Integer> toppings)
     {
-        used_toppings.put(topping, quantity);
-        item_price += (topping.getUnitPrice() * quantity);
+        used_toppings = toppings;
+    }
+
+    public void updatePrice()
+    {
+        for(Map.Entry<Topping, Integer> current_topping : used_toppings.entrySet())
+        {
+            item_price += current_topping.getKey().getUnitPrice() * current_topping.getValue();
+        }
     }
 
     /**
