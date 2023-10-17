@@ -975,7 +975,7 @@ public class Application {
 
   /**
    * report of all ingredients in which the current stock is lower than the minimum recommended amount
-   * @return Object[][] of info of ingredients where stock < minimum_quantity
+   * @return Object[][] of info of ingredients where stock is less than minimum_quantity
    */
   public Object[][] restockReportIngredients(){
 
@@ -1018,7 +1018,7 @@ public class Application {
 
   /**
    * report of all toppings in which the current stock is lower than the minimum recommended amount
-   * @return Object[][] of info of toppings where stock < minimum_quantity
+   * @return Object[][] of info of toppings where stock is less than minimum_quantity
    */
   public Object[][] restockReportToppings(){
 
@@ -1109,9 +1109,9 @@ public class Application {
      * Given a timestamp, display the list of toppings that only sold less than
      * 10% of their inventory between the timestamp and the current time, assuming no restocks
      * have happened during the window.
-     * @param start_date
-     * @param end_date
-     * @return
+     * @param start_date - the start date of the time window
+     * @param end_date - the end date of the time window
+     * @return - the table of data that fits the given timestamp
      */
     public Object[][] excessReportToppings(String start_date, String end_date, String start_time, String end_time){
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
@@ -1155,9 +1155,9 @@ public class Application {
   // given 2 dates and a menu item, show all orders that inlcude that menu item between those 2 dates
   /**
    * returns object[][] of order_item_id, order_id, notes, is_medium, ice, sugar, price
-   * @param init_time
-   * @param final_time
-   * @param menu_item
+   * @param init_time - the starting date of the window
+   * @param final_time - the ending date of the window
+   * @param menu_item - the item that we are looking for
    * @return object[][] 
    */
   public Object[][] getSalesReport(String init_date, String final_date, String init_time, String final_time, String menu_item){
