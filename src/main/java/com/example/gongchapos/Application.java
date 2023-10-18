@@ -1152,7 +1152,7 @@ public class Application {
 
 
 
-  // given 2 dates and a menu item, show all orders that inlcude that menu item between those 2 dates
+    // given 2 dates and a menu item, show all orders that inlcude that menu item between those 2 dates
   /**
    * returns object[][] of order_item_id, order_id, notes, is_medium, ice, sugar, price
    * @param init_time - the starting date of the window
@@ -1167,8 +1167,6 @@ public class Application {
       init_time = "00:00:00";
       final_time = "23:59:59";
     }
-    ArrayList<String> order_ids = new ArrayList<String>();
-
 
     int main_recipe_id = 0;
 
@@ -1187,53 +1185,43 @@ public class Application {
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
 
-
     // obtain list of order_id in between time frame
     // iterate through each order_id, and select from order_item (using order_id) where recipe_id = recipe_id of menu_item
     // sql: SELECT * FROM order_ WHERE date_ BETWEEN '2022-10-03' AND '2022-10-04' AND time_ BETWEEN '14:00' AND '15:00';
     // add onto object[][] array
 
+    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
+
     try{
       Statement stmt = conn.createStatement();
-      ResultSet result = stmt.executeQuery("SELECT * FROM order_ WHERE (date_ BETWEEN '"+ init_date + "' AND '" + final_date + "') AND (time_ BETWEEN '"+ init_time + "' AND '" + final_time + "');");
+      // select * from order_item NATURAL JOIN order_ where recipe_id = 1;
+      ResultSet result = stmt.executeQuery(
+        "Select subquery.order_id, order_item_id, recipe_id, notes, is_medium, ice, sugar, item_price from (SELECT order_id FROM order_item NATURAL JOIN order_ WHERE date_ BETWEEN '" + init_date + "' AND '" + final_date + "'AND time_ BETWEEN '" + init_time + "' AND '" + final_time + "' AND recipe_id = '" + main_recipe_id + "') As subquery, order_item WHERE order_item.order_id = subquery.order_id order by subquery.order_id;"
+      );
       while(result.next())
       {
-        String temp_id = String.valueOf(result.getInt("order_id"));
-        order_ids.add(temp_id);
+        ArrayList<String> cur_drink = new ArrayList<String>();
+        String sub_order_id = String.valueOf(result.getInt("order_id"));
+        String order_item_id = String.valueOf(result.getInt("order_item_id"));
+        String notes = result.getString("notes");
+        String is_medium = String.valueOf(result.getBoolean("is_medium"));
+        String ice = result.getString("ice");
+        String sugar = result.getString("sugar");
+        String price = String.valueOf(result.getDouble("item_price"));
+        cur_drink.add(sub_order_id);
+        cur_drink.add(order_item_id);
+        cur_drink.add(notes);
+        cur_drink.add(is_medium);
+        cur_drink.add(ice);
+        cur_drink.add(sugar);
+        cur_drink.add(price);
+        tempContainer.add(cur_drink);
       }
     } catch (Exception e) {
+      System.out.println(e);
       JOptionPane.showMessageDialog(null, "Error accessing Database");
     }
-
-    ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
-    for (String order_id: order_ids){
-      try{
-        Statement stmt = conn.createStatement();
-        ResultSet result = stmt.executeQuery("SELECT * FROM order_item where order_id = '"+ order_id + "' and recipe_id = '" + main_recipe_id + "';");
-        if(result.isBeforeFirst())
-        {
-          result.next();
-          ArrayList<String> cur_drink = new ArrayList<String>();
-          String order_item_id = String.valueOf(result.getInt("order_item_id"));
-          String notes = result.getString("notes");
-          String is_medium = String.valueOf(result.getBoolean("is_medium"));
-          String ice = result.getString("ice");
-          String sugar = result.getString("sugar");
-          String price = String.valueOf(result.getDouble("item_price"));
-          cur_drink.add(order_item_id);
-          cur_drink.add(order_id);
-          cur_drink.add(notes);
-          cur_drink.add(is_medium);
-          cur_drink.add(ice);
-          cur_drink.add(sugar);
-          cur_drink.add(price);
-          tempContainer.add(cur_drink);
-        }
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error accessing Database");
-      }
     
-    }
     Object[][] toReturn = new Object[tempContainer.size()][7];
     for(int i = 0; i < tempContainer.size(); i++){
       ArrayList<String> cur_arr = tempContainer.get(i);
@@ -1241,8 +1229,6 @@ public class Application {
       cur = cur_arr.toArray();
       toReturn[i] = cur;
     }
-
-
     return toReturn;  
   }
 
