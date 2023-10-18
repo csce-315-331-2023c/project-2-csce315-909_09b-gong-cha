@@ -25,7 +25,7 @@ public class Application {
   /**
    *  @return the order status
    */
-  public boolean getOrderStatus()
+  public boolean isNewOrder()
   {
     return isNewOrder;
   }
@@ -33,7 +33,7 @@ public class Application {
   /**  
    * @param status - the status of the order
    */
-  public void setOrderStatus(boolean status)
+  public void setIsNewOrder(boolean status)
   {
     isNewOrder = status;
   }
@@ -92,6 +92,10 @@ public class Application {
   {
     populateRecipes();
     populateToppings();
+    for(Recipe current_recipe : recipes)
+    {
+      populateIngredients(current_recipe);
+    }
   }
 
   /**
@@ -543,9 +547,10 @@ public class Application {
     if(ID != -1)
     {
       order.setOrderID(ID);
-      setOrderStatus(false);
+      setIsNewOrder(true);
     }
-    
+
+    order.clearOrderItems();
     return order;
   }
 
@@ -569,33 +574,23 @@ public class Application {
    * @param toppings_used - any topping used in the drink
    * @param toppings_used_quantity - how much of each topping was used
    */
-  public void addDrink(int recipe_ID, String notes, boolean is_medium, int ice, int sugar, double subtotal, List<String> toppings_used, List<Integer> toppings_used_quantity)
+  public void addDrink(Drink drink, double subtotal)
   {
      item_id += 1;
-    Recipe recipe = getRecipe(recipe_ID);
-
-    Drink drink = new Drink(recipe, notes, is_medium, ice, sugar);
     int ID = item_id;
-    if(ID != -1)
+    if(ID != 0)
     {
       drink.setOrderItemID(ID);
     }
     
-
-    if(getOrderStatus())
+    if(isNewOrder())
     {
-        setOrderStatus(false);
+        setIsNewOrder(false);
         order = createNewOrder();
     }
     
     order.setSubtotal(subtotal);
     order.addOrderItem(drink);
-
-    for(int i = 0; i < toppings_used.size(); i++)
-    {
-      Topping topping = getTopping(toppings_used.get(i));
-      drink.insertTopping(topping, toppings_used_quantity.get(i));
-    }
   }
 
   private void populateIngredients(Recipe recipe)
@@ -650,7 +645,6 @@ public class Application {
         JOptionPane.showMessageDialog(null, "Error accessing Database 1");
       }
       Recipe current_recipe = getRecipe(current_drink.getRecipeID());
-      populateIngredients(current_recipe);
       for(Map.Entry<Ingredient, Integer> current_ingredient : current_recipe.ingredients.entrySet())
       {
 
@@ -701,7 +695,7 @@ public class Application {
         updateToppingsStock(orderItemTopping.getToppingId(), current_stock - orderItemTopping.getQuantityUsed());
       }
     }
-    setOrderStatus(true);
+    setIsNewOrder(true);
   }
 
   /**
@@ -981,7 +975,7 @@ public class Application {
 
   /**
    * report of all ingredients in which the current stock is lower than the minimum recommended amount
-   * @return Object[][] of info of ingredients where stock < minimum_quantity
+   * @return Object[][] of info of ingredients where stock is less than minimum_quantity
    */
   public Object[][] restockReportIngredients(){
 
@@ -1024,7 +1018,7 @@ public class Application {
 
   /**
    * report of all toppings in which the current stock is lower than the minimum recommended amount
-   * @return Object[][] of info of toppings where stock < minimum_quantity
+   * @return Object[][] of info of toppings where stock is less than minimum_quantity
    */
   public Object[][] restockReportToppings(){
 
@@ -1115,9 +1109,9 @@ public class Application {
      * Given a timestamp, display the list of toppings that only sold less than
      * 10% of their inventory between the timestamp and the current time, assuming no restocks
      * have happened during the window.
-     * @param start_date
-     * @param end_date
-     * @return
+     * @param start_date - the start date of the time window
+     * @param end_date - the end date of the time window
+     * @return - the table of data that fits the given timestamp
      */
     public Object[][] excessReportToppings(String start_date, String end_date, String start_time, String end_time){
     ArrayList<ArrayList<String>> tempContainer = new ArrayList<ArrayList<String>>();
@@ -1161,9 +1155,9 @@ public class Application {
   // given 2 dates and a menu item, show all orders that inlcude that menu item between those 2 dates
   /**
    * returns object[][] of order_item_id, order_id, notes, is_medium, ice, sugar, price
-   * @param init_time
-   * @param final_time
-   * @param menu_item
+   * @param init_time - the starting date of the window
+   * @param final_time - the ending date of the window
+   * @param menu_item - the item that we are looking for
    * @return object[][] 
    */
   public Object[][] getSalesReport(String init_date, String final_date, String init_time, String final_time, String menu_item){
